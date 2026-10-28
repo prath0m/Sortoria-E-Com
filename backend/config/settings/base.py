@@ -197,6 +197,10 @@ CELERY_BEAT_SCHEDULE = {
         "task": "apps.orders.tasks.expire_unpaid_orders",
         "schedule": 300.0,
     },
+    "sync-flash-sale-prices": {
+        "task": "apps.offers.tasks.sync_flash_sale_prices",
+        "schedule": 60.0,
+    },
     "recompute-trending": {
         "task": "apps.catalog.tasks.recompute_trending_scores",
         "schedule": crontab(minute=10),

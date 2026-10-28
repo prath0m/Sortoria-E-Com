@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import type { ProductDetail, Variant } from '@/api/types';
 import { Button } from '@/components/ui/Button';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
+import { useCart } from '@/api/hooks/cart';
+import { flyToBag } from '@/components/motion/FlyToCart';
 import { MAX_PER_LINE, useGuestCart } from '@/stores/cart';
 
 interface ProductPurchaseProps {
@@ -16,28 +18,31 @@ interface ProductPurchaseProps {
 
 export function ProductPurchase({ product, variant, compact, onAdded }: ProductPurchaseProps) {
   const [quantity, setQuantity] = useState(1);
-  const add = useGuestCart((s) => s.add);
+  const { add } = useCart();
+  const openDrawer = useGuestCart((s) => s.setDrawerOpen);
   const navigate = useNavigate();
   const inStock = !!variant && variant.stock > 0;
   const max = variant ? Math.min(variant.stock, MAX_PER_LINE) : 1;
 
-  const addToBag = () => {
+  const image = product.images[0]?.renditions['400'] ?? product.images[0]?.url ?? null;
+
+  const addToBag = async () => {
     if (!variant || !inStock) return false;
-    add(
-      {
+    await add.mutateAsync({
+      line: {
         variantId: variant.id,
         productId: product.id,
         slug: product.slug,
         name: product.name,
         brand: product.brand?.name ?? null,
         variantLabel: variant.label,
-        image: product.images[0]?.renditions['400'] ?? product.images[0]?.url ?? null,
+        image,
         pricePaise: variant.price_paise,
         mrpPaise: variant.mrp_paise,
         maxQuantity: variant.stock,
       },
-      Math.min(quantity, max),
-    );
+      quantity: Math.min(quantity, max),
+    });
     return true;
   };
 
@@ -64,13 +69,15 @@ export function ProductPurchase({ product, variant, compact, onAdded }: ProductP
           disabled={!inStock}
           icon={<ShoppingBag className="h-4 w-4" />}
           data-add-to-bag
-          onClick={(e) => {
-            if (addToBag()) {
+          loading={add.isPending}
+          onClick={async (e) => {
+            const button = e.currentTarget;
+            if (await addToBag().catch(() => false)) {
+              flyToBag(button, image ?? undefined);
               toast.success(`${product.name} is in your bag`, {
                 description: variant?.label || undefined,
-                action: { label: 'View bag', onClick: () => navigate('/cart') },
+                action: { label: 'View bag', onClick: () => openDrawer(true) },
               });
-              window.dispatchEvent(new CustomEvent('sartoria:added-to-bag', { detail: { from: e.currentTarget, image: product.images[0]?.renditions['400'] } }));
               onAdded?.();
             }
           }}
@@ -85,8 +92,8 @@ export function ProductPurchase({ product, variant, compact, onAdded }: ProductP
           block
           disabled={!inStock}
           icon={<Zap className="h-4 w-4" />}
-          onClick={() => {
-            if (addToBag()) navigate('/checkout');
+          onClick={async () => {
+            if (await addToBag().catch(() => false)) navigate('/checkout');
           }}
         >
           Buy now

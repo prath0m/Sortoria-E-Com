@@ -21,6 +21,7 @@ from django.utils.text import slugify
 from PIL import Image, ImageDraw, ImageFont
 
 from apps.accounts.models import User
+from apps.accounts.serializers import STATE_CODES
 from apps.catalog.models import (
     Attribute,
     AttributeValue,
@@ -36,9 +37,12 @@ from apps.catalog.services.aggregates import refresh_products, refresh_search_ve
 from apps.catalog.tasks import build_image_renditions
 from apps.core import caching
 from apps.core.models import StoreSettings
+from apps.offers.models import Bundle, BundleItem, Coupon, CouponRedemption, FlashSale, FlashSaleItem
+from apps.shipping.models import ServiceablePincode, ShippingMethod, ShippingZone
 from config.celery import app as celery_app
 
 from .seed_data import catalog as data
+from .seed_data import commerce
 
 ASSET_DIR = settings.BASE_DIR / "seed_assets" / "images"
 UNSPLASH = "https://images.unsplash.com/photo-{id}?{params}"
@@ -117,6 +121,9 @@ class Command(BaseCommand):
             self.seed_staff()
         self.seed_catalog()
         self.build_missing_renditions()
+        with transaction.atomic():
+            self.seed_shipping()
+            self.seed_offers()
         caching.bump(caching.CATALOG, caching.NAVIGATION, caching.HOME, caching.OFFERS, caching.SHIPPING)
         self.stdout.write(self.style.SUCCESS("Sartoria demo data is ready."))
 
@@ -142,6 +149,10 @@ class Command(BaseCommand):
             ):
                 if field:
                     field.delete(save=False)
+        CouponRedemption.objects.all().delete()
+        Coupon.objects.all().delete()
+        FlashSale.objects.all().delete()
+        Bundle.objects.all().delete()
         StockMovement.objects.all().delete()
         Product.objects.all().delete()
         Category.objects.all().delete()
@@ -213,6 +224,117 @@ class Command(BaseCommand):
             user.save()
             if created:
                 self.stdout.write(f"  {role}: {email} / {os.environ.get(env_key, default)}")
+
+    # ------------------------------------------------------------------ shipping & offers
+    def seed_shipping(self):
+        if ShippingMethod.objects.exists():
+            return
+        self.stdout.write("Seeding shipping methods, zones and pincodes…")
+        for position, (code, name, desc, base, free, bulky, allows) in enumerate(commerce.METHODS):
+            ShippingMethod.objects.create(
+                code=code,
+                name=name,
+                description=desc,
+                base_rate_paise=base * 100,
+                free_threshold_paise=free * 100 if free else None,
+                bulky_surcharge_paise=bulky * 100,
+                allows_bulky=allows,
+                position=position,
+            )
+        zones = {}
+        for name, (std, exp, express, cod, extra) in commerce.ZONES.items():
+            zones[name] = ShippingZone.objects.create(
+                name=name,
+                standard_days_min=std[0],
+                standard_days_max=std[1],
+                express_days_min=exp[0] or 1,
+                express_days_max=exp[1] or 2,
+                express_available=express,
+                cod_available=cod,
+                extra_fee_paise=extra * 100,
+            )
+        rows = []
+        for city, state, zone, first, last in commerce.PINCODE_RANGES:
+            for code in range(first, last + 1):
+                rows.append(
+                    ServiceablePincode(
+                        pincode=str(code),
+                        zone=zones[zone],
+                        city=city,
+                        state=state,
+                        state_code=STATE_CODES[state],
+                    )
+                )
+        ServiceablePincode.objects.bulk_create(rows, ignore_conflicts=True)
+
+    def seed_offers(self):
+        if FlashSale.objects.exists() or Coupon.objects.exists():
+            return
+        self.stdout.write("Seeding flash sale, daily deals, bundles and coupons…")
+        now = timezone.now()
+        products = {p.name: p for p in Product.objects.all()}
+
+        def add_items(sale, items):
+            for position, (name, kind, value, cap) in enumerate(items):
+                FlashSaleItem.objects.create(
+                    sale=sale,
+                    product=products[name],
+                    discount_type=kind,
+                    value=value if kind == "percent" else value * 100,
+                    quantity_cap=cap,
+                    sold_count=self.rng.randint(0, cap // 2) if cap else 0,
+                    position=position,
+                )
+
+        flash = commerce.FLASH_SALE
+        sale = FlashSale.objects.create(
+            title=flash["title"],
+            subtitle=flash["subtitle"],
+            starts_at=now - timedelta(hours=2),
+            ends_at=now + timedelta(hours=flash["hours"]),
+        )
+        add_items(sale, flash["items"])
+        today = timezone.localtime(now).replace(hour=0, minute=0, second=0, microsecond=0)
+        for title, day, items in commerce.DAILY_DEALS:
+            deal = FlashSale.objects.create(
+                kind=FlashSale.Kind.DAILY_DEAL,
+                title=title,
+                subtitle="One piece, one day, one remarkable price.",
+                starts_at=today + timedelta(days=day),
+                ends_at=today + timedelta(days=day + 1),
+            )
+            add_items(deal, items)
+
+        for title, desc, kind, value, names in commerce.BUNDLES:
+            bundle = Bundle.objects.create(
+                title=title,
+                description=desc,
+                discount_type=kind,
+                value=value if kind == "percent" else value * 100,
+            )
+            for name in names:
+                BundleItem.objects.create(bundle=bundle, product=products[name])
+
+        categories = {c.name: c for c in Category.get_root_nodes()}
+        for code, desc, kind, value, cap, min_order, extra in commerce.COUPONS:
+            coupon = Coupon.objects.create(
+                code=code,
+                description=desc,
+                discount_type=kind,
+                value=value if kind == "percent" else value * 100,
+                max_discount_paise=cap * 100 if cap else None,
+                min_order_paise=min_order * 100,
+                starts_at=now - timedelta(days=60),
+                ends_at=now - timedelta(days=3) if extra.get("expired") else None,
+                usage_limit_total=extra.get("usage_limit_total"),
+                times_used=extra.get("times_used", 0),
+                first_order_only=extra.get("first_order_only", False),
+            )
+            for name in extra.get("categories", []):
+                coupon.applicable_categories.add(categories[name])
+        from apps.offers.tasks import sync_flash_sale_prices
+
+        sync_flash_sale_prices()
 
     # ------------------------------------------------------------------ catalog
     def seed_catalog(self):

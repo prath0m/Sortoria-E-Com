@@ -17,6 +17,7 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'jsx-a11y/no-autofocus': 'off',
+      'jsx-a11y/label-has-associated-control': ['error', { assert: 'either', depth: 4 }],
     },
   },
 );

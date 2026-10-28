@@ -129,7 +129,8 @@ class FlashSaleItem(models.Model):
 
     def price_for(self, base_price: int) -> int:
         if self.discount_type == self.DiscountType.PERCENT:
-            return max(100, base_price - (base_price * min(self.value, 95)) // 100)
+            sale = base_price - (base_price * min(self.value, 95)) // 100
+            return max(100, sale // 100 * 100)  # whole rupees
         return min(base_price, max(100, self.value))
 
 
@@ -175,3 +176,20 @@ class BundleItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} × {self.product}"
+
+
+class CouponRedemption(models.Model):
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, related_name="redemptions")
+    order = models.OneToOneField("orders.Order", on_delete=models.CASCADE, related_name="coupon_redemption")
+    user = models.ForeignKey(
+        "accounts.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="coupon_redemptions"
+    )
+    email = models.EmailField(db_index=True)
+    discount_paise = models.PositiveBigIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return f"{self.coupon.code} on {self.order_id}"

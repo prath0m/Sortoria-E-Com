@@ -128,3 +128,66 @@ def make_product(
     refresh_search_vectors([product.pk])
     product.refresh_from_db()
     return product
+
+
+# --- shipping / offers -------------------------------------------------------
+from datetime import timedelta  # noqa: E402
+
+from django.utils import timezone  # noqa: E402
+
+from apps.offers.models import Bundle, BundleItem, Coupon, FlashSale, FlashSaleItem  # noqa: E402
+from apps.shipping.models import ServiceablePincode, ShippingMethod, ShippingZone  # noqa: E402
+
+
+def shipping_setup():
+    """Standard ₹99 (free from ₹1,999), Express ₹249; Mumbai (same state as store) and Bengaluru."""
+    standard = ShippingMethod.objects.create(
+        code="standard",
+        name="Standard",
+        base_rate_paise=9900,
+        free_threshold_paise=199900,
+        bulky_surcharge_paise=49900,
+        position=0,
+    )
+    express = ShippingMethod.objects.create(
+        code="express", name="Express", base_rate_paise=24900, allows_bulky=False, position=1
+    )
+    metro = ShippingZone.objects.create(name="Metro", standard_days_min=2, standard_days_max=4)
+    remote = ShippingZone.objects.create(
+        name="Remote", express_available=False, cod_available=False, extra_fee_paise=5000
+    )
+    ServiceablePincode.objects.create(
+        pincode="400050", zone=metro, city="Mumbai", state="Maharashtra", state_code="27"
+    )
+    ServiceablePincode.objects.create(
+        pincode="560025", zone=metro, city="Bengaluru", state="Karnataka", state_code="29"
+    )
+    ServiceablePincode.objects.create(
+        pincode="744101", zone=remote, city="Port Blair", state="Andaman", state_code="35"
+    )
+    return {"standard": standard, "express": express, "metro": metro, "remote": remote}
+
+
+def make_coupon(code="WELCOME10", **kwargs):
+    defaults = {"discount_type": "percent", "value": 10, "starts_at": timezone.now() - timedelta(days=1)}
+    defaults.update(kwargs)
+    return Coupon.objects.create(code=code, **defaults)
+
+
+def make_flash_sale(products_with_values, *, kind="flash", starts=-1, ends=24, **item_kwargs):
+    sale = FlashSale.objects.create(
+        title="Midnight Sale",
+        kind=kind,
+        starts_at=timezone.now() + timedelta(hours=starts),
+        ends_at=timezone.now() + timedelta(hours=ends),
+    )
+    for product, value in products_with_values:
+        FlashSaleItem.objects.create(sale=sale, product=product, value=value, **item_kwargs)
+    return sale
+
+
+def make_bundle(products, *, discount_type="percent", value=10):
+    bundle = Bundle.objects.create(title="The Desk Set", discount_type=discount_type, value=value)
+    for product in products:
+        BundleItem.objects.create(bundle=bundle, product=product, quantity=1)
+    return bundle

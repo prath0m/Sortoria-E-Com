@@ -7,6 +7,7 @@ import { IconButton } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 import { useAuth } from '@/stores/auth';
 import { useUI } from '@/stores/ui';
+import { HeaderActions } from '../cart/HeaderActions';
 import { MegaMenu } from './MegaMenu';
 
 export function Header() {
@@ -58,7 +59,7 @@ export function Header() {
         )}
       >
         <div className="flex items-center gap-1">
-          <IconButton label="Open menu" className="lg:hidden" onClick={() => setMobileNavOpen(true)}>
+          <IconButton label="Open menu" className="xl:hidden" onClick={() => setMobileNavOpen(true)}>
             <Menu className="h-5 w-5" />
           </IconButton>
           <IconButton label="Search" onClick={() => setSearchOpen(true)} className="lg:hidden">
@@ -92,10 +93,11 @@ export function Header() {
           >
             <User className="h-5 w-5" />
           </Link>
+          <HeaderActions />
         </div>
       </div>
       {categories.length ? (
-        <div className={cn('hidden border-t border-line/70 lg:block', scrolled && 'border-transparent')}>
+        <div className={cn('hidden border-t border-line/70 xl:block', scrolled && 'border-transparent')}>
           <MegaMenu categories={categories} />
         </div>
       ) : null}

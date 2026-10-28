@@ -229,3 +229,100 @@ export interface Suggestions {
   categories: { name: string; slug: string }[];
   brands: { name: string; slug: string }[];
 }
+
+export interface QuoteLine {
+  id: number | null;
+  variant_id: number;
+  product_id: number;
+  slug: string;
+  name: string;
+  brand: string | null;
+  sku: string;
+  variant_label: string;
+  options: { name: string; value: string; hex: string }[];
+  image: { url: string; renditions: Record<string, string>; alt: string } | null;
+  quantity: number;
+  max_quantity: number;
+  unit_price_paise: number;
+  mrp_paise: number;
+  line_total_paise: number;
+  discount_paise: number;
+  flash_sale: { title: string; ends_at: string } | null;
+  is_bulky: boolean;
+  issue: string;
+}
+
+export interface ShippingOption {
+  code: string;
+  name: string;
+  description: string;
+  fee_paise: number;
+  base_fee_paise: number;
+  free: boolean;
+  available: boolean;
+  unavailable_reason: string;
+  eta_from: string | null;
+  eta_to: string | null;
+}
+
+export interface Quote {
+  lines: QuoteLine[];
+  saved_for_later?: QuoteLine[];
+  item_count: number;
+  subtotal_paise: number;
+  mrp_total_paise: number;
+  bundle_discount_paise: number;
+  bundles_applied: { title: string; slug: string; sets: number; discount_paise: number }[];
+  coupon: { code: string; applied: boolean; discount_paise: number; message: string } | null;
+  pincode: string;
+  serviceable: boolean | null;
+  destination: { city: string; state: string } | null;
+  shipping_options: ShippingOption[];
+  shipping_method: string;
+  shipping_fee_paise: number;
+  payment_method: string;
+  cod_available: boolean;
+  cod_unavailable_reason: string;
+  cod_fee_paise: number;
+  tax: { total_paise: number; cgst_paise: number; sgst_paise: number; igst_paise: number };
+  savings_paise: number;
+  total_paise: number;
+  free_shipping_threshold_paise: number | null;
+  free_shipping_remaining_paise: number;
+  messages: string[];
+  has_issues: boolean;
+}
+
+export interface DeliveryEstimate {
+  pincode: string;
+  serviceable: boolean;
+  city?: string;
+  state?: string;
+  options: ShippingOption[];
+  cod_available: boolean;
+}
+
+export interface Sale {
+  id: number;
+  kind: 'flash' | 'daily_deal';
+  title: string;
+  slug: string;
+  subtitle: string;
+  banner_image: string | null;
+  starts_at: string;
+  ends_at: string;
+  is_live: boolean;
+  products: (ProductCard & { sale_progress?: { cap: number | null; sold: number } })[];
+}
+
+export interface BundleOffer {
+  title: string;
+  slug: string;
+  description: string;
+  image: string | null;
+  ends_at: string | null;
+  items: { quantity: number; product: ProductCard }[];
+  value_paise: number;
+  bundle_price_paise: number;
+  saving_paise: number;
+}

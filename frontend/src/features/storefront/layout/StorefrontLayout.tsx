@@ -4,6 +4,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/motion/PageTransition';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { PageLoader } from '@/components/ui/PageLoader';
+import { FlyToCartLayer } from '@/components/motion/FlyToCart';
+import { MiniCartDrawer } from '@/features/storefront/cart/MiniCartDrawer';
 import { QuickView } from '@/features/storefront/catalog/QuickView';
 import { AnnouncementBar } from './AnnouncementBar';
 import { Footer } from './Footer';
@@ -36,6 +38,8 @@ export function StorefrontLayout() {
       <MobileNav />
       <SearchOverlay />
       <QuickView />
+      <MiniCartDrawer />
+      <FlyToCartLayer />
     </SmoothScroll>
   );
 }

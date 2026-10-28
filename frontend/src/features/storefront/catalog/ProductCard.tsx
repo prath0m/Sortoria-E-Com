@@ -8,6 +8,7 @@ import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { cn } from '@/lib/cn';
 import { useUI } from '@/stores/ui';
 import { ProductBadges } from './ProductBadges';
+import { WishlistHeart } from '../wishlist/WishlistHeart';
 
 interface ProductCardProps {
   product: Product;
@@ -45,6 +46,7 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
         />
       ) : null}
       <ProductBadges product={product} className="absolute left-3 top-3 flex flex-col items-start gap-1.5" />
+      <WishlistHeart productId={product.id} name={product.name} className="absolute right-3 top-3 z-[2]" />
       <button
         type="button"
         onClick={(e) => {

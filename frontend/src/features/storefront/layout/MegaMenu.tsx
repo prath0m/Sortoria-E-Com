@@ -49,7 +49,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
 
   return (
     <nav ref={navRef} aria-label="Departments" className="relative" onMouseLeave={closeSoon}>
-      <ul className="scrollbar-none container-page flex items-center justify-between gap-1 overflow-x-auto xl:justify-center xl:gap-2">
+      <ul className="scrollbar-none container-page flex items-center justify-between gap-1 overflow-x-auto">
         {categories.map((cat, i) => (
           <li key={cat.id} onMouseEnter={() => openSoon(cat.id)}>
             <button
@@ -60,20 +60,29 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
               onClick={() => setActive(active === cat.id ? null : cat.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                'relative whitespace-nowrap px-2 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-ink-soft transition-colors hover:text-burgundy-800 xl:px-3',
+                'relative whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-burgundy-800 2xl:px-2.5',
                 active === cat.id && 'text-burgundy-800',
               )}
             >
               {cat.name}
               <span
                 className={cn(
-                  'absolute inset-x-2 bottom-1.5 h-px origin-left scale-x-0 bg-gold-400 transition-transform duration-400 ease-luxe xl:inset-x-3',
+                  'absolute inset-x-1.5 bottom-1.5 h-px origin-left scale-x-0 bg-gold-400 transition-transform duration-400 ease-luxe 2xl:inset-x-2.5',
                   active === cat.id && 'scale-x-100',
                 )}
               />
             </button>
           </li>
         ))}
+        <li>
+          <Link
+            to="/offers"
+            className="relative whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-burgundy-700 transition-colors hover:text-burgundy-900 2xl:px-2.5"
+          >
+            <span className="mr-1.5 inline-block h-1.5 w-1.5 -translate-y-px rotate-45 bg-gold-400" aria-hidden="true" />
+            Offers
+          </Link>
+        </li>
       </ul>
       <AnimatePresence>
         {current ? (

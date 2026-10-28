@@ -83,6 +83,12 @@ export function MobileNav() {
                 <Link to={user ? '/account' : '/login'} onClick={close} className="block">
                   {user ? `Hello, ${user.first_name || 'there'}` : 'Sign in or create an account'}
                 </Link>
+                <Link to="/offers" onClick={close} className="block font-semibold text-burgundy-800">
+                  Offers
+                </Link>
+                <Link to="/wishlist" onClick={close} className="block">
+                  Wishlist
+                </Link>
                 <Link to="/track-order" onClick={close} className="block text-ink-soft">
                   Track an order
                 </Link>

@@ -10,6 +10,11 @@ const ShopAllPage = lazy(() => import('@/features/storefront/catalog/CategoryPag
 const SearchPage = lazy(() => import('@/features/storefront/catalog/SearchPage'));
 const BrandPage = lazy(() => import('@/features/storefront/catalog/BrandPage'));
 const ProductPage = lazy(() => import('@/features/storefront/product/ProductPage'));
+const CartPage = lazy(() => import('@/features/storefront/cart/CartPage'));
+const WishlistPage = lazy(() => import('@/features/storefront/wishlist/WishlistPage'));
+const OffersPage = lazy(() => import('@/features/storefront/offers/OffersPage'));
+const SalePage = lazy(() => import('@/features/storefront/offers/SalePage'));
+const BundlePage = lazy(() => import('@/features/storefront/offers/BundlePage'));
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -30,6 +35,11 @@ export const router = createBrowserRouter([
       { path: 'search', element: <SearchPage /> },
       { path: 'brands/:slug', element: <BrandPage /> },
       { path: 'products/:slug', element: <ProductPage /> },
+      { path: 'cart', element: <CartPage /> },
+      { path: 'wishlist', element: <WishlistPage /> },
+      { path: 'offers', element: <OffersPage /> },
+      { path: 'offers/sale/:slug', element: <SalePage /> },
+      { path: 'offers/bundles/:slug', element: <BundlePage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'forgot-password', element: <ForgotPasswordPage /> },

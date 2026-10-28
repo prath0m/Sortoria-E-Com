@@ -16,7 +16,9 @@ import { findVariant, imagesForSelection, initialSelection, type Selection } fro
 import { Gallery } from './Gallery';
 import { ProductDetails } from './ProductDetails';
 import { ProductPurchase } from './ProductPurchase';
+import { PincodeChecker } from './PincodeChecker';
 import { ShareMenu } from './ShareMenu';
+import { WishlistHeart } from '../wishlist/WishlistHeart';
 import { StickyPurchaseBar } from './StickyPurchaseBar';
 
 export default function ProductPage() {
@@ -94,7 +96,10 @@ export default function ProductPage() {
           <div className="lg:sticky lg:top-[calc(var(--header-bottom,6rem)+1.5rem)] lg:self-start">
             <ProductBadges product={{ ...product, brand: product.brand?.name ?? null, category: product.category.name }} className="mb-4 flex gap-2" />
             {product.brand ? <p className="eyebrow">{product.brand.name}</p> : null}
-            <h1 className="mt-2 text-display-lg">{product.name}</h1>
+            <div className="mt-2 flex items-start justify-between gap-4">
+              <h1 className="text-display-lg">{product.name}</h1>
+              <WishlistHeart productId={product.id} name={product.name} size="lg" className="shrink-0" />
+            </div>
             <Rating value={product.rating_avg} count={product.rating_count} className="mt-3" />
             <Price className="mt-5" size="lg" price={price} mrp={variant?.mrp_paise ?? product.mrp_paise} />
             <p className="mt-1 text-xs text-ink-muted">Inclusive of all taxes</p>
@@ -116,6 +121,9 @@ export default function ProductPage() {
             ) : null}
             <div ref={purchaseRef} className="mt-8">
               <ProductPurchase product={product} variant={variant} />
+            </div>
+            <div className="mt-6">
+              <PincodeChecker productSlug={product.slug} />
             </div>
             <div className="mt-8">
               <ShareMenu title={product.name} image={product.images[0]?.url} />

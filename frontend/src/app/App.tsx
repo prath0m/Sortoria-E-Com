@@ -7,6 +7,7 @@ import { Toaster } from 'sonner';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/stores/auth';
 import { router } from './router';
+import { installSessionSync } from './sessionSync';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,6 +18,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+installSessionSync(queryClient);
 
 export function App() {
   const bootstrap = useAuth((s) => s.bootstrap);
