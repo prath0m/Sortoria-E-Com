@@ -14,6 +14,17 @@ function Row({ label, value, saving }: { label: string; value: string; saving?: 
   );
 }
 
+function paymentLine(order: OrderDetail) {
+  const labels: Record<string, string> = {
+    pending: order.payment_method === 'cod' ? 'Cash on delivery · due on arrival' : 'Awaiting payment',
+    paid: order.payment_method === 'cod' ? 'Cash on delivery · paid' : 'Paid online',
+    failed: 'Payment failed',
+    refunded: 'Refunded in full',
+    partially_refunded: 'Partly refunded',
+  };
+  return labels[order.payment_status] ?? order.payment_status;
+}
+
 /** Shared order body for the confirmation page and the account order page. */
 export function OrderView({ order, actions }: { order: OrderDetail; actions?: React.ReactNode }) {
   const a = order.shipping_address;
@@ -60,10 +71,7 @@ export function OrderView({ order, actions }: { order: OrderDetail; actions?: Re
           </section>
           <section>
             <h2 className="eyebrow mb-2">Payment</h2>
-            <p className="text-sm text-ink-soft">
-              {order.payment_method === 'cod' ? 'Cash on delivery' : 'Paid online'} ·{' '}
-              <span className="capitalize">{order.payment_status.replace('_', ' ')}</span>
-            </p>
+            <p className="text-sm text-ink-soft">{paymentLine(order)}</p>
             {order.tracking_number ? (
               <>
                 <h2 className="eyebrow mb-2 mt-5">Tracking</h2>

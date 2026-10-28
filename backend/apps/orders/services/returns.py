@@ -51,10 +51,16 @@ COPY = {
     R.REQUESTED: ("Return requested", "We've received your request and will review it within one working day."),
     R.APPROVED: ("Return approved", "Your return is approved. We'll arrange a pickup from your delivery address."),
     R.REJECTED: ("Return update", "We weren't able to accept this return. Our note below explains why."),
-    R.PICKUP_SCHEDULED: ("Pickup scheduled", "Our courier partner will collect the parcel on the date below. Please keep it packed and ready."),
+    R.PICKUP_SCHEDULED: (
+        "Pickup scheduled",
+        "Our courier partner will collect the parcel on the date below. Please keep it packed and ready.",
+    ),
     R.RECEIVED: ("Return received", "Your parcel has reached our studio and is being inspected."),
     R.REFUNDED: ("Refund issued", "Your refund has been issued. Banks usually take 5–7 working days to show it."),
-    R.REPLACED: ("Replacement on its way", "Your replacement has been dispatched. You'll receive tracking details separately."),
+    R.REPLACED: (
+        "Replacement on its way",
+        "Your replacement has been dispatched. You'll receive tracking details separately.",
+    ),
 }
 
 
@@ -121,9 +127,14 @@ def request_return(
         if entry is None or not entry.eligible:
             raise DomainError(entry.reason if entry else "That piece isn't part of this order.", code="not_returnable")
         if quantity > entry.returnable_quantity:
-            raise DomainError(f"You can return up to {entry.returnable_quantity} of {entry.item.product_name}.", code="quantity")
+            raise DomainError(
+                f"You can return up to {entry.returnable_quantity} of {entry.item.product_name}.", code="quantity"
+            )
         if entry.policy == ReturnPolicy.NON_RETURNABLE and reason not in FAULT_REASONS:
-            raise DomainError(f"{entry.item.product_name} can only be returned if it arrived damaged or faulty.", code="not_returnable")
+            raise DomainError(
+                f"{entry.item.product_name} can only be returned if it arrived damaged or faulty.",
+                code="not_returnable",
+            )
         if entry.policy == ReturnPolicy.REPLACEMENT_ONLY:
             resolution = ReturnRequest.Resolution.REPLACEMENT
     if needs_photos and not photos:
@@ -191,7 +202,13 @@ def transition_return(ret: ReturnRequest, to: str, *, actor=None, note: str = ""
     if to == R.RECEIVED:
         for ri in ret.items.select_related("order_item"):
             if ri.order_item.variant_id:
-                adjust_stock(ri.order_item.variant_id, ri.quantity, StockMovement.Reason.RETURN_RESTOCK, reference=ret.number, actor=actor)
+                adjust_stock(
+                    ri.order_item.variant_id,
+                    ri.quantity,
+                    StockMovement.Reason.RETURN_RESTOCK,
+                    reference=ret.number,
+                    actor=actor,
+                )
             OrderItem.objects.filter(pk=ri.order_item_id).update(returned_quantity=F("returned_quantity") + ri.quantity)
     if to in (R.REFUNDED, R.REPLACED, R.REJECTED):
         ret.resolved_at = timezone.now()
@@ -199,7 +216,9 @@ def transition_return(ret: ReturnRequest, to: str, *, actor=None, note: str = ""
     if to == R.REFUNDED:
         _issue_refund(ret)
     ret.save(update_fields=fields)
-    ReturnStatusEvent.objects.create(return_request=ret, from_status=previous, to_status=to, note=note[:300], actor=actor)
+    ReturnStatusEvent.objects.create(
+        return_request=ret, from_status=previous, to_status=to, note=note[:300], actor=actor
+    )
     transaction.on_commit(lambda: _notify(ret.pk))
     return ret
 

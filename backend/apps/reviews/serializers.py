@@ -23,6 +23,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ReviewInput(serializers.Serializer):
     rating = serializers.IntegerField(min_value=1, max_value=5)
     title = serializers.CharField(max_length=120)
-    body = serializers.CharField(min_length=20, max_length=4000, error_messages={
-        "min_length": "Tell us a little more: at least 20 characters."
-    })
+    body = serializers.CharField(
+        min_length=20, max_length=4000, error_messages={"min_length": "Tell us a little more: at least 20 characters."}
+    )

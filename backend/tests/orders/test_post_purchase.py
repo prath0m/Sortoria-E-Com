@@ -5,6 +5,7 @@ from django.core import mail
 from django.utils import timezone
 
 from apps.catalog.models import ProductVariant
+from apps.core.exceptions import ConflictError
 from apps.orders.models import Order
 from apps.orders.services.returns import transition_return
 from apps.orders.services.state_machine import STAFF, transition
@@ -35,7 +36,9 @@ def test_order_history_and_customer_cancel(auth, customer, shop):
     from .conftest import ADDRESS
 
     number = client.post(
-        "/api/v1/checkout/", {"shipping_address": ADDRESS, "shipping_method": "standard", "payment_method": "cod"}, format="json"
+        "/api/v1/checkout/",
+        {"shipping_address": ADDRESS, "shipping_method": "standard", "payment_method": "cod"},
+        format="json",
     ).data["order"]["number"]
     listing = client.get("/api/v1/orders/").data
     assert listing["count"] == 1 and listing["results"][0]["number"] == number
@@ -48,8 +51,15 @@ def test_order_history_and_customer_cancel(auth, customer, shop):
 
 def test_public_tracking_by_email_or_phone(api, shop):
     order = place(api, shop["shirt"], qty=1)
-    assert api.post("/api/v1/orders/track/", {"number": order.number, "contact": "ADA@example.com"}, format="json").status_code == 200
-    by_phone = api.post("/api/v1/orders/track/", {"number": order.number.lower(), "contact": "+91 98765 43210"}, format="json")
+    assert (
+        api.post(
+            "/api/v1/orders/track/", {"number": order.number, "contact": "ADA@example.com"}, format="json"
+        ).status_code
+        == 200
+    )
+    by_phone = api.post(
+        "/api/v1/orders/track/", {"number": order.number.lower(), "contact": "+91 98765 43210"}, format="json"
+    )
     assert by_phone.status_code == 200 and by_phone.data["access_token"]
     wrong = api.post("/api/v1/orders/track/", {"number": order.number, "contact": "someone@else.com"}, format="json")
     assert wrong.status_code == 404
@@ -57,15 +67,21 @@ def test_public_tracking_by_email_or_phone(api, shop):
 
 def test_returns_only_after_delivery_and_within_window(api, shop):
     order = place(api, shop["shirt"])
-    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data["items"]
+    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data[
+        "items"
+    ]
     assert items[0]["eligible"] is False
 
     deliver(order)
-    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data["items"]
+    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data[
+        "items"
+    ]
     assert items[0]["eligible"] and items[0]["returnable_quantity"] == 2
 
     Order.objects.filter(pk=order.pk).update(delivered_at=timezone.now() - timedelta(days=40))
-    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data["items"]
+    items = api.get(f"/api/v1/orders/{order.number}/returnable-items/", {"token": order.guest_access_token}).data[
+        "items"
+    ]
     assert items[0]["eligible"] is False and "window" in items[0]["note"]
 
 
@@ -103,7 +119,7 @@ def test_cod_return_lifecycle_restocks_and_records_manual_refund(api, shop):
     assert created.data["refund_amount_paise"] == 349900  # one of two shirts
     ret = order.returns.get()
 
-    with pytest.raises(Exception):
+    with pytest.raises(ConflictError):
         transition_return(ret, "refunded")  # can't skip inspection
     transition_return(ret, "approved")
     transition_return(ret, "pickup_scheduled", pickup_date=timezone.localdate() + timedelta(days=2))
@@ -121,8 +137,13 @@ def test_prepaid_return_refunds_through_gateway(api, shop, razorpay_client):
     order = place(api, shop["shirt"], qty=1, payment_method="razorpay")
     api.post(
         "/api/v1/payments/razorpay/verify/",
-        {"order_number": order.number, "token": order.guest_access_token, "razorpay_order_id": "order_test_1",
-         "razorpay_payment_id": "pay_1", "razorpay_signature": razorpay_signature("order_test_1", "pay_1")},
+        {
+            "order_number": order.number,
+            "token": order.guest_access_token,
+            "razorpay_order_id": "order_test_1",
+            "razorpay_payment_id": "pay_1",
+            "razorpay_signature": razorpay_signature("order_test_1", "pay_1"),
+        },
         format="json",
     )
     order = deliver(order)
@@ -130,7 +151,9 @@ def test_prepaid_return_refunds_through_gateway(api, shop, razorpay_client):
     ret = order.returns.get()
     for status in ("approved", "pickup_scheduled", "received", "refunded"):
         transition_return(ret, status, pickup_date=timezone.localdate())
-    razorpay_client.payment.refund.assert_called_once_with("pay_1", {"amount": 349900, "notes": {"reason": f"Return {ret.number}"}})
+    razorpay_client.payment.refund.assert_called_once_with(
+        "pay_1", {"amount": 349900, "notes": {"reason": f"Return {ret.number}"}}
+    )
     order.refresh_from_db()
     assert order.payment_status == "refunded"
 
@@ -141,7 +164,9 @@ def test_non_returnable_items_accept_only_fault_claims(api, shop):
     order = deliver(place(api, serum, qty=1))
     changed_mind = _request(api, order, reason="changed_mind", refund_upi_id="ada@okbank")
     assert changed_mind.status_code == 400 and changed_mind.data["code"] == "not_returnable"
-    damaged = _request(api, order, reason="damaged", refund_upi_id="ada@okbank", photos=[png_file("broken.png", size=(400, 400))])
+    damaged = _request(
+        api, order, reason="damaged", refund_upi_id="ada@okbank", photos=[png_file("broken.png", size=(400, 400))]
+    )
     assert damaged.status_code == 201
 
 

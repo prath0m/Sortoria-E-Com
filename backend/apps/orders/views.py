@@ -202,7 +202,13 @@ class CancelOrderView(APIView):
     def post(self, request, number):
         order = get_accessible_order(request, number)
         reason = str(request.data.get("reason", "")).strip()[:300] or "Cancelled by customer"
-        transition(order, OrderStatus.CANCELLED, actor_type=CUSTOMER, actor=request.user if request.user.is_authenticated else None, note=reason)
+        transition(
+            order,
+            OrderStatus.CANCELLED,
+            actor_type=CUSTOMER,
+            actor=request.user if request.user.is_authenticated else None,
+            note=reason,
+        )
         return Response(OrderDetailSerializer(order_queryset().get(pk=order.pk)).data)
 
 

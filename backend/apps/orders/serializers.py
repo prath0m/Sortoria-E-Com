@@ -196,7 +196,10 @@ class ReturnSerializer(serializers.Serializer):
         return [p.image.url for p in obj.photos.all()]
 
     def get_events(self, obj) -> list[dict]:
-        return [{"status": e.to_status, "label": e.get_to_status_display(), "created_at": e.created_at} for e in obj.events.all()]
+        return [
+            {"status": e.to_status, "label": e.get_to_status_display(), "created_at": e.created_at}
+            for e in obj.events.all()
+        ]
 
 
 class ReturnInput(serializers.Serializer):
@@ -205,8 +208,12 @@ class ReturnInput(serializers.Serializer):
     items = serializers.JSONField()
     reason = serializers.ChoiceField(choices=ReturnRequest.Reason.choices)
     comments = serializers.CharField(required=False, allow_blank=True, max_length=1000)
-    refund_upi_id = serializers.RegexField(r"^[\w.\-]{2,}@[a-zA-Z]{2,}$", required=False, allow_blank=True,
-                                           error_messages={"invalid": "Enter a valid UPI ID, like name@bank."})
+    refund_upi_id = serializers.RegexField(
+        r"^[\w.\-]{2,}@[a-zA-Z]{2,}$",
+        required=False,
+        allow_blank=True,
+        error_messages={"invalid": "Enter a valid UPI ID, like name@bank."},
+    )
 
     def validate_items(self, value):
         if not isinstance(value, list) or not all(isinstance(i, dict) and "order_item_id" in i for i in value):

@@ -11,18 +11,39 @@ pytestmark = pytest.mark.django_db
 
 def deliver(user, product):
     order = Order.objects.create(
-        number=f"SRT-R-{Order.objects.count() + 1}", user=user, email=user.email, phone="9876543210", status="delivered",
-        payment_method="cod", shipping_address={}, billing_address={}, shipping_method="standard",
-        subtotal_paise=1, grand_total_paise=1,
+        number=f"SRT-R-{Order.objects.count() + 1}",
+        user=user,
+        email=user.email,
+        phone="9876543210",
+        status="delivered",
+        payment_method="cod",
+        shipping_address={},
+        billing_address={},
+        shipping_method="standard",
+        subtotal_paise=1,
+        grand_total_paise=1,
     )
     OrderItem.objects.create(
-        order=order, product_id_snapshot=product.pk, product_name=product.name, sku="X", mrp_paise=1,
-        unit_price_paise=1, quantity=1, tax_rate=5, tax_paise=0, line_total_paise=1,
+        order=order,
+        product_id_snapshot=product.pk,
+        product_name=product.name,
+        sku="X",
+        mrp_paise=1,
+        unit_price_paise=1,
+        quantity=1,
+        tax_rate=5,
+        tax_paise=0,
+        line_total_paise=1,
     )
 
 
 def payload(**overrides):
-    return {"rating": 5, "title": "Beautifully made", "body": "Soft, well cut and the stitching is immaculate.", **overrides}
+    return {
+        "rating": 5,
+        "title": "Beautifully made",
+        "body": "Soft, well cut and the stitching is immaculate.",
+        **overrides,
+    }
 
 
 def test_requires_sign_in(api):
@@ -71,7 +92,9 @@ def test_validation_and_photos(auth, customer):
 def test_sorting_and_rating_filter(api):
     product = make_product()
     for rating in (2, 5, 4):
-        Review.objects.create(product=product, user=UserFactory(), rating=rating, title="t", body="b" * 30, status="approved")
+        Review.objects.create(
+            product=product, user=UserFactory(), rating=rating, title="t", body="b" * 30, status="approved"
+        )
     data = api.get(f"/api/v1/products/{product.slug}/reviews/", {"sort": "lowest"}).data
     assert [r["rating"] for r in data["results"]] == [2, 4, 5]
     assert api.get(f"/api/v1/products/{product.slug}/reviews/", {"rating": 4}).data["count"] == 1
