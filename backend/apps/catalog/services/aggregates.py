@@ -25,8 +25,7 @@ def refresh_products(product_ids) -> None:
             product.max_price_paise = max(prices)
             product.mrp_paise = cheapest.mrp_paise
             product.max_discount_pct = max(
-                round((v.mrp_paise - effective_price(v.price_paise, item)) * 100 / v.mrp_paise)
-                for v in variants
+                round((v.mrp_paise - effective_price(v.price_paise, item)) * 100 / v.mrp_paise) for v in variants
             )
             product.total_stock = sum(max(v.stock, 0) for v in variants)
             product.in_stock = product.total_stock > 0

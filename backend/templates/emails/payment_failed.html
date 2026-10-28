@@ -1,0 +1,9 @@
+{% extends "emails/base.html" %}
+{% block preheader %}No money was taken. You can try again from your order page.{% endblock %}
+{% block content %}
+{% include "emails/partials/heading.html" with eyebrow=eyebrow title=title %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Dear {{ first_name|default:"friend" }},</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">{{ message }}</p>
+{% include "emails/partials/button.html" with url=order_url label="Try paying again" %}
+{% include "emails/partials/order_items.html" %}
+{% endblock %}

@@ -106,6 +106,15 @@
     @apply font-display font-medium text-accent;
   }
 
+  /* Cormorant defaults to old-style figures; prices and counts read better lining. */
+  .font-display,
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-variant-numeric: lining-nums;
+  }
+
   ::selection {
     @apply bg-gold-200 text-ink;
   }

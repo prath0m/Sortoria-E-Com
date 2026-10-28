@@ -170,9 +170,7 @@ class ImportJob(BaseModel):
     error_rows = models.PositiveIntegerField(default=0)
     error_report = models.FileField(upload_to="imports/errors/", blank=True)
     message = models.TextField(blank=True)
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+"
-    )
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
 
     class Meta:
         ordering = ("-created_at",)

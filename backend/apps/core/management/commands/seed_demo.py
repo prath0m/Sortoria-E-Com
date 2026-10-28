@@ -104,9 +104,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--flush", action="store_true", help="Delete existing demo data first.")
-        parser.add_argument(
-            "--no-images", action="store_true", help="Generate artwork instead of downloading."
-        )
+        parser.add_argument("--no-images", action="store_true", help="Generate artwork instead of downloading.")
 
     def handle(self, *args, **options):
         # Run image renditions and emails inline; no worker needed for seeding. Celery's config is
@@ -349,9 +347,7 @@ class Command(BaseCommand):
         self.stdout.write("Seeding attributes, brands and categories…")
         with transaction.atomic():
             values = self._seed_attributes()
-            brands = {
-                name: Brand.objects.create(name=name, description=desc) for name, desc in data.BRANDS.items()
-            }
+            brands = {name: Brand.objects.create(name=name, description=desc) for name, desc in data.BRANDS.items()}
             subcategories = self._seed_categories()
         self.stdout.write(f"Seeding {len(data.PRODUCTS)} products (downloading photos on first run)…")
         now = timezone.now()
@@ -368,9 +364,7 @@ class Command(BaseCommand):
     def _seed_attributes(self):
         values: dict[tuple[str, str], AttributeValue] = {}
         for position, (name, (kind, unit, axis, options)) in enumerate(data.ATTRIBUTES.items()):
-            attr = Attribute.objects.create(
-                name=name, kind=kind, unit=unit, is_variant_axis=axis, position=position
-            )
+            attr = Attribute.objects.create(name=name, kind=kind, unit=unit, is_variant_axis=axis, position=position)
             for vpos, option in enumerate(options):
                 value, hex_code = option if isinstance(option, tuple) else (option, "")
                 numeric = None
@@ -397,9 +391,7 @@ class Command(BaseCommand):
                 seo_title=f"{name} — curated at Sartoria",
                 seo_description=f"Shop considered {name.lower()} at Sartoria. {headline}.",
             )
-            root.banner_image.save(
-                f"{root.slug}-banner.jpg", self.photos.get(photo, "banner", name), save=False
-            )
+            root.banner_image.save(f"{root.slug}-banner.jpg", self.photos.get(photo, "banner", name), save=False)
             root.image.save(f"{root.slug}.jpg", self.photos.get(photo, "tile", name), save=False)
             root.menu_image.save(f"{root.slug}-menu.jpg", self.photos.get(photo, "tile", name), save=False)
             root.save()
@@ -443,9 +435,7 @@ class Command(BaseCommand):
         position = 0
         for group, rows in spec["specs"].items():
             for key, value in rows:
-                ProductSpec.objects.create(
-                    product=product, group=group, key=key, value=value, position=position
-                )
+                ProductSpec.objects.create(product=product, group=group, key=key, value=value, position=position)
                 position += 1
         if spec["brand"]:
             ProductSpec.objects.create(

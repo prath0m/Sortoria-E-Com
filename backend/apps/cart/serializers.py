@@ -42,9 +42,7 @@ def serialize_line(line: QuoteLine) -> dict:
         "line_total_paise": line.gross,
         "discount_paise": line.discount,
         "flash_sale": (
-            {"title": line.flash_item.sale.title, "ends_at": line.flash_item.sale.ends_at}
-            if line.flash_item
-            else None
+            {"title": line.flash_item.sale.title, "ends_at": line.flash_item.sale.ends_at} if line.flash_item else None
         ),
         "is_bulky": product.product_type == "bulky",
         "issue": line.issue,

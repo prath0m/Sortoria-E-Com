@@ -43,14 +43,10 @@ LISTING_PARAMS = [
 
 def card_queryset(qs):
     return qs.select_related("brand", "category").prefetch_related(
-        Prefetch(
-            "images", queryset=ProductImage.objects.select_related("option_value").order_by("position", "id")
-        ),
+        Prefetch("images", queryset=ProductImage.objects.select_related("option_value").order_by("position", "id")),
         Prefetch(
             "variants",
-            queryset=ProductVariant.objects.filter(is_active=True).prefetch_related(
-                "option_values__attribute"
-            ),
+            queryset=ProductVariant.objects.filter(is_active=True).prefetch_related("option_values__attribute"),
         ),
     )
 
@@ -129,21 +125,15 @@ class ProductFacetsView(APIView):
     def get(self, request):
         params = ListingParams.from_query(request.query_params)
         cache_key = request.get_full_path()
-        return Response(
-            caching.cached(caching.CATALOG, f"facets:{cache_key}", lambda: build_facets(params), 300)
-        )
+        return Response(caching.cached(caching.CATALOG, f"facets:{cache_key}", lambda: build_facets(params), 300))
 
 
 def detail_queryset():
     return Product.objects.select_related("brand", "category").prefetch_related(
-        Prefetch(
-            "images", queryset=ProductImage.objects.select_related("option_value").order_by("position", "id")
-        ),
+        Prefetch("images", queryset=ProductImage.objects.select_related("option_value").order_by("position", "id")),
         Prefetch(
             "variants",
-            queryset=ProductVariant.objects.filter(is_active=True).prefetch_related(
-                "option_values__attribute"
-            ),
+            queryset=ProductVariant.objects.filter(is_active=True).prefetch_related("option_values__attribute"),
         ),
         "specs",
         "attribute_values__attribute",
@@ -153,9 +143,7 @@ def detail_queryset():
 class ProductDetailView(APIView):
     @extend_schema(responses=ProductDetailSerializer)
     def get(self, request, slug):
-        product = get_object_or_404(
-            detail_queryset().filter(pk__in=visible_products().values("pk")), slug=slug
-        )
+        product = get_object_or_404(detail_queryset().filter(pk__in=visible_products().values("pk")), slug=slug)
         flash = live_flash_items([product.pk])
         return Response(ProductDetailSerializer(product, context={"flash": flash, "request": request}).data)
 

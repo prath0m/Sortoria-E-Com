@@ -60,9 +60,7 @@ def line_is_eligible(coupon: Coupon, product) -> bool:
     return any(product.category.path.startswith(c.path) for c in categories)
 
 
-def check_coupon(
-    coupon: Coupon | None, *, code: str, user, email: str | None, order_subtotal: int
-) -> CouponCheck:
+def check_coupon(coupon: Coupon | None, *, code: str, user, email: str | None, order_subtotal: int) -> CouponCheck:
     if coupon is None:
         return CouponCheck(None, False, f"We don't recognise the code {code.upper()}.")
     now = timezone.now()

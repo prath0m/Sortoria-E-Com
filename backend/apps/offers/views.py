@@ -16,9 +16,7 @@ from .models import Bundle, BundleItem, FlashSale, FlashSaleItem
 
 def _sale_payload(sale: FlashSale, request) -> dict:
     items = list(sale.items.all())
-    visible = {
-        p.pk: p for p in card_queryset(visible_products().filter(pk__in=[i.product_id for i in items]))
-    }
+    visible = {p.pk: p for p in card_queryset(visible_products().filter(pk__in=[i.product_id for i in items]))}
     products = [visible[i.product_id] for i in items if i.product_id in visible]
     caps = {i.product_id: {"cap": i.quantity_cap, "sold": i.sold_count} for i in items}
     cards = serialize_cards(products, request)
@@ -55,17 +53,13 @@ class FlashSalesView(APIView):
 
     @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
-        return Response(
-            caching.cached(caching.OFFERS, "flash", lambda: _sales(FlashSale.Kind.FLASH, request), 60)
-        )
+        return Response(caching.cached(caching.OFFERS, "flash", lambda: _sales(FlashSale.Kind.FLASH, request), 60))
 
 
 class DailyDealsView(APIView):
     @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
-        return Response(
-            caching.cached(caching.OFFERS, "deals", lambda: _sales(FlashSale.Kind.DAILY_DEAL, request), 60)
-        )
+        return Response(caching.cached(caching.OFFERS, "deals", lambda: _sales(FlashSale.Kind.DAILY_DEAL, request), 60))
 
 
 class FlashSaleDetailView(APIView):
@@ -108,9 +102,7 @@ def _bundle_payload(bundle: Bundle, request) -> dict:
 class BundlesView(APIView):
     @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
-        bundles = Bundle.objects.live().prefetch_related(
-            Prefetch("items", queryset=BundleItem.objects.order_by("id"))
-        )
+        bundles = Bundle.objects.live().prefetch_related(Prefetch("items", queryset=BundleItem.objects.order_by("id")))
         return Response([_bundle_payload(b, request) for b in bundles])
 
 

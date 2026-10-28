@@ -179,9 +179,7 @@ def test_first_order_and_per_user_limits(world):
     assert price_cart([(v(world["tee"]), 1)], user=user, email=user.email, coupon_code="FIRST").coupon_applied
 
     order = _order(user)
-    assert not price_cart(
-        [(v(world["tee"]), 1)], user=user, email=user.email, coupon_code="FIRST"
-    ).coupon_applied
+    assert not price_cart([(v(world["tee"]), 1)], user=user, email=user.email, coupon_code="FIRST").coupon_applied
 
     CouponRedemption.objects.create(coupon=once, order=order, user=user, email=user.email, discount_paise=1)
     assert (

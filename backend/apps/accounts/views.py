@@ -30,9 +30,7 @@ from .throttles import LoginEmailThrottle
 # headers cross-origin after a CORS preflight, which our allow-list refuses, so it blocks CSRF.
 CLIENT_HEADER = "HTTP_X_SARTORIA_CLIENT"
 
-AuthResponse = inline_serializer(
-    "AuthResponse", fields={"access": serializers.CharField(), "user": UserSerializer()}
-)
+AuthResponse = inline_serializer("AuthResponse", fields={"access": serializers.CharField(), "user": UserSerializer()})
 
 
 # Readable (non-httpOnly) flag so the SPA only attempts a silent refresh when a session exists.

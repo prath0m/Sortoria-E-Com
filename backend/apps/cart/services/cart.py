@@ -64,9 +64,7 @@ def merge_guest_cart(cart: Cart, lines: list[dict]) -> None:
     """Merge a guest bag into the account: sum quantities, cap at stock, skip anything unavailable."""
     variants = {
         v.pk: v
-        for v in ProductVariant.objects.select_related("product").filter(
-            pk__in=[line["variant_id"] for line in lines]
-        )
+        for v in ProductVariant.objects.select_related("product").filter(pk__in=[line["variant_id"] for line in lines])
     }
     existing = {i.variant_id: i for i in cart.items.select_for_update()}
     for line in lines:
@@ -75,9 +73,7 @@ def merge_guest_cart(cart: Cart, lines: list[dict]) -> None:
             continue
         item = existing.get(variant.pk)
         if item is None:
-            item = CartItem(
-                cart=cart, variant=variant, quantity=0, saved_for_later=line.get("saved_for_later", False)
-            )
+            item = CartItem(cart=cart, variant=variant, quantity=0, saved_for_later=line.get("saved_for_later", False))
             existing[variant.pk] = item
         elif not line.get("saved_for_later", False):
             item.saved_for_later = False
@@ -92,11 +88,5 @@ def clear_cart(cart: Cart) -> None:
 
 def merge_wishlist(user, product_ids: list[int]) -> None:
     have = set(WishlistItem.objects.filter(user=user).values_list("product_id", flat=True))
-    valid = (
-        Product.objects.filter(pk__in=product_ids, is_active=True)
-        .exclude(pk__in=have)
-        .values_list("pk", flat=True)
-    )
-    WishlistItem.objects.bulk_create(
-        [WishlistItem(user=user, product_id=pid) for pid in valid], ignore_conflicts=True
-    )
+    valid = Product.objects.filter(pk__in=product_ids, is_active=True).exclude(pk__in=have).values_list("pk", flat=True)
+    WishlistItem.objects.bulk_create([WishlistItem(user=user, product_id=pid) for pid in valid], ignore_conflicts=True)

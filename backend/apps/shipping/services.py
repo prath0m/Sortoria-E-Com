@@ -41,11 +41,7 @@ class ShippingOption:
 def lookup_pincode(pincode: str | None) -> ServiceablePincode | None:
     if not pincode:
         return None
-    return (
-        ServiceablePincode.objects.select_related("zone")
-        .filter(pincode=pincode.strip(), is_active=True)
-        .first()
-    )
+    return ServiceablePincode.objects.select_related("zone").filter(pincode=pincode.strip(), is_active=True).first()
 
 
 def add_working_days(start: date, days: int) -> date:
@@ -85,10 +81,7 @@ def shipping_options(
         if bulky_units and not method.allows_bulky:
             available, reason = False, "Large items travel by Standard delivery."
         base = method.base_rate_paise + (zone.extra_fee_paise if zone else 0)
-        free = (
-            method.free_threshold_paise is not None
-            and subtotal_after_discounts >= method.free_threshold_paise
-        )
+        free = method.free_threshold_paise is not None and subtotal_after_discounts >= method.free_threshold_paise
         fee = (0 if free else base) + bulky_units * method.bulky_surcharge_paise
         eta_from = eta_to = None
         if zone is not None:

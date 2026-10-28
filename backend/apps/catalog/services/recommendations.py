@@ -14,9 +14,7 @@ def related_products(product: Product, limit: int = 12):
         .exclude(pk=product.pk)
         .filter(Q(category=product.category) | Q(category__path__startswith=parent_path))
         .annotate(
-            affinity=Case(
-                When(category=product.category, then=Value(2)), default=Value(0), output_field=IntegerField()
-            )
+            affinity=Case(When(category=product.category, then=Value(2)), default=Value(0), output_field=IntegerField())
             + Case(When(brand=product.brand, then=Value(1)), default=Value(0), output_field=IntegerField())
         )
         .order_by("-affinity", "-in_stock", "-sales_count", "-rating_avg")[:limit]

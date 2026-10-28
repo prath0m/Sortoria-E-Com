@@ -264,9 +264,7 @@ def price_cart(
         else:
             quote.messages.append(f"We don't deliver to {quote.pincode} yet.")
     bulky_units = sum(line.quantity for line in lines if line.product.product_type == "bulky")
-    quote.shipping_options = shipping_options(
-        zone, subtotal_after_discounts=merchandise, bulky_units=bulky_units
-    )
+    quote.shipping_options = shipping_options(zone, subtotal_after_discounts=merchandise, bulky_units=bulky_units)
     available = [o for o in quote.shipping_options if o.available]
     chosen = next((o for o in available if o.code == shipping_method), None) or next(
         (o for o in available if o.code == ShippingMethod.Code.STANDARD), available[0] if available else None
@@ -278,9 +276,7 @@ def price_cart(
     if quote.free_shipping_threshold and lines:
         quote.free_shipping_remaining = max(0, quote.free_shipping_threshold - merchandise)
         if quote.free_shipping_remaining:
-            quote.messages.append(
-                f"Add {rupees(quote.free_shipping_remaining)} more for complimentary shipping."
-            )
+            quote.messages.append(f"Add {rupees(quote.free_shipping_remaining)} more for complimentary shipping.")
 
     # Cash on delivery
     pre_cod_total = merchandise + quote.shipping_fee

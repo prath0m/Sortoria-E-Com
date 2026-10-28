@@ -99,9 +99,7 @@ class Order(BaseModel):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    variant = models.ForeignKey(
-        ProductVariant, null=True, on_delete=models.SET_NULL, related_name="order_items"
-    )
+    variant = models.ForeignKey(ProductVariant, null=True, on_delete=models.SET_NULL, related_name="order_items")
     product_id_snapshot = models.PositiveBigIntegerField(null=True)
     product_name = models.CharField(max_length=160)
     product_slug = models.CharField(max_length=170, blank=True)
@@ -112,9 +110,7 @@ class OrderItem(models.Model):
     mrp_paise = models.PositiveBigIntegerField()
     unit_price_paise = models.PositiveBigIntegerField()
     quantity = models.PositiveIntegerField()
-    line_discount_paise = models.PositiveBigIntegerField(
-        default=0, help_text="Allocated bundle + coupon discount."
-    )
+    line_discount_paise = models.PositiveBigIntegerField(default=0, help_text="Allocated bundle + coupon discount.")
     tax_rate = models.PositiveSmallIntegerField()
     tax_paise = models.PositiveBigIntegerField()
     line_total_paise = models.PositiveBigIntegerField()
@@ -143,3 +139,93 @@ class OrderStatusEvent(models.Model):
 
     def __str__(self):
         return f"{self.order_id}: {self.from_status} → {self.to_status}"
+
+
+class ReturnStatus(models.TextChoices):
+    REQUESTED = "requested", "Requested"
+    APPROVED = "approved", "Approved"
+    REJECTED = "rejected", "Rejected"
+    PICKUP_SCHEDULED = "pickup_scheduled", "Pickup scheduled"
+    RECEIVED = "received", "Received"
+    REFUNDED = "refunded", "Refunded"
+    REPLACED = "replaced", "Replacement sent"
+
+
+class ReturnRequest(BaseModel):
+    class Reason(models.TextChoices):
+        WRONG_SIZE = "wrong_size", "Doesn't fit"
+        DAMAGED = "damaged", "Arrived damaged"
+        DEFECTIVE = "defective", "Faulty or not working"
+        NOT_AS_DESCRIBED = "not_as_described", "Not as described"
+        CHANGED_MIND = "changed_mind", "Changed my mind"
+        OTHER = "other", "Something else"
+
+    class Resolution(models.TextChoices):
+        REFUND = "refund", "Refund"
+        REPLACEMENT = "replacement", "Replacement"
+
+    number = models.CharField(max_length=24, unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="returns")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="returns"
+    )
+    email = models.EmailField()
+    status = models.CharField(max_length=20, choices=ReturnStatus.choices, default=ReturnStatus.REQUESTED)
+    reason = models.CharField(max_length=20, choices=Reason.choices)
+    resolution = models.CharField(max_length=12, choices=Resolution.choices, default=Resolution.REFUND)
+    comments = models.TextField(max_length=1000, blank=True)
+    refund_upi_id = models.CharField(max_length=60, blank=True, help_text="For refunds of cash-on-delivery orders.")
+    refund_amount_paise = models.PositiveBigIntegerField(default=0)
+    admin_note = models.TextField(blank=True)
+    pickup_date = models.DateField(null=True, blank=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return self.number
+
+
+class ReturnItem(models.Model):
+    return_request = models.ForeignKey(ReturnRequest, on_delete=models.CASCADE, related_name="items")
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="return_items")
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.quantity} × {self.order_item.product_name}"
+
+
+class ReturnPhoto(models.Model):
+    return_request = models.ForeignKey(ReturnRequest, on_delete=models.CASCADE, related_name="photos")
+    image = models.ImageField(upload_to="returns/%Y/%m/")
+
+    def __str__(self):
+        return self.image.name
+
+
+class ReturnStatusEvent(models.Model):
+    return_request = models.ForeignKey(ReturnRequest, on_delete=models.CASCADE, related_name="events")
+    from_status = models.CharField(max_length=20, blank=True)
+    to_status = models.CharField(max_length=20, choices=ReturnStatus.choices)
+    note = models.CharField(max_length=300, blank=True)
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("created_at", "id")
+
+    def __str__(self):
+        return f"{self.return_request_id}: {self.to_status}"
+
+
+class DocumentCounter(models.Model):
+    """Gap-free numbering for invoices (per financial year) and returns."""
+
+    key = models.CharField(max_length=40, unique=True)
+    value = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.key}={self.value}"

@@ -105,9 +105,7 @@ def test_password_reset_flow_is_single_use(api):
     uid, token = _reset_link_parts()
 
     new_password = "Bespoke-Wool-77"
-    ok = api.post(
-        "/api/v1/auth/password/reset/", {"uid": uid, "token": token, "password": new_password}, format="json"
-    )
+    ok = api.post("/api/v1/auth/password/reset/", {"uid": uid, "token": token, "password": new_password}, format="json")
     assert ok.status_code == 200
     user.refresh_from_db()
     assert user.check_password(new_password)
@@ -156,9 +154,7 @@ def test_login_is_rate_limited(api):
     SimpleRateThrottle.THROTTLE_RATES = settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
     try:
         codes = [
-            api.post(
-                "/api/v1/auth/login/", {"email": "x@example.com", "password": "x"}, format="json"
-            ).status_code
+            api.post("/api/v1/auth/login/", {"email": "x@example.com", "password": "x"}, format="json").status_code
             for _ in range(4)
         ]
     finally:

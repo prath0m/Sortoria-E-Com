@@ -326,3 +326,103 @@ export interface BundleOffer {
   bundle_price_paise: number;
   saving_paise: number;
 }
+
+export type OrderStatus =
+  | 'pending_payment'
+  | 'payment_failed'
+  | 'placed'
+  | 'confirmed'
+  | 'packed'
+  | 'shipped'
+  | 'out_for_delivery'
+  | 'delivered'
+  | 'cancelled';
+
+export interface OrderAddress {
+  full_name: string;
+  phone: string;
+  line1: string;
+  line2?: string;
+  landmark?: string;
+  city: string;
+  state: string;
+  state_code?: string;
+  pincode: string;
+}
+
+export interface OrderItem {
+  id: number;
+  product_name: string;
+  product_slug: string;
+  variant_label: string;
+  sku: string;
+  image_url: string;
+  mrp_paise: number;
+  unit_price_paise: number;
+  quantity: number;
+  line_discount_paise: number;
+  tax_rate: number;
+  tax_paise: number;
+  line_total_paise: number;
+  returned_quantity: number;
+}
+
+export interface OrderSummaryRow {
+  number: string;
+  status: OrderStatus;
+  status_label: string;
+  payment_status: string;
+  payment_method: string;
+  grand_total_paise: number;
+  placed_at: string | null;
+  created_at: string;
+  item_count: number;
+  preview_images: string[];
+}
+
+export interface OrderDetail extends OrderSummaryRow {
+  email: string;
+  phone: string;
+  shipping_address: OrderAddress;
+  billing_address: OrderAddress;
+  shipping_method: string;
+  coupon_code: string;
+  subtotal_paise: number;
+  item_discount_paise: number;
+  bundle_discount_paise: number;
+  coupon_discount_paise: number;
+  shipping_fee_paise: number;
+  cod_fee_paise: number;
+  tax_total_paise: number;
+  cgst_paise: number;
+  sgst_paise: number;
+  igst_paise: number;
+  courier_name: string;
+  tracking_number: string;
+  tracking_url: string;
+  estimated_delivery_date: string | null;
+  delivered_at: string | null;
+  cancelled_at: string | null;
+  cancel_reason: string;
+  customer_note: string;
+  items: OrderItem[];
+  events: { to_status: OrderStatus; label: string; note: string; created_at: string }[];
+  can_cancel: boolean;
+  can_retry_payment: boolean;
+  has_invoice: boolean;
+  access_token: string;
+}
+
+export interface RazorpayPayload {
+  provider: 'razorpay';
+  key_id: string;
+  razorpay_order_id: string;
+  amount: number;
+  currency: string;
+  prefill: { name: string; email: string; contact: string };
+}
+
+export interface CheckoutResult {
+  order: OrderDetail;
+  payment: RazorpayPayload | null;
+}

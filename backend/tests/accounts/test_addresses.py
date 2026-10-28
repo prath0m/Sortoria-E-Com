@@ -32,9 +32,7 @@ def test_rejects_invalid_pincode_and_phone(auth, customer):
 def test_only_one_default_and_set_default_action(auth, customer):
     client = auth(customer)
     first = client.post("/api/v1/account/addresses/", PAYLOAD, format="json").data
-    second = client.post(
-        "/api/v1/account/addresses/", {**PAYLOAD, "is_default_shipping": True}, format="json"
-    ).data
+    second = client.post("/api/v1/account/addresses/", {**PAYLOAD, "is_default_shipping": True}, format="json").data
     listing = {a["id"]: a for a in client.get("/api/v1/account/addresses/").data}
     assert listing[second["id"]]["is_default_shipping"] and not listing[first["id"]]["is_default_shipping"]
 

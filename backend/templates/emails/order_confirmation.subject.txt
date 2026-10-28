@@ -1,0 +1,1 @@
+Thank you — order {{ number }} is confirmed

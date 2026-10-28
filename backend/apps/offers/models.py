@@ -11,9 +11,7 @@ from apps.core.utils import unique_slug
 class ScheduledQuerySet(models.QuerySet):
     def live(self, at=None):
         at = at or timezone.now()
-        return self.filter(is_active=True, starts_at__lte=at).filter(
-            Q(ends_at__isnull=True) | Q(ends_at__gt=at)
-        )
+        return self.filter(is_active=True, starts_at__lte=at).filter(Q(ends_at__isnull=True) | Q(ends_at__gt=at))
 
 
 class Coupon(BaseModel):
@@ -25,9 +23,7 @@ class Coupon(BaseModel):
     description = models.CharField(max_length=200, blank=True)
     discount_type = models.CharField(max_length=10, choices=DiscountType.choices)
     value = models.PositiveIntegerField(help_text="Percent (1-90) or amount in paise.")
-    max_discount_paise = models.PositiveBigIntegerField(
-        null=True, blank=True, help_text="Cap for percent coupons."
-    )
+    max_discount_paise = models.PositiveBigIntegerField(null=True, blank=True, help_text="Cap for percent coupons.")
     min_order_paise = models.PositiveBigIntegerField(default=0)
     starts_at = models.DateTimeField(default=timezone.now)
     ends_at = models.DateTimeField(null=True, blank=True)
@@ -104,13 +100,9 @@ class FlashSaleItem(models.Model):
 
     sale = models.ForeignKey(FlashSale, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="flash_items")
-    discount_type = models.CharField(
-        max_length=12, choices=DiscountType.choices, default=DiscountType.PERCENT
-    )
+    discount_type = models.CharField(max_length=12, choices=DiscountType.choices, default=DiscountType.PERCENT)
     value = models.PositiveBigIntegerField(help_text="Percent off, or the sale price in paise.")
-    quantity_cap = models.PositiveIntegerField(
-        null=True, blank=True, help_text="Units available at this price."
-    )
+    quantity_cap = models.PositiveIntegerField(null=True, blank=True, help_text="Units available at this price.")
     sold_count = models.PositiveIntegerField(default=0)
     position = models.PositiveIntegerField(default=0)
 
@@ -144,9 +136,7 @@ class Bundle(BaseModel):
     slug = models.SlugField(max_length=130, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="offers/bundles/", blank=True)
-    discount_type = models.CharField(
-        max_length=12, choices=DiscountType.choices, default=DiscountType.PERCENT
-    )
+    discount_type = models.CharField(max_length=12, choices=DiscountType.choices, default=DiscountType.PERCENT)
     value = models.PositiveBigIntegerField()
     starts_at = models.DateTimeField(default=timezone.now)
     ends_at = models.DateTimeField(null=True, blank=True)

@@ -29,9 +29,7 @@ def snapshot(instance) -> dict:
 
 def diff(before: dict, after: dict) -> dict:
     keys = set(before) | set(after)
-    return {
-        k: {"from": before.get(k), "to": after.get(k)} for k in sorted(keys) if before.get(k) != after.get(k)
-    }
+    return {k: {"from": before.get(k), "to": after.get(k)} for k in sorted(keys) if before.get(k) != after.get(k)}
 
 
 def record(request, action, *, obj=None, object_type=None, object_id="", object_repr="", changes=None):

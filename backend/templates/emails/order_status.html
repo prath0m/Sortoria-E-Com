@@ -1,0 +1,25 @@
+{% extends "emails/base.html" %}
+{% block preheader %}{{ message }}{% endblock %}
+{% block content %}
+{% include "emails/partials/heading.html" with eyebrow=eyebrow title=title %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Dear {{ first_name|default:"friend" }},</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">{{ message }}</p>
+{% if status == "shipped" or status == "out_for_delivery" %}{% if tracking_number %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0;background:#F3EDE2;border-radius:2px;">
+  <tr><td style="padding:16px 18px;font-size:14px;line-height:22px;">
+    <strong style="display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#61635B;">Tracking</strong>
+    {{ courier }} · <strong>{{ tracking_number }}</strong>{% if estimated_delivery %}<br>Expected by {{ estimated_delivery }}{% endif %}
+  </td></tr>
+</table>
+{% if tracking_url %}{% include "emails/partials/button.html" with url=tracking_url label="Track with courier" %}{% endif %}
+{% endif %}{% endif %}
+{% if status == "cancelled" %}
+{% if cancel_reason %}<p style="margin:0 0 14px;font-size:14px;line-height:22px;color:#61635B;">Reason: {{ cancel_reason }}</p>{% endif %}
+{% if refund_note %}<p style="margin:0 0 14px;font-size:15px;line-height:25px;">{{ refund_note }}</p>{% endif %}
+{% endif %}
+{% if status == "delivered" %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">If something isn't right, you can request a return or replacement from your order page.</p>
+{% endif %}
+{% include "emails/partials/order_items.html" %}
+{% include "emails/partials/button.html" with url=order_url label="View your order" %}
+{% endblock %}

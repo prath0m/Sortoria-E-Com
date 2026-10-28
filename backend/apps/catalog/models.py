@@ -32,9 +32,7 @@ class Category(MP_Node, BaseModel):
     show_in_menu = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True, db_index=True)
     position = models.PositiveIntegerField(default=0)
-    return_policy = models.CharField(
-        max_length=20, choices=ReturnPolicy.choices, default=ReturnPolicy.RETURNABLE
-    )
+    return_policy = models.CharField(max_length=20, choices=ReturnPolicy.choices, default=ReturnPolicy.RETURNABLE)
     return_window_days = models.PositiveIntegerField(
         null=True, blank=True, help_text="Leave blank to use the store default."
     )
@@ -140,9 +138,7 @@ class Product(BaseModel):
 
     name = models.CharField(max_length=160)
     slug = models.SlugField(max_length=170, unique=True)
-    brand = models.ForeignKey(
-        Brand, null=True, blank=True, on_delete=models.SET_NULL, related_name="products"
-    )
+    brand = models.ForeignKey(Brand, null=True, blank=True, on_delete=models.SET_NULL, related_name="products")
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="products")
     extra_categories = models.ManyToManyField(Category, blank=True, related_name="extra_products")
     product_type = models.CharField(max_length=10, choices=Type.choices, default=Type.STANDARD)
@@ -233,9 +229,7 @@ class ProductVariant(BaseModel):
     class Meta:
         ordering = ("position", "id")
         indexes = [models.Index(fields=("stock",))]
-        constraints = [
-            models.CheckConstraint(condition=models.Q(stock__gte=0), name="variant_stock_non_negative")
-        ]
+        constraints = [models.CheckConstraint(condition=models.Q(stock__gte=0), name="variant_stock_non_negative")]
 
     def __str__(self):
         return f"{self.product.name} ({self.label or self.sku})"

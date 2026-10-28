@@ -8,9 +8,7 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def products():
     shipping_setup()
-    return make_product("Linen Shirt", price=349900, stock=5), make_product(
-        "Wool Scarf", price=249900, stock=2
-    )
+    return make_product("Linen Shirt", price=349900, stock=5), make_product("Wool Scarf", price=249900, stock=2)
 
 
 def vid(p):
@@ -48,9 +46,7 @@ def test_update_remove_and_save_for_later(auth, customer, products):
 def test_cannot_touch_another_users_cart(auth, customer, products, admin_user):
     shirt, _ = products
     item_id = (
-        auth(customer)
-        .post("/api/v1/cart/items/", {"variant_id": vid(shirt)}, format="json")
-        .data["lines"][0]["id"]
+        auth(customer).post("/api/v1/cart/items/", {"variant_id": vid(shirt)}, format="json").data["lines"][0]["id"]
     )
     assert auth(admin_user).delete(f"/api/v1/cart/items/{item_id}/").status_code == 404
 
@@ -100,9 +96,7 @@ def test_guest_quote_never_trusts_client_prices(api, products):
 def test_wishlist_add_remove_merge(auth, customer, products):
     shirt, scarf = products
     client = auth(customer)
-    assert client.post("/api/v1/wishlist/", {"product_id": shirt.pk}, format="json").data["product_ids"] == [
-        shirt.pk
-    ]
+    assert client.post("/api/v1/wishlist/", {"product_id": shirt.pk}, format="json").data["product_ids"] == [shirt.pk]
     client.post("/api/v1/wishlist/", {"product_id": shirt.pk}, format="json")  # idempotent
     data = client.post("/api/v1/wishlist/merge/", {"product_ids": [shirt.pk, scarf.pk]}, format="json").data
     assert set(data["product_ids"]) == {shirt.pk, scarf.pk}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tax invoice {{ invoice_number }}</title>
+<style>
+  @font-face { font-family: "Cormorant"; src: url("static/fonts/cormorant-garamond-latin-500-normal.woff2"); font-weight: 500; }
+  @font-face { font-family: "Manrope"; src: url("static/fonts/manrope-latin-400-normal.woff2"); font-weight: 400; }
+  @font-face { font-family: "Manrope"; src: url("static/fonts/manrope-latin-600-normal.woff2"); font-weight: 600; }
+  @page { size: A4; margin: 16mm 14mm 18mm;
+    @bottom-center { content: "{{ store.legal_name|default:store.name }} · GSTIN {{ store.gstin }} · Page " counter(page) " of " counter(pages); font: 7.5pt Manrope; color: #61635B; } }
+  body { font: 8.5pt/1.45 Manrope, sans-serif; color: #2A1413; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 0.6pt solid #E8D258; padding-bottom: 10pt; }
+  .head img { height: 26pt; }
+  .title { text-align: right; }
+  .title h1 { font: 500 20pt Cormorant, serif; color: #590907; margin: 0; letter-spacing: .04em; }
+  .muted { color: #61635B; }
+  .eyebrow { font-size: 6.5pt; letter-spacing: .2em; text-transform: uppercase; color: #61635B; font-weight: 600; margin-bottom: 3pt; }
+  .grid { display: flex; gap: 14pt; margin: 12pt 0; }
+  .grid > div { flex: 1; }
+  table { width: 100%; border-collapse: collapse; }
+  .items th { font-size: 6.5pt; letter-spacing: .12em; text-transform: uppercase; color: #61635B; text-align: right; padding: 5pt 4pt; border-bottom: 0.6pt solid #A5A79B; }
+  .items th:first-child, .items td:first-child { text-align: left; }
+  .items td { padding: 6pt 4pt; border-bottom: 0.4pt solid #EAE1D1; text-align: right; vertical-align: top; }
+  .totals { width: 46%; margin-left: auto; margin-top: 10pt; }
+  .totals td { padding: 3pt 4pt; }
+  .totals td:last-child { text-align: right; }
+  .grand td { border-top: 0.6pt solid #590907; padding-top: 6pt; font-weight: 600; font-size: 10pt; }
+  .grand td:last-child { font: 600 12pt Manrope, sans-serif; color: #590907; }
+  .words { margin-top: 8pt; font-style: italic; }
+  .foot { margin-top: 18pt; padding-top: 8pt; border-top: 0.4pt solid #EAE1D1; font-size: 7.5pt; color: #61635B; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div>
+      <img src="static/brand/wordmark.svg" alt="{{ store.name }}">
+      <div style="margin-top:8pt">
+        <strong>{{ store.legal_name|default:store.name }}</strong><br>
+        {{ store.address_line1 }}{% if store.address_line2 %}, {{ store.address_line2 }}{% endif %}<br>
+        {{ store.city }}, {{ store.state }} {{ store.pincode }}<br>
+        GSTIN {{ store.gstin }} · State code {{ store.state_code }}
+      </div>
+    </div>
+    <div class="title">
+      <h1>Tax Invoice</h1>
+      <div class="muted">Original for recipient</div>
+      <div style="margin-top:8pt">
+        <strong>{{ invoice_number }}</strong><br>
+        Date {{ invoice_date }}<br>
+        Order {{ order.number }}<br>
+        Place of supply: {{ place_of_supply }}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div><div class="eyebrow">Bill to</div>{% for line in bill_to %}{{ line }}<br>{% endfor %}{{ order.email }}</div>
+    <div><div class="eyebrow">Ship to</div>{% for line in ship_to %}{{ line }}<br>{% endfor %}</div>
+    <div><div class="eyebrow">Payment</div>{{ payment }}<br>{{ order.shipping_method|title }} delivery</div>
+  </div>
+
+  <table class="items">
+    <thead>
+      <tr><th>Item</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Discount</th><th>Taxable</th><th>GST %</th>
+      {% if intra_state %}<th>CGST</th><th>SGST</th>{% else %}<th>IGST</th>{% endif %}<th>Total</th></tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td><strong>{{ row.name }}</strong>{% if row.variant %}<br><span class="muted">{{ row.variant }}</span>{% endif %}<br><span class="muted">SKU {{ row.sku }}</span></td>
+        <td>{{ row.hsn|default:"—" }}</td><td>{{ row.quantity }}</td><td>{{ row.unit_price }}</td><td>{{ row.discount }}</td>
+        <td>{{ row.taxable }}</td><td>{{ row.rate }}%</td>
+        {% if intra_state %}<td>{{ row.cgst }}</td><td>{{ row.sgst }}</td>{% else %}<td>{{ row.igst }}</td>{% endif %}
+        <td>{{ row.total }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal</td><td>{{ subtotal }}</td></tr>
+    {% if bundle_discount %}<tr><td>Bundle savings</td><td>−{{ bundle_discount }}</td></tr>{% endif %}
+    {% if coupon_discount %}<tr><td>Code {{ order.coupon_code }}</td><td>−{{ coupon_discount }}</td></tr>{% endif %}
+    {% if service_charges %}<tr><td>Shipping &amp; handling (GST 18%)</td><td>{{ service_charges }}</td></tr>{% endif %}
+    {% if intra_state %}<tr><td class="muted">CGST included</td><td class="muted">{{ cgst }}</td></tr><tr><td class="muted">SGST included</td><td class="muted">{{ sgst }}</td></tr>
+    {% else %}<tr><td class="muted">IGST included</td><td class="muted">{{ igst }}</td></tr>{% endif %}
+    <tr class="grand"><td>Total</td><td>{{ total }}</td></tr>
+  </table>
+  <p class="words">{{ total_words }}</p>
+
+  <div class="foot">
+    Prices are inclusive of GST. This is a computer-generated invoice and does not require a signature.
+    Questions about this invoice? Write to {{ store.contact_email }}{% if store.support_phone %} or call {{ store.support_phone }}{% endif %}.
+  </div>
+</body>
+</html>

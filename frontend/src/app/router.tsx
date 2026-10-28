@@ -15,6 +15,8 @@ const WishlistPage = lazy(() => import('@/features/storefront/wishlist/WishlistP
 const OffersPage = lazy(() => import('@/features/storefront/offers/OffersPage'));
 const SalePage = lazy(() => import('@/features/storefront/offers/SalePage'));
 const BundlePage = lazy(() => import('@/features/storefront/offers/BundlePage'));
+const CheckoutPage = lazy(() => import('@/features/storefront/checkout/CheckoutPage'));
+const OrderPage = lazy(() => import('@/features/storefront/orders/OrderPage'));
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -37,6 +39,8 @@ export const router = createBrowserRouter([
       { path: 'products/:slug', element: <ProductPage /> },
       { path: 'cart', element: <CartPage /> },
       { path: 'wishlist', element: <WishlistPage /> },
+      { path: 'checkout', element: <CheckoutPage /> },
+      { path: 'order/:number', element: <OrderPage /> },
       { path: 'offers', element: <OffersPage /> },
       { path: 'offers/sale/:slug', element: <SalePage /> },
       { path: 'offers/bundles/:slug', element: <BundlePage /> },

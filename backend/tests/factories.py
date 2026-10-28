@@ -156,9 +156,7 @@ def shipping_setup():
     remote = ShippingZone.objects.create(
         name="Remote", express_available=False, cod_available=False, extra_fee_paise=5000
     )
-    ServiceablePincode.objects.create(
-        pincode="400050", zone=metro, city="Mumbai", state="Maharashtra", state_code="27"
-    )
+    ServiceablePincode.objects.create(pincode="400050", zone=metro, city="Mumbai", state="Maharashtra", state_code="27")
     ServiceablePincode.objects.create(
         pincode="560025", zone=metro, city="Bengaluru", state="Karnataka", state_code="29"
     )

@@ -1,0 +1,174 @@
+from datetime import timedelta
+
+from django.conf import settings
+from django.db import transaction
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.views import APIView
+
+from apps.accounts.models import Address
+from apps.cart.services.cart import get_cart
+from apps.core.exceptions import DomainError
+from apps.payments.providers import ProviderError, available_providers, get_provider
+
+from .models import Order, OrderStatus
+from .serializers import CheckoutSerializer, OrderDetailSerializer
+from .services.checkout import CheckoutInput, place_order
+from .services.invoices import ensure_invoice
+from .services.state_machine import CUSTOMER, transition
+
+
+def order_queryset():
+    return Order.objects.prefetch_related("items", "events")
+
+
+def get_accessible_order(request, number: str) -> Order:
+    """The owner, or anyone holding the order's access token (guest links in emails)."""
+    order = get_object_or_404(order_queryset(), number=number)
+    token = request.query_params.get("token") or request.data.get("token")
+    if request.user.is_authenticated and order.user_id == request.user.pk:
+        return order
+    if token and token == order.guest_access_token:
+        return order
+    raise Http404
+
+
+class CheckoutConfigView(APIView):
+    @extend_schema(responses=OpenApiTypes.OBJECT)
+    def get(self, request):
+        return Response(
+            {
+                "payment_methods": [
+                    {"code": p.code, "name": p.display_name, "prepaid": p.prepaid} for p in available_providers()
+                ]
+            }
+        )
+
+
+class CheckoutView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "checkout"
+
+    @extend_schema(request=CheckoutSerializer, responses=OpenApiTypes.OBJECT)
+    def post(self, request):
+        serializer = CheckoutSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        v = serializer.validated_data
+        user = request.user if request.user.is_authenticated else None
+
+        if v.get("address_id"):
+            address = get_object_or_404(Address, pk=v["address_id"], user=user)
+            shipping = address.as_snapshot()
+        else:
+            shipping = dict(v["shipping_address"])
+        billing = shipping if v["billing_same_as_shipping"] else dict(v["billing_address"])
+
+        if user:
+            cart = get_cart(user)
+            items = list(cart.items.filter(saved_for_later=False).values_list("variant_id", "quantity"))
+            coupon_code = cart.coupon.code if cart.coupon_id else ""
+            email = user.email
+            phone = v.get("phone") or user.phone or shipping["phone"]
+        else:
+            items = [(line["variant_id"], line["quantity"]) for line in v["lines"]]
+            coupon_code = v.get("coupon_code", "")
+            email, phone = v["email"], v["phone"]
+
+        order, payment = place_order(
+            CheckoutInput(
+                email=email,
+                phone=phone,
+                shipping_address=shipping,
+                billing_address=billing,
+                items=items,
+                shipping_method=v["shipping_method"],
+                payment_method=v["payment_method"],
+                coupon_code=coupon_code,
+                customer_note=v.get("customer_note", ""),
+                expected_total=v.get("expected_total_paise"),
+            ),
+            user=user,
+        )
+        if user and v.get("save_address") and not v.get("address_id"):
+            has_default = user.addresses.filter(is_default_shipping=True).exists()
+            Address.objects.create(
+                user=user,
+                is_default_shipping=not has_default,
+                **{
+                    k: shipping[k]
+                    for k in (
+                        "full_name",
+                        "phone",
+                        "line1",
+                        "line2",
+                        "landmark",
+                        "city",
+                        "state",
+                        "state_code",
+                        "pincode",
+                    )
+                },
+            )
+        return Response(
+            {"order": OrderDetailSerializer(order).data, "payment": payment}, status=status.HTTP_201_CREATED
+        )
+
+
+class RetryPaymentView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "checkout"
+
+    @extend_schema(request=None, responses=OpenApiTypes.OBJECT)
+    def post(self, request, number):
+        order = get_accessible_order(request, number)
+        if order.payment_method == "cod" or order.status not in (
+            OrderStatus.PENDING_PAYMENT,
+            OrderStatus.PAYMENT_FAILED,
+        ):
+            raise DomainError("This order doesn't need payment.", code="no_payment_due")
+        provider = get_provider(order.payment_method)
+        with transaction.atomic():
+            if order.status == OrderStatus.PAYMENT_FAILED:
+                order = transition(order, OrderStatus.PENDING_PAYMENT, actor_type=CUSTOMER, note="Payment retried")
+            order.reservation_expires_at = timezone.now() + timedelta(minutes=settings.PAYMENT_RESERVATION_MINUTES)
+            order.save(update_fields=["reservation_expires_at"])
+            try:
+                payment = provider.create_payment(order)
+            except ProviderError as exc:
+                raise DomainError(str(exc), code="payment_provider_error") from exc
+        return Response(
+            {
+                "order": OrderDetailSerializer(order_queryset().get(pk=order.pk)).data,
+                "payment": provider.client_payload(payment),
+            }
+        )
+
+
+class OrderDetailView(APIView):
+    @extend_schema(parameters=[OpenApiParameter("token", str)], responses=OrderDetailSerializer)
+    def get(self, request, number):
+        return Response(OrderDetailSerializer(get_accessible_order(request, number)).data)
+
+
+class InvoiceView(APIView):
+    @extend_schema(
+        parameters=[OpenApiParameter("token", str)], responses={(200, "application/pdf"): OpenApiTypes.BINARY}
+    )
+    def get(self, request, number):
+        order = get_accessible_order(request, number)
+        if not order.invoice_number:
+            raise DomainError("The invoice is issued once the order is placed.", code="no_invoice")
+        if not order.invoice_pdf:
+            ensure_invoice(order)
+        return FileResponse(
+            order.invoice_pdf.open("rb"),
+            as_attachment=True,
+            filename=f"Invoice-{order.number}.pdf",
+            content_type="application/pdf",
+        )

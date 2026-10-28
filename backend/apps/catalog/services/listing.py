@@ -92,9 +92,9 @@ class ListingParams:
 
 
 def visible_products():
-    return Product.objects.filter(
-        is_active=True, published_at__lte=timezone.now(), category__is_active=True
-    ).exclude(min_price_paise=0)
+    return Product.objects.filter(is_active=True, published_at__lte=timezone.now(), category__is_active=True).exclude(
+        min_price_paise=0
+    )
 
 
 def category_filter(category: Category) -> Q:
@@ -103,12 +103,8 @@ def category_filter(category: Category) -> Q:
 
 
 def _products_with_values(value_ids):
-    via_variants = ProductVariant.objects.filter(is_active=True, option_values__in=value_ids).values(
-        "product_id"
-    )
-    via_product = Product.attribute_values.through.objects.filter(attributevalue_id__in=value_ids).values(
-        "product_id"
-    )
+    via_variants = ProductVariant.objects.filter(is_active=True, option_values__in=value_ids).values("product_id")
+    via_product = Product.attribute_values.through.objects.filter(attributevalue_id__in=value_ids).values("product_id")
     return Q(pk__in=via_variants) | Q(pk__in=via_product)
 
 
@@ -120,9 +116,7 @@ def apply_filters(qs, p: ListingParams, *, skip: str | None = None):
     for attr_slug, value_slugs in p.attrs.items():
         if skip == f"attr.{attr_slug}":
             continue
-        value_ids = AttributeValue.objects.filter(attribute__slug=attr_slug, slug__in=value_slugs).values(
-            "id"
-        )
+        value_ids = AttributeValue.objects.filter(attribute__slug=attr_slug, slug__in=value_slugs).values("id")
         qs = qs.filter(_products_with_values(value_ids))
     if skip != "price":
         if p.price_min is not None:
@@ -245,9 +239,7 @@ def build_facets(p: ListingParams) -> dict:
             {"slug": attr.slug, "name": attr.name, "kind": attr.kind, "unit": attr.unit, "values": values}
         )
 
-    price_range = apply_filters(base, p, skip="price").aggregate(
-        lo=Min("min_price_paise"), hi=Max("min_price_paise")
-    )
+    price_range = apply_filters(base, p, skip="price").aggregate(lo=Min("min_price_paise"), hi=Max("min_price_paise"))
     rating_qs = apply_filters(base, p, skip="rating")
     discount_qs = apply_filters(base, p, skip="discount")
     stock_qs = apply_filters(base, p, skip="availability")

@@ -24,9 +24,7 @@ def brand_context() -> dict:
             "email": store.contact_email,
             "phone": store.support_phone,
             "hours": store.support_hours,
-            "address": ", ".join(
-                p for p in (store.address_line1, store.address_line2, store.city, store.pincode) if p
-            ),
+            "address": ", ".join(p for p in (store.address_line1, store.address_line2, store.city, store.pincode) if p),
             "instagram": store.instagram_url,
             "facebook": store.facebook_url,
             "pinterest": store.pinterest_url,
