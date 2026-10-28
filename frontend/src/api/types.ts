@@ -426,3 +426,54 @@ export interface CheckoutResult {
   order: OrderDetail;
   payment: RazorpayPayload | null;
 }
+
+export interface Review {
+  id: number;
+  rating: number;
+  title: string;
+  body: string;
+  author: string;
+  is_verified_buyer: boolean;
+  photos: string[];
+  admin_reply: string;
+  created_at: string;
+}
+
+export interface ReviewPage extends Paginated<Review> {
+  summary: { average: number; count: number; distribution: Record<string, number> };
+  viewer: { status: 'pending' | 'approved' | 'rejected' | null; verified_buyer: boolean } | null;
+}
+
+export interface ReturnableItem {
+  order_item_id: number;
+  product_name: string;
+  variant_label: string;
+  image_url: string;
+  quantity: number;
+  returnable_quantity: number;
+  policy: 'returnable' | 'replacement_only' | 'non_returnable';
+  window_days: number;
+  eligible: boolean;
+  note: string;
+}
+
+export type ReturnStatus = 'requested' | 'approved' | 'rejected' | 'pickup_scheduled' | 'received' | 'refunded' | 'replaced';
+
+export interface ReturnRequest {
+  number: string;
+  order_number: string;
+  status: ReturnStatus;
+  status_label: string;
+  reason: string;
+  reason_label: string;
+  resolution: 'refund' | 'replacement';
+  comments: string;
+  refund_amount_paise: number;
+  pickup_date: string | null;
+  admin_note: string;
+  created_at: string;
+  resolved_at: string | null;
+  items: { order_item_id: number; product_name: string; variant_label: string; image_url: string; quantity: number }[];
+  photos: string[];
+  events: { status: ReturnStatus; label: string; created_at: string }[];
+}

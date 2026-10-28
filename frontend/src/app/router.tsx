@@ -17,6 +17,12 @@ const SalePage = lazy(() => import('@/features/storefront/offers/SalePage'));
 const BundlePage = lazy(() => import('@/features/storefront/offers/BundlePage'));
 const CheckoutPage = lazy(() => import('@/features/storefront/checkout/CheckoutPage'));
 const OrderPage = lazy(() => import('@/features/storefront/orders/OrderPage'));
+const TrackOrderPage = lazy(() => import('@/features/storefront/orders/TrackOrderPage'));
+const NewReturnPage = lazy(() => import('@/features/storefront/returns/NewReturnPage'));
+const ReturnDetailPage = lazy(() => import('@/features/storefront/returns/ReturnDetailPage'));
+const OrdersPage = lazy(() => import('@/features/storefront/account/OrdersPage'));
+const AccountOrderPage = lazy(() => import('@/features/storefront/account/AccountOrderPage'));
+const ReturnsPage = lazy(() => import('@/features/storefront/account/ReturnsPage'));
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -41,6 +47,9 @@ export const router = createBrowserRouter([
       { path: 'wishlist', element: <WishlistPage /> },
       { path: 'checkout', element: <CheckoutPage /> },
       { path: 'order/:number', element: <OrderPage /> },
+      { path: 'track-order', element: <TrackOrderPage /> },
+      { path: 'returns/new', element: <NewReturnPage /> },
+      { path: 'returns/:number', element: <ReturnDetailPage /> },
       { path: 'offers', element: <OffersPage /> },
       { path: 'offers/sale/:slug', element: <SalePage /> },
       { path: 'offers/bundles/:slug', element: <BundlePage /> },
@@ -55,6 +64,9 @@ export const router = createBrowserRouter([
           { index: true, element: <OverviewPage /> },
           { path: 'profile', element: <ProfilePage /> },
           { path: 'addresses', element: <AddressesPage /> },
+          { path: 'orders', element: <OrdersPage /> },
+          { path: 'orders/:number', element: <AccountOrderPage /> },
+          { path: 'returns', element: <ReturnsPage /> },
         ],
       },
       { path: '*', element: <NotFoundPage /> },

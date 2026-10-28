@@ -7,6 +7,7 @@ Without network access (or with --no-images) on-brand placeholder artwork is gen
 import itertools
 import os
 import random
+import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
@@ -20,8 +21,9 @@ from django.utils import timezone
 from django.utils.text import slugify
 from PIL import Image, ImageDraw, ImageFont
 
-from apps.accounts.models import User
+from apps.accounts.models import Address, User
 from apps.accounts.serializers import STATE_CODES
+from apps.cart.services.pricing import price_cart
 from apps.catalog.models import (
     Attribute,
     AttributeValue,
@@ -31,18 +33,30 @@ from apps.catalog.models import (
     ProductImage,
     ProductSpec,
     ProductVariant,
+    ProductView,
     StockMovement,
 )
-from apps.catalog.services.aggregates import refresh_products, refresh_search_vectors
+from apps.catalog.services.aggregates import refresh_products, refresh_ratings, refresh_search_vectors
 from apps.catalog.tasks import build_image_renditions
 from apps.core import caching
 from apps.core.models import StoreSettings
 from apps.offers.models import Bundle, BundleItem, Coupon, CouponRedemption, FlashSale, FlashSaleItem
+from apps.orders.models import (
+    Order,
+    OrderItem,
+    OrderStatusEvent,
+    ReturnItem,
+    ReturnRequest,
+    ReturnStatusEvent,
+)
+from apps.orders.services.numbering import next_invoice_number, next_order_number, next_return_number
+from apps.payments.models import Payment, Refund
+from apps.reviews.models import Review
 from apps.shipping.models import ServiceablePincode, ShippingMethod, ShippingZone
 from config.celery import app as celery_app
 
+from .seed_data import activity, commerce
 from .seed_data import catalog as data
-from .seed_data import commerce
 
 ASSET_DIR = settings.BASE_DIR / "seed_assets" / "images"
 UNSPLASH = "https://images.unsplash.com/photo-{id}?{params}"
@@ -113,17 +127,33 @@ class Command(BaseCommand):
         self.rng = random.Random(42)
         self.photos = PhotoSource(offline=options["no_images"], stdout=self.stdout)
         if options["flush"]:
-            self._flush()
-        with transaction.atomic():
-            self.seed_store_settings()
-            self.seed_staff()
-        self.seed_catalog()
-        self.build_missing_renditions()
-        with transaction.atomic():
-            self.seed_shipping()
-            self.seed_offers()
+            self._timed("flush", self._flush)
+        self._timed("settings & staff", self._seed_basics)
+        self._timed("catalogue", self.seed_catalog)
+        self._timed("image renditions", self.build_missing_renditions)
+        self._timed("shipping & offers", self._seed_commerce)
+        self._timed("customers & orders", self._seed_activity_atomic)
         caching.bump(caching.CATALOG, caching.NAVIGATION, caching.HOME, caching.OFFERS, caching.SHIPPING)
         self.stdout.write(self.style.SUCCESS("Sartoria demo data is ready."))
+
+    def _timed(self, label, fn):
+        started = time.monotonic()
+        fn()
+        self.stdout.write(f"  ✓ {label} ({time.monotonic() - started:.1f}s)")
+
+    @transaction.atomic
+    def _seed_basics(self):
+        self.seed_store_settings()
+        self.seed_staff()
+
+    @transaction.atomic
+    def _seed_commerce(self):
+        self.seed_shipping()
+        self.seed_offers()
+
+    @transaction.atomic
+    def _seed_activity_atomic(self):
+        self.seed_activity()
 
     def build_missing_renditions(self):
         missing = list(ProductImage.objects.filter(renditions={}).values_list("pk", flat=True))
@@ -147,6 +177,9 @@ class Command(BaseCommand):
             ):
                 if field:
                     field.delete(save=False)
+        Order.objects.all().delete()
+        Review.objects.all().delete()
+        User.objects.filter(role=User.Role.CUSTOMER).delete()
         CouponRedemption.objects.all().delete()
         Coupon.objects.all().delete()
         FlashSale.objects.all().delete()
@@ -333,6 +366,346 @@ class Command(BaseCommand):
         from apps.offers.tasks import sync_flash_sale_prices
 
         sync_flash_sale_prices()
+
+    # ------------------------------------------------------------------ customers & orders
+    FLOW = ["placed", "confirmed", "packed", "shipped", "out_for_delivery", "delivered"]
+
+    def _weighted(self, pairs):
+        total = sum(w for _, w in pairs)
+        roll = self.rng.uniform(0, total)
+        for value, weight in pairs:
+            roll -= weight
+            if roll <= 0:
+                return value
+        return pairs[-1][0]
+
+    def seed_activity(self):
+        if Order.objects.filter(email__endswith="@example.in").exists():
+            return
+        self.stdout.write("Seeding customers, orders, reviews and returns…")
+        rng = self.rng
+        now = timezone.now()
+        password = os.environ.get("SEED_CUSTOMER_PASSWORD", "Sartoria@Guest1")
+
+        customers = []
+        demo = User.objects.filter(email="patron@sartoria.test").first() or User.objects.create_user(
+            "patron@sartoria.test", password, first_name="Meera", last_name="Nair", phone="9820012345"
+        )
+        customers.append(demo)
+        for i, first in enumerate(activity.FIRST_NAMES):
+            last = activity.LAST_NAMES[i % len(activity.LAST_NAMES)]
+            user = User.objects.create_user(
+                f"{first.lower()}.{last.lower()}{i}@example.in",
+                password,
+                first_name=first,
+                last_name=last,
+                phone=f"9{rng.randint(100000000, 999999999)}",
+                marketing_opt_in=rng.random() < 0.4,
+            )
+            user.date_joined = now - timedelta(days=rng.randint(5, 420))
+            user.save(update_fields=["date_joined"])
+            customers.append(user)
+        for user in customers:
+            city, state, pincode = rng.choice(activity.CITIES)
+            Address.objects.create(
+                user=user,
+                label=rng.choice(["Home", "Work", ""]),
+                full_name=user.full_name,
+                phone=user.phone or "9820012345",
+                line1=f"{rng.randint(2, 180)}, {rng.choice(activity.STREETS)}",
+                city=city,
+                state=state,
+                state_code=STATE_CODES[state],
+                pincode=pincode,
+                is_default_shipping=True,
+            )
+        self.stdout.write(f"  customer login: patron@sartoria.test / {password}")
+
+        variants = list(
+            ProductVariant.objects.filter(is_active=True, stock__gt=2, product__is_active=True).select_related(
+                "product"
+            )
+        )
+        dates = sorted(
+            now - timedelta(days=int(rng.triangular(0, 360, 20)), hours=rng.randint(0, 23)) for _ in range(150)
+        )
+        delivered_orders = []
+        for placed_at in dates:
+            user = rng.choice(customers) if rng.random() < 0.85 else None
+            address = (
+                user.addresses.first().as_snapshot()
+                if user
+                else {
+                    "full_name": f"{rng.choice(activity.FIRST_NAMES)} {rng.choice(activity.LAST_NAMES)}",
+                    "phone": f"9{rng.randint(100000000, 999999999)}",
+                    "line1": f"{rng.randint(2, 99)}, {rng.choice(activity.STREETS)}",
+                    "line2": "",
+                    "landmark": "",
+                    "country": "IN",
+                    **dict(zip(("city", "state", "pincode"), rng.choice(activity.CITIES), strict=True)),
+                }
+            )
+            address.setdefault("state_code", STATE_CODES[address["state"]])
+            age_days = (now - placed_at).days
+            status = self._weighted(activity.STATUS_WEIGHTS)
+            if age_days > 12 and status in (
+                "placed",
+                "confirmed",
+                "packed",
+                "shipped",
+                "out_for_delivery",
+                "pending_payment",
+            ):
+                status = "delivered"
+            if status == "pending_payment" and age_days > 0:
+                status = "payment_failed"
+            payment_method = (
+                "cod" if rng.random() < 0.3 and status not in ("pending_payment", "payment_failed") else "razorpay"
+            )
+            lines = [(v.pk, rng.choice([1, 1, 1, 2])) for v in rng.sample(variants, rng.choice([1, 1, 2, 2, 3]))]
+            quote = price_cart(
+                lines,
+                pincode=address["pincode"],
+                shipping_method="express" if rng.random() < 0.15 else "standard",
+                payment_method=payment_method,
+                destination_state_code=address["state_code"],
+            )
+            order = self._create_order(quote, address, user, status, payment_method, placed_at)
+            if order.status == "delivered":
+                delivered_orders.append(order)
+
+        self._seed_reviews(customers, delivered_orders)
+        self._seed_returns(delivered_orders)
+        self._seed_views()
+
+    def _create_order(self, quote, address, user, status, payment_method, placed_at):
+        rng = self.rng
+        email = user.email if user else f"{address['full_name'].split()[0].lower()}{rng.randint(10, 99)}@example.in"
+        order = Order.objects.create(
+            number=next_order_number(),
+            user=user,
+            email=email,
+            phone=address["phone"],
+            status=status,
+            payment_method=payment_method,
+            shipping_address=address,
+            billing_address=address,
+            shipping_method=quote.shipping_method,
+            subtotal_paise=quote.subtotal,
+            item_discount_paise=max(0, quote.mrp_total - quote.subtotal),
+            bundle_discount_paise=quote.bundle_discount,
+            shipping_fee_paise=quote.shipping_fee,
+            cod_fee_paise=quote.cod_fee,
+            tax_total_paise=quote.tax_total,
+            cgst_paise=quote.cgst,
+            sgst_paise=quote.sgst,
+            igst_paise=quote.igst,
+            grand_total_paise=quote.total,
+            placed_at=placed_at if status not in ("pending_payment", "payment_failed") else None,
+            estimated_delivery_date=(placed_at + timedelta(days=rng.randint(3, 6))).date(),
+            review_request_sent=True,
+        )
+        for line in quote.lines:
+            v = line.variant
+            image = v.product.images.all()[0] if v.product.images.all() else None
+            OrderItem.objects.create(
+                order=order,
+                variant=v,
+                product_id_snapshot=v.product_id,
+                product_name=v.product.name,
+                product_slug=v.product.slug,
+                variant_label=v.label,
+                sku=v.sku,
+                image_url=(image.renditions.get("400") or image.image.url) if image else "",
+                hsn_code=v.product.hsn_code,
+                mrp_paise=line.mrp,
+                unit_price_paise=line.unit_price,
+                quantity=line.quantity,
+                line_discount_paise=line.discount,
+                tax_rate=v.product.tax_rate,
+                tax_paise=line.tax,
+                line_total_paise=line.net,
+            )
+
+        # Status history with plausible gaps between steps.
+        events = []
+        moment = placed_at
+        if payment_method == "razorpay":
+            events.append(("", "pending_payment", moment))
+        if status in ("pending_payment", "payment_failed"):
+            if status == "payment_failed":
+                events.append(("pending_payment", "payment_failed", moment + timedelta(minutes=20)))
+        else:
+            previous = "pending_payment" if payment_method == "razorpay" else ""
+            target = status
+            if status == "cancelled":
+                target = rng.choice(["placed", "confirmed"])
+            for step in self.FLOW[: self.FLOW.index(target) + 1]:
+                events.append((previous, step, moment))
+                previous = step
+                moment += timedelta(hours=rng.randint(4, 30))
+            if status == "cancelled":
+                events.append((previous, "cancelled", moment))
+        for from_status, to_status, at in events:
+            event = OrderStatusEvent.objects.create(order=order, from_status=from_status, to_status=to_status)
+            OrderStatusEvent.objects.filter(pk=event.pk).update(created_at=at)
+
+        fields = {"created_at": placed_at, "updated_at": events[-1][2]}
+        paid = payment_method == "razorpay" and status not in ("pending_payment", "payment_failed")
+        if status in ("shipped", "out_for_delivery", "delivered"):
+            courier, url = rng.choice(activity.COURIERS)
+            tracking = f"{courier[:2].upper()}{rng.randint(10**9, 10**10 - 1)}"
+            fields.update(courier_name=courier, tracking_number=tracking, tracking_url=url.format(tracking))
+        if status == "delivered":
+            fields["delivered_at"] = events[-1][2]
+            paid = True
+        if status == "cancelled":
+            fields.update(
+                cancelled_at=events[-1][2],
+                cancel_reason=rng.choice(
+                    [
+                        "Ordered the wrong size",
+                        "Found it cheaper elsewhere",
+                        "No longer needed",
+                        "Delivery date too late",
+                    ]
+                ),
+            )
+        if status not in ("pending_payment", "payment_failed"):
+            fields["invoice_number"] = next_invoice_number()
+        if status == "payment_failed":
+            fields["payment_status"] = "failed"
+        elif status == "cancelled" and payment_method == "razorpay":
+            fields["payment_status"] = "refunded"
+        elif paid:
+            fields["payment_status"] = "paid"
+        Order.objects.filter(pk=order.pk).update(**fields)
+
+        payment = Payment.objects.create(
+            order=order,
+            provider=payment_method,
+            provider_order_id=f"order_seed{order.pk:05d}" if payment_method == "razorpay" else "",
+            provider_payment_id=f"pay_seed{order.pk:05d}" if paid and payment_method == "razorpay" else "",
+            amount_paise=order.grand_total_paise,
+            status="captured"
+            if paid or (status == "cancelled" and payment_method == "razorpay")
+            else ("failed" if status == "payment_failed" else "created"),
+            method=rng.choice(["upi", "card", "netbanking"]) if payment_method == "razorpay" else "",
+            signature_verified=paid,
+        )
+        if status == "cancelled" and payment_method == "razorpay":
+            Refund.objects.create(
+                payment=payment,
+                amount_paise=payment.amount_paise,
+                status="processed",
+                provider_refund_id=f"rfnd_seed{order.pk:05d}",
+                reason="Order cancelled",
+            )
+            Payment.objects.filter(pk=payment.pk).update(status="refunded")
+        order.refresh_from_db()
+        return order
+
+    def _seed_reviews(self, customers, delivered_orders):
+        rng = self.rng
+        reviewed = set()
+        verified_pairs = [
+            (o.user, item.product_id_snapshot) for o in delivered_orders if o.user for item in o.items.all()
+        ]
+        products = list(Product.objects.all())
+        target = 180
+        while len(reviewed) < target:
+            if verified_pairs and rng.random() < 0.6:
+                user, product_id = verified_pairs.pop(rng.randrange(len(verified_pairs)))
+                verified = True
+            else:
+                user, product_id, verified = rng.choice(customers), rng.choice(products).pk, False
+            if (user.pk, product_id) in reviewed:
+                continue
+            reviewed.add((user.pk, product_id))
+            rating = self._weighted(activity.RATING_WEIGHTS)
+            title, body = rng.choice(activity.REVIEWS[rating])
+            status = "approved" if rng.random() < 0.9 else rng.choice(["pending", "pending", "rejected"])
+            review = Review.objects.create(
+                product_id=product_id,
+                user=user,
+                rating=rating,
+                title=title,
+                body=body,
+                is_verified_buyer=verified,
+                status=status,
+                admin_reply="Thank you for letting us know. We've shared this with our makers." if rating <= 2 else "",
+            )
+            Review.objects.filter(pk=review.pk).update(created_at=timezone.now() - timedelta(days=rng.randint(1, 300)))
+        for product_id in {pid for _, pid in reviewed}:
+            refresh_ratings(product_id)
+
+    def _seed_returns(self, delivered_orders):
+        rng = self.rng
+        candidates = [o for o in delivered_orders if o.delivered_at]
+        for (status, reason, resolution, note), order in zip(
+            activity.RETURNS, rng.sample(candidates, len(activity.RETURNS)), strict=False
+        ):
+            item = order.items.first()
+            refund_amount = item.line_total_paise // item.quantity if resolution == "refund" else 0
+            ret = ReturnRequest.objects.create(
+                number=next_return_number(),
+                order=order,
+                user=order.user,
+                email=order.email,
+                status=status,
+                reason=reason,
+                resolution=resolution,
+                refund_amount_paise=refund_amount,
+                admin_note=note,
+                refund_upi_id="patron@okaxis" if order.payment_method == "cod" else "",
+                comments="Lovely piece, but it isn't quite right for me.",
+                pickup_date=(order.delivered_at + timedelta(days=4)).date() if status != "requested" else None,
+            )
+            ReturnItem.objects.create(return_request=ret, order_item=item, quantity=1)
+            chain = {
+                "requested": ["requested"],
+                "approved": ["requested", "approved"],
+                "pickup_scheduled": ["requested", "approved", "pickup_scheduled"],
+                "received": ["requested", "approved", "pickup_scheduled", "received"],
+                "refunded": ["requested", "approved", "pickup_scheduled", "received", "refunded"],
+                "replaced": ["requested", "approved", "pickup_scheduled", "received", "replaced"],
+                "rejected": ["requested", "rejected"],
+            }[status]
+            previous = ""
+            for step in chain:
+                ReturnStatusEvent.objects.create(return_request=ret, from_status=previous, to_status=step)
+                previous = step
+            if status in ("received", "refunded", "replaced"):
+                OrderItem.objects.filter(pk=item.pk).update(returned_quantity=1)
+            if status == "refunded":
+                payment = order.payments.first()
+                Refund.objects.create(
+                    payment=payment,
+                    return_request=ret,
+                    amount_paise=refund_amount,
+                    status="manual" if order.payment_method == "cod" else "processed",
+                    reason=f"Return {ret.number}",
+                )
+                Order.objects.filter(pk=order.pk).update(payment_status="partially_refunded")
+
+    def _seed_views(self):
+        rng = self.rng
+        today = timezone.localdate()
+        rows = []
+        for product in Product.objects.all():
+            base = rng.randint(5, 80) + (60 if product.is_featured else 0)
+            for day in range(14):
+                rows.append(
+                    ProductView(
+                        product=product,
+                        date=today - timedelta(days=day),
+                        views=max(0, int(base * rng.uniform(0.5, 1.4))),
+                    )
+                )
+        ProductView.objects.bulk_create(rows, ignore_conflicts=True)
+        from apps.catalog.tasks import recompute_trending_scores
+
+        recompute_trending_scores()
 
     # ------------------------------------------------------------------ catalog
     def seed_catalog(self):

@@ -10,6 +10,7 @@ import { PageLoader } from '@/components/ui/PageLoader';
 import { Seo } from '@/lib/seo';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { usePaymentFlow } from '../checkout/usePaymentFlow';
+import { OrderActions } from './OrderActions';
 import { OrderView } from './OrderView';
 
 function SuccessMark() {
@@ -111,13 +112,14 @@ export default function OrderPage() {
           <OrderView
             order={order}
             actions={
-              justPlaced ? (
-                <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
+                <OrderActions order={order} token={token} />
+                {justPlaced ? (
                   <ButtonLink to="/shop" variant="secondary" block>
                     Continue browsing
                   </ButtonLink>
-                </div>
-              ) : null
+                ) : null}
+              </div>
             }
           />
         </div>

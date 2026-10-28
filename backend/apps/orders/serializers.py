@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.accounts.serializers import STATE_CODES
 
-from .models import Order, OrderItem, OrderStatusEvent
+from .models import Order, OrderItem, OrderStatusEvent, ReturnRequest
 from .services.state_machine import CUSTOMER, allowed_transitions
 
 
@@ -161,3 +161,59 @@ class OrderDetailSerializer(OrderSummarySerializer):
 
     def get_has_invoice(self, obj) -> bool:
         return bool(obj.invoice_number)
+
+
+class ReturnItemSerializer(serializers.Serializer):
+    order_item_id = serializers.IntegerField(source="order_item.id")
+    product_name = serializers.CharField(source="order_item.product_name")
+    variant_label = serializers.CharField(source="order_item.variant_label")
+    image_url = serializers.CharField(source="order_item.image_url")
+    quantity = serializers.IntegerField()
+
+
+class ReturnSerializer(serializers.Serializer):
+    number = serializers.CharField()
+    order_number = serializers.CharField(source="order.number")
+    status = serializers.CharField()
+    status_label = serializers.CharField(source="get_status_display")
+    reason = serializers.CharField()
+    reason_label = serializers.CharField(source="get_reason_display")
+    resolution = serializers.CharField()
+    comments = serializers.CharField()
+    refund_amount_paise = serializers.IntegerField()
+    pickup_date = serializers.DateField(allow_null=True)
+    admin_note = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField()
+    resolved_at = serializers.DateTimeField(allow_null=True)
+    items = ReturnItemSerializer(many=True)
+    photos = serializers.SerializerMethodField()
+    events = serializers.SerializerMethodField()
+
+    def get_admin_note(self, obj) -> str:
+        return obj.admin_note if obj.status == "rejected" else ""
+
+    def get_photos(self, obj) -> list[str]:
+        return [p.image.url for p in obj.photos.all()]
+
+    def get_events(self, obj) -> list[dict]:
+        return [{"status": e.to_status, "label": e.get_to_status_display(), "created_at": e.created_at} for e in obj.events.all()]
+
+
+class ReturnInput(serializers.Serializer):
+    order_number = serializers.CharField()
+    token = serializers.CharField(required=False, allow_blank=True)
+    items = serializers.JSONField()
+    reason = serializers.ChoiceField(choices=ReturnRequest.Reason.choices)
+    comments = serializers.CharField(required=False, allow_blank=True, max_length=1000)
+    refund_upi_id = serializers.RegexField(r"^[\w.\-]{2,}@[a-zA-Z]{2,}$", required=False, allow_blank=True,
+                                           error_messages={"invalid": "Enter a valid UPI ID, like name@bank."})
+
+    def validate_items(self, value):
+        if not isinstance(value, list) or not all(isinstance(i, dict) and "order_item_id" in i for i in value):
+            raise serializers.ValidationError("Choose the pieces you'd like to return.")
+        return value
+
+
+class TrackInput(serializers.Serializer):
+    number = serializers.CharField(max_length=24)
+    contact = serializers.CharField(max_length=120, help_text="Email or mobile number used for the order.")

@@ -16,6 +16,7 @@ import { findVariant, imagesForSelection, initialSelection, type Selection } fro
 import { Gallery } from './Gallery';
 import { ProductDetails } from './ProductDetails';
 import { ProductPurchase } from './ProductPurchase';
+import { ReviewsSection } from './ReviewsSection';
 import { PincodeChecker } from './PincodeChecker';
 import { ShareMenu } from './ShareMenu';
 import { WishlistHeart } from '../wishlist/WishlistHeart';
@@ -100,7 +101,11 @@ export default function ProductPage() {
               <h1 className="text-display-lg">{product.name}</h1>
               <WishlistHeart productId={product.id} name={product.name} size="lg" className="shrink-0" />
             </div>
-            <Rating value={product.rating_avg} count={product.rating_count} className="mt-3" />
+            {product.rating_count ? (
+              <a href="#reviews" className="mt-3 inline-block hover:opacity-80">
+                <Rating value={product.rating_avg} count={product.rating_count} />
+              </a>
+            ) : null}
             <Price className="mt-5" size="lg" price={price} mrp={variant?.mrp_paise ?? product.mrp_paise} />
             <p className="mt-1 text-xs text-ink-muted">Inclusive of all taxes</p>
             <p className="mt-6 text-ink-soft">{product.short_description}</p>
@@ -134,6 +139,7 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+      <ReviewsSection slug={product.slug} productName={product.name} />
       <ProductRail title="You may also like" eyebrow="Considered pairings" products={related.data} loading={related.isLoading} />
       {otherRecent.length ? <ProductRail title="Recently viewed" eyebrow="Pick up where you left off" products={recent.data} loading={recent.isLoading} /> : null}
       <StickyPurchaseBar

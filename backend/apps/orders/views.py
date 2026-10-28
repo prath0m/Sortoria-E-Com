@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import status
+from rest_framework import generics, permissions, status
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
@@ -17,10 +18,18 @@ from apps.cart.services.cart import get_cart
 from apps.core.exceptions import DomainError
 from apps.payments.providers import ProviderError, available_providers, get_provider
 
-from .models import Order, OrderStatus
-from .serializers import CheckoutSerializer, OrderDetailSerializer
+from .models import Order, OrderStatus, ReturnRequest
+from .serializers import (
+    CheckoutSerializer,
+    OrderDetailSerializer,
+    OrderSummarySerializer,
+    ReturnInput,
+    ReturnSerializer,
+    TrackInput,
+)
 from .services.checkout import CheckoutInput, place_order
 from .services.invoices import ensure_invoice
+from .services.returns import eligibility, request_return
 from .services.state_machine import CUSTOMER, transition
 
 
@@ -172,3 +181,122 @@ class InvoiceView(APIView):
             filename=f"Invoice-{order.number}.pdf",
             content_type="application/pdf",
         )
+
+
+class OrderListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = OrderSummarySerializer
+    filter_backends: list = []
+
+    def get_queryset(self):
+        return (
+            Order.objects.filter(user=self.request.user)
+            .exclude(status=OrderStatus.PENDING_PAYMENT, reservation_expires_at__lt=timezone.now())
+            .prefetch_related("items")
+            .order_by("-created_at")
+        )
+
+
+class CancelOrderView(APIView):
+    @extend_schema(request=OpenApiTypes.OBJECT, responses=OrderDetailSerializer)
+    def post(self, request, number):
+        order = get_accessible_order(request, number)
+        reason = str(request.data.get("reason", "")).strip()[:300] or "Cancelled by customer"
+        transition(order, OrderStatus.CANCELLED, actor_type=CUSTOMER, actor=request.user if request.user.is_authenticated else None, note=reason)
+        return Response(OrderDetailSerializer(order_queryset().get(pk=order.pk)).data)
+
+
+class TrackOrderView(APIView):
+    """Public lookup by order number + the email or phone used. Returns the order with its access token."""
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "track"
+
+    @extend_schema(request=TrackInput, responses=OrderDetailSerializer)
+    def post(self, request):
+        data = TrackInput(data=request.data)
+        data.is_valid(raise_exception=True)
+        number = data.validated_data["number"].strip().upper()
+        contact = data.validated_data["contact"].strip().lower()
+        digits = "".join(c for c in contact if c.isdigit())[-10:]
+        order = order_queryset().filter(number=number).first()
+        if order is None or not (contact == order.email or (len(digits) == 10 and digits == order.phone)):
+            return Response(
+                {"detail": "We couldn't find an order with those details. Please check and try again."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        return Response(OrderDetailSerializer(order).data)
+
+
+class ReturnableItemsView(APIView):
+    @extend_schema(parameters=[OpenApiParameter("token", str)], responses=OpenApiTypes.OBJECT)
+    def get(self, request, number):
+        order = get_accessible_order(request, number)
+        return Response(
+            {
+                "order_number": order.number,
+                "payment_method": order.payment_method,
+                "items": [
+                    {
+                        "order_item_id": e.item.pk,
+                        "product_name": e.item.product_name,
+                        "variant_label": e.item.variant_label,
+                        "image_url": e.item.image_url,
+                        "quantity": e.item.quantity,
+                        "returnable_quantity": e.returnable_quantity,
+                        "policy": e.policy,
+                        "window_days": e.window_days,
+                        "eligible": e.eligible,
+                        "note": e.reason,
+                    }
+                    for e in eligibility(order)
+                ],
+            }
+        )
+
+
+def return_queryset():
+    return ReturnRequest.objects.select_related("order").prefetch_related("items__order_item", "photos", "events")
+
+
+class ReturnsView(APIView):
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    @extend_schema(responses=ReturnSerializer(many=True))
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Sign in to see your returns."}, status=status.HTTP_401_UNAUTHORIZED)
+        returns = return_queryset().filter(order__user=request.user)
+        return Response(ReturnSerializer(returns, many=True).data)
+
+    @extend_schema(request=ReturnInput, responses=ReturnSerializer)
+    def post(self, request):
+        data = ReturnInput(data=request.data)
+        data.is_valid(raise_exception=True)
+        v = data.validated_data
+        order = get_accessible_order(request, v["order_number"])
+        ret = request_return(
+            order,
+            items=v["items"],
+            reason=v["reason"],
+            comments=v.get("comments", ""),
+            refund_upi_id=v.get("refund_upi_id", ""),
+            photos=request.FILES.getlist("photos"),
+            user=request.user if request.user.is_authenticated else None,
+        )
+        return Response(ReturnSerializer(return_queryset().get(pk=ret.pk)).data, status=status.HTTP_201_CREATED)
+
+
+class ReturnDetailView(APIView):
+    @extend_schema(parameters=[OpenApiParameter("token", str)], responses=ReturnSerializer)
+    def get(self, request, number):
+        ret = get_object_or_404(return_queryset(), number=number)
+        get_accessible_order(request, ret.order.number)  # same access rule as the order
+        return Response(ReturnSerializer(ret).data)
+
+
+class OrderReturnsView(APIView):
+    @extend_schema(parameters=[OpenApiParameter("token", str)], responses=ReturnSerializer(many=True))
+    def get(self, request, number):
+        order = get_accessible_order(request, number)
+        return Response(ReturnSerializer(return_queryset().filter(order=order), many=True).data)

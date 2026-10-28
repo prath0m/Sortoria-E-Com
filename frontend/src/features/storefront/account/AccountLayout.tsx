@@ -7,6 +7,9 @@ import { RequireAuth } from './RequireAuth';
 
 export const ACCOUNT_LINKS = [
   { to: '/account', label: 'Overview', end: true },
+  { to: '/account/orders', label: 'Orders' },
+  { to: '/account/returns', label: 'Returns' },
+  { to: '/wishlist', label: 'Wishlist' },
   { to: '/account/profile', label: 'Profile & security' },
   { to: '/account/addresses', label: 'Addresses' },
 ];
