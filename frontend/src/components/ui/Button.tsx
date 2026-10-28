@@ -11,9 +11,9 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary: 'bg-primary text-primary-on hover:bg-primary-hover shadow-soft',
-  secondary: 'border border-burgundy-800 text-burgundy-800 hover:bg-burgundy-800 hover:text-cream-50',
+  secondary: 'border border-accent text-accent hover:bg-primary hover:border-primary hover:text-primary-on',
   ghost: 'text-ink hover:bg-ink/5',
-  link: 'link-underline px-0 tracking-[0.12em] text-burgundy-800',
+  link: 'link-underline px-0 tracking-[0.12em] text-accent',
   gold: 'bg-gold-300 text-ink hover:bg-gold-200 shadow-soft',
   danger: 'bg-danger text-white hover:opacity-90',
 };
@@ -65,9 +65,16 @@ export function ButtonLink({
   size,
   block,
   className,
+  icon,
+  children,
   ...rest
-}: LinkProps & Pick<ButtonProps, 'variant' | 'size' | 'block'>) {
-  return <Link className={buttonClasses({ variant, size, block, className })} {...rest} />;
+}: LinkProps & Pick<ButtonProps, 'variant' | 'size' | 'block' | 'icon'>) {
+  return (
+    <Link className={buttonClasses({ variant, size, block, className })} {...rest}>
+      {icon}
+      {children}
+    </Link>
+  );
 }
 
 export const IconButton = forwardRef<

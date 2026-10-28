@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { PageLoader } from '@/components/ui/PageLoader';
 import { createBrowserRouter } from 'react-router-dom';
 import { StorefrontLayout } from '@/features/storefront/layout/StorefrontLayout';
+import { RequireCapability } from '@/features/admin/layout/RequireCapability';
 import { ErrorPage } from '@/features/storefront/pages/ErrorPage';
 import { NotFoundPage } from '@/features/storefront/pages/NotFoundPage';
 
@@ -30,6 +31,21 @@ const AdminShell = lazy(() => import('@/features/admin/layout/AdminShell'));
 const AdminLogin = lazy(() => import('@/features/admin/AdminLogin'));
 const DashboardPage = lazy(() => import('@/features/admin/dashboard/DashboardPage'));
 const AdminNotFound = lazy(() => import('@/features/admin/AdminNotFound'));
+const AdminProducts = lazy(() => import('@/features/admin/products/ProductsPage'));
+const AdminProductEdit = lazy(() => import('@/features/admin/products/ProductEditPage'));
+const AdminCategories = lazy(() => import('@/features/admin/catalog/CategoriesPage'));
+const AdminBrands = lazy(() => import('@/features/admin/catalog/BrandsPage'));
+const AdminAttributes = lazy(() => import('@/features/admin/catalog/AttributesPage'));
+const AdminInventory = lazy(() => import('@/features/admin/catalog/InventoryPage'));
+const AdminOrders = lazy(() => import('@/features/admin/orders/OrdersPage'));
+const AdminOrderDetail = lazy(() => import('@/features/admin/orders/OrderDetailPage'));
+const AdminReturns = lazy(() => import('@/features/admin/returns/ReturnsPage'));
+const AdminReturnDetail = lazy(() => import('@/features/admin/returns/ReturnDetailPage'));
+const AdminCustomers = lazy(() => import('@/features/admin/customers/CustomersPage'));
+const AdminCustomerDetail = lazy(() => import('@/features/admin/customers/CustomerDetailPage'));
+const AdminReviews = lazy(() => import('@/features/admin/reviews/ReviewsPage'));
+
+const guard = (capability: string, element: JSX.Element) => <RequireCapability capability={capability}>{element}</RequireCapability>;
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -49,6 +65,19 @@ export const router = createBrowserRouter([
         element: <Suspense fallback={<PageLoader />}><AdminShell /></Suspense>,
         children: [
           { index: true, element: <DashboardPage /> },
+          { path: 'products', element: guard('catalog.edit', <AdminProducts />) },
+          { path: 'products/:id', element: guard('catalog.edit', <AdminProductEdit />) },
+          { path: 'categories', element: guard('catalog.edit', <AdminCategories />) },
+          { path: 'brands', element: guard('catalog.edit', <AdminBrands />) },
+          { path: 'attributes', element: guard('catalog.edit', <AdminAttributes />) },
+          { path: 'inventory', element: guard('inventory.manage', <AdminInventory />) },
+          { path: 'orders', element: guard('orders.view', <AdminOrders />) },
+          { path: 'orders/:number', element: guard('orders.view', <AdminOrderDetail />) },
+          { path: 'returns', element: guard('returns.manage', <AdminReturns />) },
+          { path: 'returns/:number', element: guard('returns.manage', <AdminReturnDetail />) },
+          { path: 'customers', element: guard('customers.view', <AdminCustomers />) },
+          { path: 'customers/:id', element: guard('customers.view', <AdminCustomerDetail />) },
+          { path: 'reviews', element: guard('reviews.manage', <AdminReviews />) },
           { path: '*', element: <AdminNotFound /> },
         ],
       },

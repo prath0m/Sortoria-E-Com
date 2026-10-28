@@ -3,7 +3,19 @@ import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { server } from './server';
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+  // jsdom's AbortSignal isn't accepted by Node's Request/fetch (which MSW's interceptor uses). Queries
+  // pass one for cancellation; tests don't need it at the network layer, so honour an already-aborted
+  // signal and drop it otherwise. Installed after listen() so it wraps MSW's patched fetch.
+  const interceptedFetch = globalThis.fetch;
+  globalThis.fetch = (input: RequestInfo | URL, init?: RequestInit) => {
+    if (!init?.signal) return interceptedFetch(input, init);
+    if (init.signal.aborted) return Promise.reject(new DOMException('Aborted', 'AbortError'));
+    const { signal: _signal, ...rest } = init;
+    return interceptedFetch(input, rest);
+  };
+});
 afterEach(() => {
   server.resetHandlers();
   cleanup();
@@ -42,3 +54,4 @@ const nativeFormData = (
   await new Response('a=1', { headers: { 'content-type': 'application/x-www-form-urlencoded' } }).formData()
 ).constructor as typeof FormData;
 Object.defineProperty(globalThis, 'FormData', { writable: true, value: nativeFormData });
+

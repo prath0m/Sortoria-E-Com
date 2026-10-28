@@ -23,6 +23,8 @@ api_v1 = [
     path("", include("apps.reviews.urls")),
     path("", include("apps.cms.urls")),
     path("", include("apps.analytics.urls")),
+    path("", include("apps.catalog.admin_urls")),
+    path("", include("apps.orders.admin_urls")),
 ]
 
 urlpatterns = [
