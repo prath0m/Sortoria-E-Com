@@ -14,6 +14,7 @@ api_v1 = [
     path("health/", health, name="health"),
     path("", include("apps.core.urls")),
     path("", include("apps.accounts.urls")),
+    path("", include("apps.catalog.urls")),
 ]
 
 urlpatterns = [
