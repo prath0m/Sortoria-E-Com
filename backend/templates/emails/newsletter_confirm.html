@@ -1,0 +1,8 @@
+{% extends "emails/base.html" %}
+{% block preheader %}One click to confirm, and you're on the list.{% endblock %}
+{% block content %}
+{% include "emails/partials/heading.html" with eyebrow="Newsletter" title="One last step" %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Thank you for wanting to hear from us. Please confirm your address and we'll send a few considered letters a month: new arrivals, quiet sales and the stories behind our makers.</p>
+{% include "emails/partials/button.html" with url=confirm_url label="Confirm subscription" %}
+<p style="margin:0;font-size:13px;line-height:22px;color:#61635B;">Didn't sign up? Simply ignore this email and you won't hear from us. <a href="{{ unsubscribe_url }}" style="color:#61635B;">Unsubscribe</a></p>
+{% endblock %}

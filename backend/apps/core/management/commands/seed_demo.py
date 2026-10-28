@@ -38,6 +38,7 @@ from apps.catalog.models import (
 )
 from apps.catalog.services.aggregates import refresh_products, refresh_ratings, refresh_search_vectors
 from apps.catalog.tasks import build_image_renditions
+from apps.cms.models import Counter, HeroSlide, HomeSection, Page, PromoBanner, Testimonial, TrustBadge
 from apps.core import caching
 from apps.core.models import StoreSettings
 from apps.offers.models import Bundle, BundleItem, Coupon, CouponRedemption, FlashSale, FlashSaleItem
@@ -55,7 +56,7 @@ from apps.reviews.models import Review
 from apps.shipping.models import ServiceablePincode, ShippingMethod, ShippingZone
 from config.celery import app as celery_app
 
-from .seed_data import activity, commerce
+from .seed_data import activity, cms, commerce
 from .seed_data import catalog as data
 
 ASSET_DIR = settings.BASE_DIR / "seed_assets" / "images"
@@ -133,6 +134,7 @@ class Command(BaseCommand):
         self._timed("image renditions", self.build_missing_renditions)
         self._timed("shipping & offers", self._seed_commerce)
         self._timed("customers & orders", self._seed_activity_atomic)
+        self._timed("homepage & pages", self._seed_cms_atomic)
         caching.bump(caching.CATALOG, caching.NAVIGATION, caching.HOME, caching.OFFERS, caching.SHIPPING)
         self.stdout.write(self.style.SUCCESS("Sartoria demo data is ready."))
 
@@ -150,6 +152,10 @@ class Command(BaseCommand):
     def _seed_commerce(self):
         self.seed_shipping()
         self.seed_offers()
+
+    @transaction.atomic
+    def _seed_cms_atomic(self):
+        self.seed_cms()
 
     @transaction.atomic
     def _seed_activity_atomic(self):
@@ -177,6 +183,8 @@ class Command(BaseCommand):
             ):
                 if field:
                     field.delete(save=False)
+        for model in (HeroSlide, HomeSection, PromoBanner, TrustBadge, Counter, Testimonial, Page):
+            model.objects.all().delete()
         Order.objects.all().delete()
         Review.objects.all().delete()
         User.objects.filter(role=User.Role.CUSTOMER).delete()
@@ -366,6 +374,82 @@ class Command(BaseCommand):
         from apps.offers.tasks import sync_flash_sale_prices
 
         sync_flash_sale_prices()
+
+    # ------------------------------------------------------------------ CMS
+    def seed_cms(self):
+        if HomeSection.objects.exists():
+            return
+        self.stdout.write("Seeding homepage, banners and pages…")
+        jobs = [(h["photo"], "banner") for h in cms.HERO] + [(h["photo"], "tile") for h in cms.HERO]
+        jobs += [(b[1], "banner") for b in cms.BANNERS] + [(b[1], "tile") for b in cms.BANNERS]
+        jobs += [(x[4]["photo"], "tile") for x in cms.SECTIONS if "photo" in x[4]]
+        self.photos.prefetch(jobs)
+        for position, h in enumerate(cms.HERO):
+            slide = HeroSlide(
+                eyebrow=h["eyebrow"],
+                headline=h["headline"],
+                subtext=h["subtext"],
+                image_alt=h["headline"],
+                cta_label=h["cta"][0],
+                cta_url=h["cta"][1],
+                secondary_cta_label=h["secondary"][0] if h["secondary"] else "",
+                secondary_cta_url=h["secondary"][1] if h["secondary"] else "",
+                text_theme=h["theme"],
+                text_align=h["align"],
+                position=position,
+            )
+            slide.image.save(f"hero-{position}.jpg", self.photos.get(h["photo"], "banner", h["headline"]), save=False)
+            slide.mobile_image.save(
+                f"hero-{position}-m.jpg", self.photos.get(h["photo"], "tile", h["headline"]), save=False
+            )
+            slide.save()
+        for position, (kind, eyebrow, title, subtitle, extra) in enumerate(cms.SECTIONS):
+            section = HomeSection(
+                type=kind,
+                eyebrow=eyebrow,
+                title=title,
+                subtitle=subtitle,
+                body=extra.get("body", ""),
+                limit=extra.get("limit", 12),
+                cta_label=extra.get("cta", ("", ""))[0],
+                cta_url=extra.get("cta", ("", ""))[1],
+                position=position,
+            )
+            if "photo" in extra:
+                section.image.save(
+                    f"section-{position}.jpg", self.photos.get(extra["photo"], "tile", title), save=False
+                )
+            section.save()
+        for position, (placement, photo, eyebrow, title, subtitle, cta, badge) in enumerate(cms.BANNERS):
+            banner = PromoBanner(
+                placement=placement,
+                eyebrow=eyebrow,
+                title=title,
+                subtitle=subtitle,
+                cta_label=cta[0],
+                cta_url=cta[1],
+                badge_text=badge,
+                position=position,
+            )
+            banner.image.save(f"banner-{position}.jpg", self.photos.get(photo, "banner", title), save=False)
+            banner.mobile_image.save(f"banner-{position}-m.jpg", self.photos.get(photo, "tile", title), save=False)
+            banner.save()
+        for position, (icon, title, text) in enumerate(cms.TRUST_BADGES):
+            TrustBadge.objects.create(icon=icon, title=title, text=text, position=position)
+        for position, (value, prefix, suffix, label) in enumerate(cms.COUNTERS):
+            Counter.objects.create(value=value, prefix=prefix, suffix=suffix, label=label, position=position)
+        for position, (name, location, quote) in enumerate(cms.TESTIMONIALS):
+            Testimonial.objects.create(name=name, location=location, quote=quote, position=position)
+        for position, (slug, title, summary, body) in enumerate(cms.PAGES):
+            Page.objects.create(
+                slug=slug,
+                title=title,
+                summary=summary,
+                body=body,
+                position=position,
+                seo_title=title,
+                seo_description=summary,
+            )
 
     # ------------------------------------------------------------------ customers & orders
     FLOW = ["placed", "confirmed", "packed", "shipped", "out_for_delivery", "delivered"]

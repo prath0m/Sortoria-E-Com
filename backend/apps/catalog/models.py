@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from treebeard.mp_tree import MP_Node
 
 from apps.core.models import BaseModel, OrderedModel, StoreSettings
+from apps.core.sanitize import clean_html
 from apps.core.utils import unique_slug
 
 GST_RATES = [(0, "0%"), (3, "3% (gold & jewellery)"), (5, "5%"), (18, "18%"), (40, "40%")]
@@ -197,6 +198,7 @@ class Product(BaseModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = unique_slug(self, self.name, max_length=170)
+        self.description = clean_html(self.description)
         super().save(*args, **kwargs)
 
     @property

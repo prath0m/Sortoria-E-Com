@@ -477,3 +477,64 @@ export interface ReturnRequest {
   photos: string[];
   events: { status: ReturnStatus; label: string; created_at: string }[];
 }
+
+export interface HeroSlide {
+  id: number;
+  eyebrow: string;
+  headline: string;
+  subtext: string;
+  image: string;
+  mobile_image: string | null;
+  image_alt: string;
+  cta_label: string;
+  cta_url: string;
+  secondary_cta_label: string;
+  secondary_cta_url: string;
+  text_theme: 'light' | 'dark';
+  text_align: 'left' | 'center' | 'right';
+}
+
+export interface Banner {
+  id: number;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  mobile_image: string | null;
+  cta_label: string;
+  cta_url: string;
+  badge_text: string;
+}
+
+interface SectionBase {
+  id: number;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  image: string | null;
+  cta_label: string;
+  cta_url: string;
+}
+
+export type HomeSectionData =
+  | (SectionBase & { type: 'hero'; data: HeroSlide[] })
+  | (SectionBase & { type: 'featured_categories'; data: { id: number; name: string; slug: string; image: string | null }[] })
+  | (SectionBase & { type: 'trending' | 'new_arrivals' | 'best_sellers' | 'featured_products'; data: ProductCard[] })
+  | (SectionBase & { type: 'flash_sale' | 'daily_deals'; data: { title: string; slug: string; subtitle: string; ends_at: string; products: ProductCard[] } })
+  | (SectionBase & { type: 'bundles'; data: BundleOffer[] })
+  | (SectionBase & { type: 'promo_banners'; data: Banner[] })
+  | (SectionBase & { type: 'trust_badges'; data: { icon: string; title: string; text: string }[] })
+  | (SectionBase & { type: 'counters'; data: { value: number; prefix: string; suffix: string; label: string }[] })
+  | (SectionBase & { type: 'testimonials'; data: { name: string; location: string; quote: string; rating: number; avatar: string | null }[] })
+  | (SectionBase & { type: 'newsletter' | 'editorial'; data: Record<string, never> });
+
+export interface CmsPage {
+  title: string;
+  slug: string;
+  summary: string;
+  body: string;
+  seo_title: string;
+  seo_description: string;
+  updated_at: string;
+}

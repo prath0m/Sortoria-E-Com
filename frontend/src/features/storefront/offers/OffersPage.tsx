@@ -1,4 +1,7 @@
+import { useBanners } from '@/api/hooks/cms';
 import { useBundles, useDailyDeals, useFlashSales } from '@/api/hooks/offers';
+import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/Badge';
 import { BotanicalDivider } from '@/components/brand/Illustrations';
 import { Reveal } from '@/components/motion/Reveal';
 import { ButtonLink } from '@/components/ui/Button';
@@ -12,6 +15,7 @@ export default function OffersPage() {
   const flash = useFlashSales();
   const deals = useDailyDeals();
   const bundles = useBundles();
+  const { data: banners } = useBanners('offers');
   const loading = flash.isLoading || deals.isLoading || bundles.isLoading;
   const nothing = !loading && !flash.data?.length && !deals.data?.length && !bundles.data?.length;
 
@@ -41,6 +45,17 @@ export default function OffersPage() {
           />
         ) : (
           <div className="mt-12 space-y-16">
+            {banners?.map((b) => (
+              <Link key={b.id} to={b.cta_url || '/shop'} className="group relative block h-56 overflow-hidden rounded-md md:h-72">
+                <img src={b.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.03]" />
+                <span className="absolute inset-0 bg-gradient-to-r from-ink/80 to-ink/10" />
+                <span className="absolute inset-y-0 left-6 flex max-w-lg flex-col justify-center md:left-12">
+                  {b.badge_text ? <Badge tone="sale" className="mb-3 self-start">{b.badge_text}</Badge> : null}
+                  <span className="font-display text-display-md text-cream-50">{b.title}</span>
+                  {b.subtitle ? <span className="mt-2 text-cream-100">{b.subtitle}</span> : null}
+                </span>
+              </Link>
+            ))}
             {flash.data?.map((sale) => <SaleSection key={sale.id} sale={sale} limit={8} />)}
             {deals.data?.map((sale) => <SaleSection key={sale.id} sale={sale} />)}
             {bundles.data?.length ? (

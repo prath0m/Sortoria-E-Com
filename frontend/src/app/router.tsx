@@ -23,6 +23,8 @@ const ReturnDetailPage = lazy(() => import('@/features/storefront/returns/Return
 const OrdersPage = lazy(() => import('@/features/storefront/account/OrdersPage'));
 const AccountOrderPage = lazy(() => import('@/features/storefront/account/AccountOrderPage'));
 const ReturnsPage = lazy(() => import('@/features/storefront/account/ReturnsPage'));
+const CmsPage = lazy(() => import('@/features/storefront/pages/CmsPage'));
+const NewsletterActionPage = lazy(() => import('@/features/storefront/pages/NewsletterActionPage'));
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -53,6 +55,9 @@ export const router = createBrowserRouter([
       { path: 'offers', element: <OffersPage /> },
       { path: 'offers/sale/:slug', element: <SalePage /> },
       { path: 'offers/bundles/:slug', element: <BundlePage /> },
+      { path: 'pages/:slug', element: <CmsPage /> },
+      { path: 'newsletter/confirm/:token', element: <NewsletterActionPage action="confirm" /> },
+      { path: 'newsletter/unsubscribe/:token', element: <NewsletterActionPage action="unsubscribe" /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'forgot-password', element: <ForgotPasswordPage /> },

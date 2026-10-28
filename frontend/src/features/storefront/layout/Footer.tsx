@@ -1,6 +1,8 @@
 import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useFooterPages } from '@/api/hooks/cms';
 import { useNavigation, useStoreSettings } from '@/api/hooks/store';
+import { NewsletterForm } from '../home/sections/Newsletter';
 import { Logo } from '@/components/brand/Logo';
 import type { ReactNode } from 'react';
 
@@ -24,6 +26,7 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 export function Footer() {
   const { data: store } = useStoreSettings();
   const { data: categories = [] } = useNavigation();
+  const { data: pages = [] } = useFooterPages();
   const name = store?.name ?? 'Sartoria';
   const socials = [
     { href: store?.instagram_url, label: 'Instagram', Icon: Instagram },
@@ -39,6 +42,10 @@ export function Footer() {
           <div className="max-w-sm">
             <Logo src={store?.logo} label={name} tone="cream" className="h-8" />
             {store?.footer_blurb ? <p className="mt-6 text-sm leading-relaxed text-cream-200">{store.footer_blurb}</p> : null}
+            <div className="mt-8">
+              <p className="mb-3 text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold-300">The {name} letter</p>
+              <NewsletterForm source="footer" tone="dark" compact />
+            </div>
             {socials.length ? (
               <ul className="mt-8 flex gap-2">
                 {socials.map(({ href, label, Icon }) => (
@@ -69,14 +76,7 @@ export function Footer() {
             </FooterColumn>
             <FooterColumn title="Help">
               <li><Link to="/track-order" className="link-underline hover:text-cream-50">Track your order</Link></li>
-              <li><Link to="/pages/shipping-policy" className="link-underline hover:text-cream-50">Shipping</Link></li>
-              <li><Link to="/pages/returns-policy" className="link-underline hover:text-cream-50">Returns &amp; refunds</Link></li>
-              <li><Link to="/pages/contact" className="link-underline hover:text-cream-50">Contact us</Link></li>
-            </FooterColumn>
-            <FooterColumn title={name}>
-              <li><Link to="/pages/about" className="link-underline hover:text-cream-50">Our story</Link></li>
-              <li><Link to="/pages/privacy-policy" className="link-underline hover:text-cream-50">Privacy</Link></li>
-              <li><Link to="/pages/terms" className="link-underline hover:text-cream-50">Terms</Link></li>
+              <li><Link to="/offers" className="link-underline hover:text-cream-50">Offers</Link></li>
               {store?.contact_email ? (
                 <li>
                   <a href={`mailto:${store.contact_email}`} className="link-underline hover:text-cream-50">
@@ -85,6 +85,15 @@ export function Footer() {
                 </li>
               ) : null}
               {store?.support_phone ? <li className="text-cream-200">{store.support_phone}</li> : null}
+            </FooterColumn>
+            <FooterColumn title={name}>
+              {pages.map((page) => (
+                <li key={page.slug}>
+                  <Link to={`/pages/${page.slug}`} className="link-underline hover:text-cream-50">
+                    {page.title}
+                  </Link>
+                </li>
+              ))}
             </FooterColumn>
           </div>
         </div>
