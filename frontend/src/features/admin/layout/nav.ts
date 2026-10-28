@@ -1,4 +1,27 @@
-import { Boxes, FolderTree, LayoutDashboard, MessageSquareQuote, Package, Receipt, SlidersHorizontal, Tag, Undo2, Users, type LucideIcon } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  Boxes,
+  FileText,
+  FolderTree,
+  Gift,
+  History,
+  LayoutDashboard,
+  LayoutTemplate,
+  Mail,
+  MessageSquareQuote,
+  Package,
+  Receipt,
+  Settings,
+  SlidersHorizontal,
+  Tag,
+  Ticket,
+  Truck,
+  Undo2,
+  UserCog,
+  Users,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react';
 
 export interface NavItem {
   to: string;
@@ -41,6 +64,32 @@ export const NAV: NavGroup[] = [
     items: [
       { to: '/admin-panel/customers', label: 'Customers', icon: Users, capability: 'customers.view' },
       { to: '/admin-panel/reviews', label: 'Reviews', icon: MessageSquareQuote, capability: 'reviews.manage' },
+    ],
+  },
+  {
+    label: 'Offers',
+    items: [
+      { to: '/admin-panel/offers/coupons', label: 'Coupons', icon: Ticket, capability: 'offers.manage' },
+      { to: '/admin-panel/offers/sales', label: 'Sales & deals', icon: Zap, capability: 'offers.manage' },
+      { to: '/admin-panel/offers/bundles', label: 'Bundles', icon: Gift, capability: 'offers.manage' },
+    ],
+  },
+  {
+    label: 'Content',
+    items: [
+      { to: '/admin-panel/content', label: 'Homepage', icon: LayoutTemplate, capability: 'cms.manage', end: true },
+      { to: '/admin-panel/content/pages', label: 'Pages', icon: FileText, capability: 'cms.manage' },
+      { to: '/admin-panel/content/newsletter', label: 'Newsletter', icon: Mail, capability: 'cms.manage' },
+    ],
+  },
+  {
+    label: 'Store',
+    items: [
+      { to: '/admin-panel/shipping', label: 'Shipping', icon: Truck, capability: 'shipping.manage' },
+      { to: '/admin-panel/settings', label: 'Settings', icon: Settings, capability: 'settings.manage' },
+      { to: '/admin-panel/staff', label: 'Staff', icon: UserCog, capability: 'staff.manage' },
+      { to: '/admin-panel/data', label: 'Import & export', icon: ArrowLeftRight, capability: 'export.run' },
+      { to: '/admin-panel/activity', label: 'Activity log', icon: History, capability: 'audit.view' },
     ],
   },
 ];

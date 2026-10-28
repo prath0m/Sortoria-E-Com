@@ -12,7 +12,7 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 
 from apps.catalog.models import Category, Product
 from apps.core import caching
-from apps.core.admin_tools import ModelCleanMixin, ReorderMixin, SafeImageField
+from apps.core.admin_tools import FormBooleanMixin, ModelCleanMixin, ReorderMixin, SafeImageField
 from apps.core.audit import AuditedViewSetMixin
 from apps.core.pagination import AdminPagination
 from apps.core.permissions import HasCapability
@@ -53,7 +53,7 @@ class CmsViewSet(AuditedViewSetMixin, ReorderMixin, viewsets.ModelViewSet):
 
 
 # --------------------------------------------------------------------------- hero slides
-class HeroSlideSerializer(ScheduleValidationMixin, serializers.ModelSerializer):
+class HeroSlideSerializer(FormBooleanMixin, ScheduleValidationMixin, serializers.ModelSerializer):
     image = SafeImageField(required=False)
     mobile_image = SafeImageField(max_side=1400)
     state = serializers.SerializerMethodField()
@@ -79,16 +79,22 @@ class HeroSlideViewSet(CmsViewSet):
 
 
 # --------------------------------------------------------------------------- homepage sections
-class HomeSectionSerializer(serializers.ModelSerializer):
+class HomeSectionSerializer(FormBooleanMixin, serializers.ModelSerializer):
     image = SafeImageField()
     products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all(), required=False)
     categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all(), required=False)
     type_label = serializers.CharField(source="get_type_display", read_only=True)
+    products_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = HomeSection
         exclude = ("created_at", "updated_at")
         read_only_fields = ("position",)
+
+    def get_products_detail(self, obj) -> list[dict]:
+        from apps.offers.admin_api import ProductRefSerializer
+
+        return ProductRefSerializer(obj.products.prefetch_related("images"), many=True).data
 
     def validate_limit(self, value):
         if not 1 <= value <= 24:
@@ -102,7 +108,7 @@ class HomeSectionViewSet(CmsViewSet):
 
 
 # --------------------------------------------------------------------------- banners, badges, counters, testimonials
-class PromoBannerSerializer(ScheduleValidationMixin, serializers.ModelSerializer):
+class PromoBannerSerializer(FormBooleanMixin, ScheduleValidationMixin, serializers.ModelSerializer):
     image = SafeImageField(required=False)
     mobile_image = SafeImageField(max_side=1400)
     state = serializers.SerializerMethodField()
@@ -128,7 +134,7 @@ class PromoBannerViewSet(CmsViewSet):
     filterset_fields = ("placement",)
 
 
-class TrustBadgeSerializer(serializers.ModelSerializer):
+class TrustBadgeSerializer(FormBooleanMixin, serializers.ModelSerializer):
     class Meta:
         model = TrustBadge
         exclude = ("created_at", "updated_at")
@@ -140,7 +146,7 @@ class TrustBadgeViewSet(CmsViewSet):
     queryset = TrustBadge.objects.all()
 
 
-class CounterSerializer(serializers.ModelSerializer):
+class CounterSerializer(FormBooleanMixin, serializers.ModelSerializer):
     class Meta:
         model = Counter
         exclude = ("created_at", "updated_at")
@@ -152,7 +158,7 @@ class CounterViewSet(CmsViewSet):
     queryset = Counter.objects.all()
 
 
-class TestimonialSerializer(ModelCleanMixin, serializers.ModelSerializer):
+class TestimonialSerializer(FormBooleanMixin, ModelCleanMixin, serializers.ModelSerializer):
     avatar = SafeImageField(max_side=400)
 
     class Meta:
@@ -167,7 +173,7 @@ class TestimonialViewSet(CmsViewSet):
 
 
 # --------------------------------------------------------------------------- pages
-class PageSerializer(serializers.ModelSerializer):
+class PageSerializer(FormBooleanMixin, serializers.ModelSerializer):
     slug = serializers.SlugField(required=False, allow_blank=True)
 
     class Meta:

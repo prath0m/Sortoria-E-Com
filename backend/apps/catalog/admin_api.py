@@ -12,7 +12,7 @@ from rest_framework.decorators import action
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
-from apps.core.admin_tools import SafeImageField
+from apps.core.admin_tools import FormBooleanMixin, SafeImageField
 from apps.core.audit import AuditedViewSetMixin, record
 from apps.core.exceptions import DomainError
 from apps.core.images import reencode_upload, validate_image_file
@@ -442,7 +442,7 @@ class AdminImageViewSet(viewsets.GenericViewSet):
 
 
 # --------------------------------------------------------------------------- categories
-class AdminCategorySerializer(serializers.ModelSerializer):
+class AdminCategorySerializer(FormBooleanMixin, serializers.ModelSerializer):
     image = SafeImageField()
     banner_image = SafeImageField()
     banner_mobile_image = SafeImageField()
@@ -547,7 +547,7 @@ class AdminCategoryViewSet(AuditedViewSetMixin, viewsets.ModelViewSet):
 
 
 # --------------------------------------------------------------------------- brands & attributes
-class AdminBrandSerializer(serializers.ModelSerializer):
+class AdminBrandSerializer(FormBooleanMixin, serializers.ModelSerializer):
     logo = SafeImageField(max_side=800)
     product_count = serializers.IntegerField(read_only=True)
     slug = serializers.SlugField(required=False, allow_blank=True)

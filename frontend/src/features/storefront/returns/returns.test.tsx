@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { useAuth } from '@/stores/auth';
 import { renderWithProviders } from '@/test/render';
+import { settings } from '@/test/fixtures';
 import { server } from '@/test/server';
 import { ReviewsSection } from '../product/ReviewsSection';
 import NewReturnPage from './NewReturnPage';
@@ -23,6 +24,7 @@ const item = {
 describe('return request form', () => {
   beforeEach(() => {
     server.use(
+      http.get('/api/v1/store/settings/', () => HttpResponse.json(settings)),
       http.get('/api/v1/orders/SRT-1/returnable-items/', () =>
         HttpResponse.json({ order_number: 'SRT-1', payment_method: 'cod', items: [item] }),
       ),

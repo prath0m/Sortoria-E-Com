@@ -9,7 +9,7 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 
 from apps.catalog.models import Category, Product
 from apps.core import caching
-from apps.core.admin_tools import ModelCleanMixin, ReorderMixin, SafeImageField
+from apps.core.admin_tools import FormBooleanMixin, ModelCleanMixin, ReorderMixin, SafeImageField
 from apps.core.audit import AuditedViewSetMixin
 from apps.core.pagination import AdminPagination
 from apps.core.permissions import HasCapability
@@ -45,11 +45,12 @@ class ProductRefSerializer(serializers.ModelSerializer):
 
 
 # --------------------------------------------------------------------------- coupons
-class AdminCouponSerializer(ModelCleanMixin, serializers.ModelSerializer):
+class AdminCouponSerializer(FormBooleanMixin, ModelCleanMixin, serializers.ModelSerializer):
     applicable_categories = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Category.objects.all(), required=False
     )
     applicable_products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all(), required=False)
+    products_detail = ProductRefSerializer(source="applicable_products", many=True, read_only=True)
     state = serializers.SerializerMethodField()
     revenue_paise = serializers.IntegerField(read_only=True, default=0)
     discount_given_paise = serializers.IntegerField(read_only=True, default=0)
@@ -71,6 +72,7 @@ class AdminCouponSerializer(ModelCleanMixin, serializers.ModelSerializer):
             "first_order_only",
             "applicable_categories",
             "applicable_products",
+            "products_detail",
             "is_active",
             "times_used",
             "state",
@@ -125,7 +127,7 @@ class AdminCouponViewSet(AuditedViewSetMixin, viewsets.ModelViewSet):
     ordering = ("-created_at",)
 
     def get_queryset(self):
-        return Coupon.objects.prefetch_related("applicable_categories", "applicable_products").annotate(
+        return Coupon.objects.prefetch_related("applicable_categories", "applicable_products__images").annotate(
             revenue_paise=Coalesce(Sum("redemptions__order__grand_total_paise"), 0),
             discount_given_paise=Coalesce(Sum("redemptions__discount_paise"), 0),
         )
@@ -150,7 +152,7 @@ class FlashItemSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class AdminFlashSaleSerializer(ModelCleanMixin, serializers.ModelSerializer):
+class AdminFlashSaleSerializer(FormBooleanMixin, ModelCleanMixin, serializers.ModelSerializer):
     items = FlashItemSerializer(many=True, required=False)
     slug = serializers.SlugField(required=False, allow_blank=True)
     state = serializers.SerializerMethodField()
@@ -243,7 +245,7 @@ class BundleItemSerializer(serializers.ModelSerializer):
         fields = ("product", "product_detail", "quantity")
 
 
-class AdminBundleSerializer(serializers.ModelSerializer):
+class AdminBundleSerializer(FormBooleanMixin, serializers.ModelSerializer):
     items = BundleItemSerializer(many=True, required=False)
     slug = serializers.SlugField(required=False, allow_blank=True)
     state = serializers.SerializerMethodField()

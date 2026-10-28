@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/cn';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ErrorState } from '../components/ErrorState';
-import { filesForm, ImageInput } from '../components/ImageInput';
+import { filesForm, ImageInput, type FileChange } from '../components/ImageInput';
 import { PageHeader } from '../components/PageHeader';
 import { StatusBadge } from '../components/StatusBadge';
 import { useCatalogOptions } from '../products/useCatalogOptions';
@@ -55,7 +55,7 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
     const { depth: _d, product_count: _p, image: _i, banner_image: _b, banner_mobile_image: _m, menu_image: _mi, ...rest } = category as Category;
     return rest;
   });
-  const [files, setFiles] = useState<Record<ImageField, File | null>>({ image: null, banner_image: null, banner_mobile_image: null, menu_image: null });
+  const [files, setFiles] = useState<Record<ImageField, FileChange>>({ image: null, banner_image: null, banner_mobile_image: null, menu_image: null });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [saving, setSaving] = useState(false);
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setDraft((d) => ({ ...d, [k]: v }));
@@ -120,11 +120,11 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
         <fieldset className="space-y-4 border-t border-line pt-5">
           <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Imagery</legend>
           <div className="grid grid-cols-2 gap-4">
-            <ImageInput label="Tile image" current={existing?.image} file={files.image} onChange={(f) => setFiles((x) => ({ ...x, image: f }))} aspect="aspect-[4/5]" />
-            <ImageInput label="Menu image" current={existing?.menu_image} file={files.menu_image} onChange={(f) => setFiles((x) => ({ ...x, menu_image: f }))} aspect="aspect-[4/5]" />
+            <ImageInput clearable label="Tile image" current={existing?.image} file={files.image} onChange={(f) => setFiles((x) => ({ ...x, image: f }))} aspect="aspect-[4/5]" />
+            <ImageInput clearable label="Menu image" current={existing?.menu_image} file={files.menu_image} onChange={(f) => setFiles((x) => ({ ...x, menu_image: f }))} aspect="aspect-[4/5]" />
           </div>
-          <ImageInput label="Banner" current={existing?.banner_image} file={files.banner_image} onChange={(f) => setFiles((x) => ({ ...x, banner_image: f }))} aspect="aspect-[3/1]" hint="Wide image at the top of the category page, at least 2000px across." />
-          <ImageInput label="Banner on phones" current={existing?.banner_mobile_image} file={files.banner_mobile_image} onChange={(f) => setFiles((x) => ({ ...x, banner_mobile_image: f }))} aspect="aspect-[4/3]" hint="Optional. Falls back to the banner." />
+          <ImageInput clearable label="Banner" current={existing?.banner_image} file={files.banner_image} onChange={(f) => setFiles((x) => ({ ...x, banner_image: f }))} aspect="aspect-[3/1]" hint="Wide image at the top of the category page, at least 2000px across." />
+          <ImageInput clearable label="Banner on phones" current={existing?.banner_mobile_image} file={files.banner_mobile_image} onChange={(f) => setFiles((x) => ({ ...x, banner_mobile_image: f }))} aspect="aspect-[4/3]" hint="Optional. Falls back to the banner." />
           <TextField label="Banner headline" optional value={draft.banner_headline} onChange={(e) => set('banner_headline', e.target.value)} />
           <TextField label="Banner text" optional value={draft.banner_subtext} onChange={(e) => set('banner_subtext', e.target.value)} />
         </fieldset>

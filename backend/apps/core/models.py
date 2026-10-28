@@ -98,13 +98,14 @@ class StoreSettings(BaseModel):
 
 class AuditLog(models.Model):
     class Action(models.TextChoices):
-        CREATE = "create"
-        UPDATE = "update"
-        DELETE = "delete"
-        BULK = "bulk"
-        TRANSITION = "transition"
-        IMPORT = "import"
-        LOGIN = "login"
+        CREATE = "create", "Created"
+        UPDATE = "update", "Updated"
+        DELETE = "delete", "Deleted"
+        BULK = "bulk", "Bulk change"
+        TRANSITION = "transition", "Status change"
+        IMPORT = "import", "Import"
+        EXPORT = "export", "Export"
+        LOGIN = "login", "Sign-in"
 
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"

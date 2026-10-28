@@ -78,6 +78,7 @@ export function useReturnableItems(number: string, token?: string | null) {
       api<{ order_number: string; payment_method: string; items: ReturnableItem[] }>(`/orders/${number}/returnable-items/`, {
         query: { token: token ?? undefined },
       }),
+    enabled: !!number,
   });
 }
 

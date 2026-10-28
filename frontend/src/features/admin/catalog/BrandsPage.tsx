@@ -9,7 +9,7 @@ import { Checkbox, TextArea, TextField } from '@/components/ui/Field';
 import { Drawer } from '@/components/ui/Overlay';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { DataTable, type Column } from '../components/DataTable';
-import { filesForm, ImageInput } from '../components/ImageInput';
+import { filesForm, ImageInput, type FileChange } from '../components/ImageInput';
 import { PageHeader } from '../components/PageHeader';
 import { StatusBadge } from '../components/StatusBadge';
 import { SearchInput, Toolbar } from '../components/Toolbar';
@@ -28,7 +28,7 @@ interface Brand {
 function Editor({ brand, onClose }: { brand: Brand; onClose: () => void }) {
   const qc = useQueryClient();
   const [draft, setDraft] = useState(brand);
-  const [logo, setLogo] = useState<File | null>(null);
+  const [logo, setLogo] = useState<FileChange>(null);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [saving, setSaving] = useState(false);
 
@@ -69,7 +69,7 @@ function Editor({ brand, onClose }: { brand: Brand; onClose: () => void }) {
         <TextField label="URL slug" optional value={draft.slug} error={errors.slug?.[0]} hint="Leave blank to generate from the name." onChange={(e) => setDraft({ ...draft, slug: e.target.value })} />
         <TextArea label="About the brand" optional rows={4} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} />
         <div className="w-40">
-          <ImageInput label="Logo" current={brand.logo} file={logo} onChange={setLogo} aspect="aspect-square" hint="Square, transparent PNG works best." />
+          <ImageInput label="Logo" current={brand.logo} file={logo} onChange={setLogo} aspect="aspect-square" fit="contain" clearable hint="Square, transparent PNG works best." />
         </div>
         <Checkbox label="Active" description="Inactive brands are hidden from filters and the brand page." checked={draft.is_active} onChange={(e) => setDraft({ ...draft, is_active: e.target.checked })} />
       </div>

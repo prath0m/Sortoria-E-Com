@@ -44,6 +44,18 @@ const AdminReturnDetail = lazy(() => import('@/features/admin/returns/ReturnDeta
 const AdminCustomers = lazy(() => import('@/features/admin/customers/CustomersPage'));
 const AdminCustomerDetail = lazy(() => import('@/features/admin/customers/CustomerDetailPage'));
 const AdminReviews = lazy(() => import('@/features/admin/reviews/ReviewsPage'));
+const AdminCoupons = lazy(() => import('@/features/admin/offers/CouponsPage'));
+const AdminSales = lazy(() => import('@/features/admin/offers/SalesPage'));
+const AdminSaleEdit = lazy(() => import('@/features/admin/offers/SaleEditPage'));
+const AdminBundles = lazy(() => import('@/features/admin/offers/BundlesPage'));
+const AdminContent = lazy(() => import('@/features/admin/content/ContentPage'));
+const AdminPages = lazy(() => import('@/features/admin/content/PagesPage'));
+const AdminNewsletter = lazy(() => import('@/features/admin/content/NewsletterPage'));
+const AdminShipping = lazy(() => import('@/features/admin/shipping/ShippingPage'));
+const AdminSettings = lazy(() => import('@/features/admin/settings/SettingsPage'));
+const AdminStaff = lazy(() => import('@/features/admin/system/StaffPage'));
+const AdminData = lazy(() => import('@/features/admin/system/ImportExportPage'));
+const AdminActivity = lazy(() => import('@/features/admin/system/AuditLogPage'));
 
 const guard = (capability: string, element: JSX.Element) => <RequireCapability capability={capability}>{element}</RequireCapability>;
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
@@ -78,6 +90,18 @@ export const router = createBrowserRouter([
           { path: 'customers', element: guard('customers.view', <AdminCustomers />) },
           { path: 'customers/:id', element: guard('customers.view', <AdminCustomerDetail />) },
           { path: 'reviews', element: guard('reviews.manage', <AdminReviews />) },
+          { path: 'offers/coupons', element: guard('offers.manage', <AdminCoupons />) },
+          { path: 'offers/sales', element: guard('offers.manage', <AdminSales />) },
+          { path: 'offers/sales/:id', element: guard('offers.manage', <AdminSaleEdit />) },
+          { path: 'offers/bundles', element: guard('offers.manage', <AdminBundles />) },
+          { path: 'content', element: guard('cms.manage', <AdminContent />) },
+          { path: 'content/pages', element: guard('cms.manage', <AdminPages />) },
+          { path: 'content/newsletter', element: guard('cms.manage', <AdminNewsletter />) },
+          { path: 'shipping', element: guard('shipping.manage', <AdminShipping />) },
+          { path: 'settings', element: guard('settings.manage', <AdminSettings />) },
+          { path: 'staff', element: guard('staff.manage', <AdminStaff />) },
+          { path: 'data', element: guard('export.run', <AdminData />) },
+          { path: 'activity', element: guard('audit.view', <AdminActivity />) },
           { path: '*', element: <AdminNotFound /> },
         ],
       },

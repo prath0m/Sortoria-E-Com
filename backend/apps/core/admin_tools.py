@@ -76,6 +76,8 @@ class SafeImageField(serializers.ImageField):
         self.max_side = max_side
         kwargs.setdefault("required", False)
         super().__init__(*args, **kwargs)
+        # Lets an empty multipart value through as "" (clear) instead of being skipped.
+        self.allow_blank = not self.required
 
     def validate_empty_values(self, data):
         if data == "" and not self.required:
@@ -92,3 +94,16 @@ class SafeImageField(serializers.ImageField):
         except AttributeError as exc:
             raise serializers.ValidationError("Upload an image file.") from exc
         return reencode_upload(data, max_side=self.max_side)
+
+
+class FormBooleanMixin:
+    """With multipart data DRF reads a missing boolean as False (HTML checkbox rules).
+
+    Admin forms post uploads as multipart, so fall back to the model default instead.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field, serializers.BooleanField):
+                field.default_empty_html = serializers.empty

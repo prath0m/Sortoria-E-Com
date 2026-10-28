@@ -1,6 +1,7 @@
 """Branded transactional email. Everything is rendered and sent from a Celery task."""
 
 import logging
+import re
 
 from celery import shared_task
 from django.conf import settings
@@ -38,7 +39,9 @@ def render_email(template: str, context: dict) -> tuple[str, str, str]:
     ctx = {**brand_context(), **context}
     subject = render_to_string(f"emails/{template}.subject.txt", ctx).strip()
     html = render_to_string(f"emails/{template}.html", ctx)
-    text = strip_tags(html)
+    # Keep link targets in the plain-text part: "Set your password (https://…)".
+    text = re.sub(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', r"\2 (\1)", html, flags=re.S | re.I)
+    text = strip_tags(text)
     text = "\n".join(line.strip() for line in text.splitlines() if line.strip())
     return subject, html, text
 
