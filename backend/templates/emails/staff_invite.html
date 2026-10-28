@@ -1,0 +1,8 @@
+{% extends "emails/base.html" %}
+{% block preheader %}Set your password to start working in the admin panel.{% endblock %}
+{% block content %}
+{% include "emails/partials/heading.html" with eyebrow="Admin access" title="Welcome to the team" %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Dear {{ first_name|default:"colleague" }},</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">You've been given <strong>{{ role }}</strong> access to {{ store.name }} Admin. Choose a password to sign in. The link works once and expires in two hours.</p>
+{% include "emails/partials/button.html" with url=reset_url label="Set your password" %}
+{% endblock %}

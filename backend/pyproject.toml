@@ -16,4 +16,4 @@ ignore = ["DJ001", "B904"]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 python_files = ["test_*.py"]
 addopts = "-q --reuse-db -p no:cacheprovider"
-filterwarnings = ["ignore::DeprecationWarning"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore:No directory at:UserWarning"]

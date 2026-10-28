@@ -1,0 +1,10 @@
+{% extends "emails/base.html" %}
+{% block preheader %}Your account is ready. Here's what to expect from us.{% endblock %}
+{% block content %}
+{% include "emails/partials/heading.html" with eyebrow="Welcome" title="We're glad you're here" %}
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Dear {{ first_name|default:"friend" }},</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Your {{ store.name }} account is ready. Everything we stock is chosen for how well it is made and how long it will serve you, whether that's a pair of headphones or a linen shirt.</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Your account keeps your bag, wishlist and addresses in one place, so you can pick up where you left off on any device.</p>
+{% include "emails/partials/button.html" with url=site_url label="Begin browsing" %}
+<p style="margin:0;font-size:15px;line-height:25px;">Warmly,<br>The {{ store.name }} team</p>
+{% endblock %}

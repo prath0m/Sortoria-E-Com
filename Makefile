@@ -42,7 +42,7 @@ test-frontend:
 	cd frontend && npm test
 
 lint:
-	cd backend && .venv/bin/ruff check . && .venv/bin/ruff format --check .
+	cd backend && .venv/bin/ruff format --check . && .venv/bin/ruff check .
 	cd frontend && npm run lint && npm run typecheck
 
 brand: ## Regenerate logo SVG/PNG assets from the font outlines

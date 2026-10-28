@@ -79,6 +79,11 @@ class StoreSettings(BaseModel):
 
     def save(self, *args, **kwargs):
         self.pk = 1
+        if self._state.adding:
+            existing = StoreSettings.objects.filter(pk=1).values_list("created_at", flat=True).first()
+            if existing:
+                self._state.adding = False
+                self.created_at = existing
         super().save(*args, **kwargs)
         cache.delete(self.CACHE_KEY)
 
