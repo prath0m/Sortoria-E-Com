@@ -27,9 +27,15 @@ def _flash_sale_saved(sender, instance, **kwargs):
 
 
 for model in (Bundle, BundleItem, Coupon):
-    post_save.connect(
-        lambda **kw: caching.bump(caching.OFFERS, caching.HOME),
-        sender=model,
-        weak=False,
-        dispatch_uid=f"offers-bump-{model.__name__}",
-    )
+    for signal in (post_save, post_delete):
+        signal.connect(
+            lambda **kw: caching.bump(caching.OFFERS, caching.HOME),
+            sender=model,
+            weak=False,
+            dispatch_uid=f"offers-bump-{model.__name__}-{signal is post_save}",
+        )
+
+
+@receiver(post_delete, sender=FlashSale, dispatch_uid="flash-sale-deleted")
+def _flash_sale_deleted(sender, instance, **kwargs):
+    caching.bump(caching.OFFERS, caching.CATALOG, caching.HOME)
