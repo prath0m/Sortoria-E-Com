@@ -1,0 +1,5 @@
+.venv
+media
+.test-media
+staticfiles
+__pycache__

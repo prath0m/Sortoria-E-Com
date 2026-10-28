@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Palette as RGB triplets so Tailwind's /<alpha> modifiers work.
+ * Brand anchors: burgundy-800 #590907, sage-400 #A5A79B, gold-300 #E8D258, cream-100 #F3EDE2.
+ */
+@layer base {
+  :root {
+    --burgundy-50: 239 229 225;
+    --burgundy-100: 220 202 198;
+    --burgundy-200: 201 174 171;
+    --burgundy-300: 183 147 143;
+    --burgundy-400: 164 119 116;
+    --burgundy-500: 145 92 89;
+    --burgundy-600: 126 64 62;
+    --burgundy-700: 108 37 34;
+    --burgundy-800: 89 9 7;
+    --burgundy-900: 71 8 7;
+    --burgundy-950: 52 8 7;
+
+    --sage-50: 241 240 234;
+    --sage-100: 222 221 214;
+    --sage-200: 203 203 195;
+    --sage-300: 184 185 175;
+    --sage-400: 165 167 155;
+    --sage-500: 148 150 139;
+    --sage-600: 131 133 123;
+    --sage-700: 114 116 107;
+    --sage-800: 97 99 91;
+    --sage-900: 81 82 75;
+    --sage-950: 64 65 59;
+
+    --gold-50: 251 245 218;
+    --gold-100: 244 233 175;
+    --gold-200: 238 222 131;
+    --gold-300: 232 210 88;
+    --gold-400: 211 191 80;
+    --gold-500: 190 171 71;
+    --gold-600: 169 152 63;
+    --gold-700: 148 132 54;
+    --gold-800: 127 113 46;
+    --gold-900: 105 93 37;
+    --gold-950: 84 74 29;
+
+    --cream-50: 251 248 243;
+    --cream-100: 243 237 226;
+    --cream-200: 234 225 209;
+    --cream-300: 221 208 186;
+
+    /* Semantic tokens (remapped in .dark). */
+    --ink: 42 20 19;
+    --ink-soft: 74 51 49;
+    --ink-muted: 97 99 91; /* sage-800: 5.2:1 on cream — the lightest allowed text colour */
+    --surface: 243 237 226;
+    --surface-raised: 251 248 243;
+    --surface-sunken: 234 225 209;
+    --line: 203 203 195;
+    --line-strong: 165 167 155;
+    --success: 46 107 62;
+    --danger: 166 31 36;
+    --warning: 138 98 10;
+    --primary: 89 9 7;
+    --primary-hover: 108 37 34;
+    --on-primary: 251 248 243;
+    --accent: 89 9 7;
+    --accent-soft: 239 229 225;
+
+    --header-h: 4.5rem;
+    color-scheme: light;
+  }
+
+  .dark {
+    --ink: 240 232 222;
+    --ink-soft: 214 204 192;
+    --ink-muted: 168 170 158;
+    --surface: 22 14 13;
+    --surface-raised: 33 22 21;
+    --surface-sunken: 15 9 9;
+    --line: 61 47 45;
+    --line-strong: 92 74 71;
+    --success: 120 196 140;
+    --danger: 240 128 128;
+    --warning: 232 210 88;
+    --primary: 140 40 36;
+    --primary-hover: 160 52 47;
+    --on-primary: 251 248 243;
+    --accent: 222 178 173;
+    --accent-soft: 60 26 25;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface font-sans text-[0.9375rem] leading-relaxed text-ink;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-medium text-accent;
+  }
+
+  ::selection {
+    @apply bg-gold-200 text-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--burgundy-800));
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px rgb(var(--gold-300) / 0.55);
+    border-radius: 2px;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  img {
+    @apply select-none;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-10;
+  }
+
+  .eyebrow {
+    @apply font-sans text-eyebrow font-semibold uppercase text-ink-muted;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(rgb(var(--gold-400)), rgb(var(--gold-400)));
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .hairline {
+    @apply border-line;
+  }
+
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-sm bg-cream-200;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background: linear-gradient(90deg, transparent, rgb(var(--cream-50) / 0.7), transparent);
+  }
+  .dark .skeleton {
+    @apply bg-surface-raised;
+  }
+  .dark .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.05), transparent);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prose-sartoria {
+    @apply max-w-prose text-ink-soft;
+  }
+  .prose-sartoria h2 {
+    @apply mb-3 mt-10 text-display-sm;
+  }
+  .prose-sartoria h3 {
+    @apply mb-2 mt-6 text-xl;
+  }
+  .prose-sartoria p {
+    @apply mb-4;
+  }
+  .prose-sartoria ul {
+    @apply mb-4 list-disc space-y-1 pl-5 marker:text-gold-700;
+  }
+  .prose-sartoria ol {
+    @apply mb-4 list-decimal space-y-1 pl-5;
+  }
+  .prose-sartoria a {
+    @apply text-burgundy-800 underline decoration-gold-400 underline-offset-4;
+  }
+  .prose-sartoria strong {
+    @apply font-semibold text-ink;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
