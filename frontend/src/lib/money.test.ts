@@ -21,3 +21,13 @@ describe('discountPercent', () => {
     expect(discountPercent(5000, 4000)).toBe(0);
   });
 });
+
+describe('formatCompactMoney', () => {
+  it('uses Indian units', async () => {
+    const { formatCompactMoney } = await import('./money');
+    expect(formatCompactMoney(95000)).toBe('₹950');
+    expect(formatCompactMoney(4850000)).toBe('₹48.5k');
+    expect(formatCompactMoney(48000000)).toBe('₹4.8L');
+    expect(formatCompactMoney(1200000000)).toBe('₹1.2Cr');
+  });
+});

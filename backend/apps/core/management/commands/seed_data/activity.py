@@ -101,19 +101,6 @@ COURIERS = [
     ("Ekart", "https://ekartlogistics.com/track/{}"),
 ]
 
-# Status mix for 150 orders, oldest orders are mostly delivered.
-STATUS_WEIGHTS = [
-    ("delivered", 62),
-    ("shipped", 8),
-    ("out_for_delivery", 4),
-    ("packed", 5),
-    ("confirmed", 5),
-    ("placed", 6),
-    ("cancelled", 6),
-    ("payment_failed", 3),
-    ("pending_payment", 1),
-]
-
 REVIEWS = {
     5: [
         (

@@ -24,3 +24,13 @@ export function discountPercent(pricePaise: number, mrpPaise: number | null | un
   if (!mrpPaise || mrpPaise <= pricePaise) return 0;
   return Math.round(((mrpPaise - pricePaise) / mrpPaise) * 100);
 }
+
+/** Short Indian-style amounts for chart axes and KPI tiles: ₹950, ₹48.5k, ₹4.8L, ₹1.2Cr. */
+export function formatCompactMoney(paise: number): string {
+  const rupees = paise / 100;
+  const trim = (n: number) => (n >= 100 ? Math.round(n).toString() : n.toFixed(1).replace(/\.0$/, ''));
+  if (rupees >= 1e7) return `₹${trim(rupees / 1e7)}Cr`;
+  if (rupees >= 1e5) return `₹${trim(rupees / 1e5)}L`;
+  if (rupees >= 1e3) return `₹${trim(rupees / 1e3)}k`;
+  return `₹${Math.round(rupees)}`;
+}

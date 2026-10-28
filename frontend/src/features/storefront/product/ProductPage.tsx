@@ -6,6 +6,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Price } from '@/components/ui/Price';
 import { Rating } from '@/components/ui/Rating';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { track } from '@/lib/analytics';
 import { breadcrumbJsonLd, Seo } from '@/lib/seo';
 import { useRecentlyViewed } from '@/stores/recentlyViewed';
 import { NotFoundPage } from '@/features/storefront/pages/NotFoundPage';
@@ -37,6 +38,7 @@ export default function ProductPage() {
     if (!product) return;
     setSelection(initialSelection(product.variants));
     addRecent(product.id);
+    track(`/products/${product.slug}`, { product_id: product.id });
   }, [product, addRecent]);
 
   if (error instanceof ApiError && error.status === 404) return <NotFoundPage />;

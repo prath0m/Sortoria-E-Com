@@ -17,12 +17,15 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from django.utils.text import slugify
 from PIL import Image, ImageDraw, ImageFont
 
 from apps.accounts.models import Address, User
 from apps.accounts.serializers import STATE_CODES
+from apps.analytics.models import DailyMetric
 from apps.cart.services.pricing import price_cart
 from apps.catalog.models import (
     Attribute,
@@ -40,7 +43,7 @@ from apps.catalog.services.aggregates import refresh_products, refresh_ratings, 
 from apps.catalog.tasks import build_image_renditions
 from apps.cms.models import Counter, HeroSlide, HomeSection, Page, PromoBanner, Testimonial, TrustBadge
 from apps.core import caching
-from apps.core.models import StoreSettings
+from apps.core.models import AdminNotification, StoreSettings
 from apps.offers.models import Bundle, BundleItem, Coupon, CouponRedemption, FlashSale, FlashSaleItem
 from apps.orders.models import (
     Order,
@@ -135,6 +138,7 @@ class Command(BaseCommand):
         self._timed("shipping & offers", self._seed_commerce)
         self._timed("customers & orders", self._seed_activity_atomic)
         self._timed("homepage & pages", self._seed_cms_atomic)
+        self._timed("traffic history", self.seed_traffic)
         caching.bump(caching.CATALOG, caching.NAVIGATION, caching.HOME, caching.OFFERS, caching.SHIPPING)
         self.stdout.write(self.style.SUCCESS("Sartoria demo data is ready."))
 
@@ -185,6 +189,8 @@ class Command(BaseCommand):
                     field.delete(save=False)
         for model in (HeroSlide, HomeSection, PromoBanner, TrustBadge, Counter, Testimonial, Page):
             model.objects.all().delete()
+        DailyMetric.objects.all().delete()
+        AdminNotification.objects.all().delete()
         Order.objects.all().delete()
         Review.objects.all().delete()
         User.objects.filter(role=User.Role.CUSTOMER).delete()
@@ -375,6 +381,29 @@ class Command(BaseCommand):
 
         sync_flash_sale_prices()
 
+    # ------------------------------------------------------------------ traffic
+    @transaction.atomic
+    def seed_traffic(self):
+        """A year of daily visits, scaled to orders so conversion lands around 2–3%."""
+        if DailyMetric.objects.exists():
+            return
+        today = timezone.localdate()
+        per_day = dict(
+            Order.objects.filter(placed_at__isnull=False)
+            .annotate(day=TruncDate("placed_at", tzinfo=timezone.get_current_timezone()))
+            .values("day")
+            .annotate(n=Count("id"))
+            .values_list("day", "n")
+        )
+        rows = []
+        for back in range(1, 400):
+            day = today - timedelta(days=back)
+            orders = per_day.get(day, 0)
+            visits = orders * self.rng.randint(26, 40) + self.rng.randint(4, 12) + (day.weekday() >= 5) * 6
+            views = int(visits * self.rng.uniform(3.2, 4.6))
+            rows.append(DailyMetric(date=day, visits=visits, page_views=views, product_views=int(views * 0.45)))
+        DailyMetric.objects.bulk_create(rows)
+
     # ------------------------------------------------------------------ CMS
     def seed_cms(self):
         if HomeSection.objects.exists():
@@ -510,8 +539,10 @@ class Command(BaseCommand):
                 "product"
             )
         )
+        # Mostly spread over the year, plus a dozen in the last few days so fulfilment queues aren't empty.
         dates = sorted(
-            now - timedelta(days=int(rng.triangular(0, 360, 20)), hours=rng.randint(0, 23)) for _ in range(150)
+            [now - timedelta(days=int(rng.triangular(0, 360, 10)), hours=rng.randint(0, 23)) for _ in range(138)]
+            + [now - timedelta(hours=rng.randint(2, 5 * 24)) for _ in range(12)]
         )
         delivered_orders = []
         for placed_at in dates:
@@ -531,18 +562,7 @@ class Command(BaseCommand):
             )
             address.setdefault("state_code", STATE_CODES[address["state"]])
             age_days = (now - placed_at).days
-            status = self._weighted(activity.STATUS_WEIGHTS)
-            if age_days > 12 and status in (
-                "placed",
-                "confirmed",
-                "packed",
-                "shipped",
-                "out_for_delivery",
-                "pending_payment",
-            ):
-                status = "delivered"
-            if status == "pending_payment" and age_days > 0:
-                status = "payment_failed"
+            status = self._status_for_age(age_days)
             payment_method = (
                 "cod" if rng.random() < 0.3 and status not in ("pending_payment", "payment_failed") else "razorpay"
             )
@@ -561,6 +581,21 @@ class Command(BaseCommand):
         self._seed_reviews(customers, delivered_orders)
         self._seed_returns(delivered_orders)
         self._seed_views()
+
+    def _status_for_age(self, age_days: int) -> str:
+        """Recent orders are still moving through fulfilment; older ones have settled."""
+        roll = self.rng.random()
+        if roll < 0.06:
+            return "cancelled"
+        if roll < 0.09:
+            return "payment_failed"
+        if age_days <= 1:
+            return self.rng.choice(["placed", "placed", "confirmed"])
+        if age_days <= 3:
+            return self.rng.choice(["confirmed", "packed", "packed"])
+        if age_days <= 6:
+            return self.rng.choice(["shipped", "shipped", "out_for_delivery", "delivered"])
+        return "delivered"
 
     def _create_order(self, quote, address, user, status, payment_method, placed_at):
         rng = self.rng

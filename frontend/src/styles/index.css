@@ -262,3 +262,38 @@ html.lenis body {
   --swiper-pagination-bullet-inactive-opacity: 0.6;
   --swiper-pagination-bullet-size: 6px;
 }
+
+/*
+ * Admin chart palette — validated with the dataviz validator (scripts/validate_palette.js):
+ * light on #FBF8F3: all checks pass, worst adjacent CVD ΔE 8.2; dark on #211615: all pass, CVD ΔE 9.3.
+ * Order is fixed: burgundy, gold, blue, terracotta, green. Never cycle; fold extras into "Other".
+ */
+:root {
+  --chart-1: #8c2a26;
+  --chart-2: #a87a12;
+  --chart-3: #2f6db5;
+  --chart-4: #c9562a;
+  --chart-5: #2e8a5a;
+  --chart-grid: rgb(var(--line) / 0.7);
+  --chart-axis: rgb(var(--ink-muted));
+  --chart-muted: rgb(var(--sage-400));
+}
+.dark {
+  --chart-1: #d0667e;
+  --chart-2: #a88b22;
+  --chart-3: #5f8fd8;
+  --chart-4: #c8653a;
+  --chart-5: #2c9e8a;
+  --chart-muted: rgb(var(--line-strong));
+}
+
+.rdp-sartoria {
+  --rdp-accent-color: rgb(var(--primary));
+  --rdp-accent-background-color: rgb(var(--accent-soft));
+  --rdp-day-height: 2.25rem;
+  --rdp-day-width: 2.25rem;
+  --rdp-day_button-height: 2.125rem;
+  --rdp-day_button-width: 2.125rem;
+  color: rgb(var(--ink));
+  font-size: 0.8125rem;
+}

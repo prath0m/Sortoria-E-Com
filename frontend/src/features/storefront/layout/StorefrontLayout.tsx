@@ -1,7 +1,8 @@
 import { AnimatePresence } from 'framer-motion';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/motion/PageTransition';
+import { track } from '@/lib/analytics';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { PageLoader } from '@/components/ui/PageLoader';
 import { FlyToCartLayer } from '@/components/motion/FlyToCart';
@@ -15,6 +16,9 @@ import { SearchOverlay } from './SearchOverlay';
 
 export function StorefrontLayout() {
   const location = useLocation();
+  useEffect(() => {
+    if (!location.pathname.startsWith('/products/')) track(location.pathname);
+  }, [location.pathname]);
   return (
     <SmoothScroll>
       <a

@@ -4,10 +4,11 @@ import { cn } from '@/lib/cn';
 type Tone = 'sale' | 'new' | 'muted' | 'dark' | 'success' | 'outline';
 
 const tones: Record<Tone, string> = {
-  sale: 'bg-gold-300 text-ink',
+  // Fixed-colour pairs use explicit text colours so they read the same in light and dark themes.
+  sale: 'bg-gold-300 text-[#2A1413]',
   new: 'bg-burgundy-800 text-cream-50',
-  muted: 'bg-cream-200 text-ink-soft',
-  dark: 'bg-ink/80 text-cream-50 backdrop-blur',
+  muted: 'bg-ink/10 text-ink-soft',
+  dark: 'bg-[#2A1413]/80 text-cream-50 backdrop-blur',
   success: 'bg-success/10 text-success',
   outline: 'border border-line-strong text-ink-soft',
 };

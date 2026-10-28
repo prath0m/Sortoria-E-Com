@@ -1,4 +1,5 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
+import { PageLoader } from '@/components/ui/PageLoader';
 import { createBrowserRouter } from 'react-router-dom';
 import { StorefrontLayout } from '@/features/storefront/layout/StorefrontLayout';
 import { ErrorPage } from '@/features/storefront/pages/ErrorPage';
@@ -25,6 +26,10 @@ const AccountOrderPage = lazy(() => import('@/features/storefront/account/Accoun
 const ReturnsPage = lazy(() => import('@/features/storefront/account/ReturnsPage'));
 const CmsPage = lazy(() => import('@/features/storefront/pages/CmsPage'));
 const NewsletterActionPage = lazy(() => import('@/features/storefront/pages/NewsletterActionPage'));
+const AdminShell = lazy(() => import('@/features/admin/layout/AdminShell'));
+const AdminLogin = lazy(() => import('@/features/admin/AdminLogin'));
+const DashboardPage = lazy(() => import('@/features/admin/dashboard/DashboardPage'));
+const AdminNotFound = lazy(() => import('@/features/admin/AdminNotFound'));
 const LoginPage = lazy(() => import('@/features/storefront/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/storefront/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/storefront/auth/ForgotPasswordPage'));
@@ -35,6 +40,20 @@ const ProfilePage = lazy(() => import('@/features/storefront/account/ProfilePage
 const AddressesPage = lazy(() => import('@/features/storefront/account/AddressesPage'));
 
 export const router = createBrowserRouter([
+  {
+    path: 'admin-panel',
+    errorElement: <ErrorPage />,
+    children: [
+      { path: 'login', element: <Suspense fallback={<PageLoader />}><AdminLogin /></Suspense> },
+      {
+        element: <Suspense fallback={<PageLoader />}><AdminShell /></Suspense>,
+        children: [
+          { index: true, element: <DashboardPage /> },
+          { path: '*', element: <AdminNotFound /> },
+        ],
+      },
+    ],
+  },
   {
     element: <StorefrontLayout />,
     errorElement: <ErrorPage />,
