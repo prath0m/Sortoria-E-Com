@@ -1,10 +1,42 @@
-import { Logo } from '@/components/brand/Logo';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MotionConfig } from 'framer-motion';
+import { useEffect } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { RouterProvider } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import { ApiError } from '@/api/client';
+import { useAuth } from '@/stores/auth';
+import { router } from './router';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+      retry: (count, error) => !(error instanceof ApiError && error.status >= 400 && error.status < 500) && count < 2,
+    },
+  },
+});
 
 export function App() {
+  const bootstrap = useAuth((s) => s.bootstrap);
+  useEffect(() => {
+    bootstrap();
+  }, [bootstrap]);
+
   return (
-    <main className="grain flex min-h-screen flex-col items-center justify-center gap-6 bg-cream-100 px-4 text-center">
-      <Logo className="h-10" />
-      <p className="eyebrow">Crafted with intention. Worn for a lifetime.</p>
-    </main>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <MotionConfig reducedMotion="user">
+          <RouterProvider router={router} />
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              className: '!rounded-xs !border-line !bg-surface-raised !font-sans !text-ink !shadow-lift',
+            }}
+          />
+        </MotionConfig>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }

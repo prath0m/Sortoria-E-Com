@@ -35,7 +35,18 @@ AuthResponse = inline_serializer(
 )
 
 
+# Readable (non-httpOnly) flag so the SPA only attempts a silent refresh when a session exists.
+SESSION_HINT_COOKIE = "sartoria_has_session"
+
+
 def _set_refresh_cookie(response, refresh: str):
+    response.set_cookie(
+        SESSION_HINT_COOKIE,
+        "1",
+        max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
+        secure=settings.REFRESH_COOKIE_SECURE,
+        samesite="Lax",
+    )
     response.set_cookie(
         settings.REFRESH_COOKIE_NAME,
         refresh,
@@ -48,6 +59,7 @@ def _set_refresh_cookie(response, refresh: str):
 
 
 def _clear_refresh_cookie(response):
+    response.delete_cookie(SESSION_HINT_COOKIE, samesite="Lax")
     response.delete_cookie(
         settings.REFRESH_COOKIE_NAME,
         path=settings.REFRESH_COOKIE_PATH,

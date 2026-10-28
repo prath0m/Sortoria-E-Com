@@ -138,3 +138,13 @@ def test_listing_query_count_is_constant(api, catalog):
         response = api.get("/api/v1/products/")
     assert response.status_code == 200
     assert len(ctx.captured_queries) <= 12, [q["sql"] for q in ctx.captured_queries]
+
+
+def test_search_matches_partial_words_while_typing(api, catalog):
+    assert slugs(api.get("/api/v1/products/", {"q": "earb"})) == [catalog["buds"].slug]
+    assert catalog["phone"].slug in slugs(api.get("/api/v1/products/", {"q": "smart"}))
+
+
+def test_search_ignores_tsquery_syntax(api, catalog):
+    response = api.get("/api/v1/products/", {"q": "shirt & | ! :* ("})
+    assert response.status_code == 200

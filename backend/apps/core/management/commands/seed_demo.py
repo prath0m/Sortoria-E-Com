@@ -130,6 +130,18 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------ helpers
     def _flush(self):
         self.stdout.write("Flushing catalogue…")
+        # Remove the uploaded files too; deleting rows alone would orphan them in MEDIA_ROOT.
+        for image in ProductImage.objects.all():
+            image.image.delete(save=False)
+        for category in Category.objects.all():
+            for field in (
+                category.image,
+                category.banner_image,
+                category.banner_mobile_image,
+                category.menu_image,
+            ):
+                if field:
+                    field.delete(save=False)
         StockMovement.objects.all().delete()
         Product.objects.all().delete()
         Category.objects.all().delete()
@@ -344,7 +356,7 @@ class Command(BaseCommand):
         for position, combo in enumerate(combos):
             delta = sum(d for _, d in combo)
             price = (spec["price"] + delta) * 100
-            mrp = round(price * mrp_ratio / 100) * 100 if mrp_ratio else None
+            mrp = self._price_point(price * mrp_ratio) if mrp_ratio else None
             if spec["stock"] is not None:
                 stock = spec["stock"]
             else:
@@ -366,6 +378,13 @@ class Command(BaseCommand):
                 StockMovement.objects.create(
                     variant=variant, delta=stock, balance_after=stock, reason=StockMovement.Reason.INITIAL
                 )
+
+    @staticmethod
+    def _price_point(paise: float) -> int:
+        """Round an MRP up to a familiar price point (₹70,908 → ₹70,999; ₹849 → ₹899)."""
+        rupees = paise / 100
+        step = 1000 if rupees >= 5000 else 100
+        return int((-(-rupees // step) * step - 1) * 100)
 
     def _seed_images(self, product, spec):
         photos = spec["photos"]

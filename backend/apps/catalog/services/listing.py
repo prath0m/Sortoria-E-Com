@@ -3,6 +3,7 @@
 Prices in the URL are whole rupees (readable, shareable links); everything internal is paise.
 """
 
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 
@@ -145,12 +146,26 @@ def apply_filters(qs, p: ListingParams, *, skip: str | None = None):
     return qs
 
 
+def _prefix_query(q: str) -> SearchQuery | None:
+    """`head phon` -> to_tsquery('head:* & phon:*') so partial words match while typing."""
+    tokens = [re.sub(r"[^\w]", "", t) for t in q.split()]
+    tokens = [t for t in tokens if t]
+    if not tokens:
+        return None
+    return SearchQuery(" & ".join(f"{t}:*" for t in tokens), search_type="raw", config="english")
+
+
 def apply_search(qs, q: str):
+    """Full-text match, prefix match (for as-you-type) and trigram similarity (for typos)."""
     query = SearchQuery(q, search_type="websearch", config="english")
+    condition = Q(search_vector=query) | Q(similarity__gt=0.2) | Q(name__icontains=q)
+    prefix = _prefix_query(q)
+    if prefix is not None:
+        condition |= Q(search_vector=prefix)
     return qs.annotate(
-        rank=SearchRank(F("search_vector"), query),
+        rank=SearchRank(F("search_vector"), prefix if prefix is not None else query),
         similarity=TrigramSimilarity("name", q),
-    ).filter(Q(search_vector=query) | Q(similarity__gt=0.2))
+    ).filter(condition)
 
 
 def sorted_listing(qs, p: ListingParams):

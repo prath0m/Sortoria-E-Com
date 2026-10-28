@@ -245,3 +245,11 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Swiper theming */
+.gallery-swiper {
+  --swiper-theme-color: rgb(var(--burgundy-800));
+  --swiper-pagination-bullet-inactive-color: rgb(var(--sage-500));
+  --swiper-pagination-bullet-inactive-opacity: 0.6;
+  --swiper-pagination-bullet-size: 6px;
+}
