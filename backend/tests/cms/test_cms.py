@@ -52,7 +52,10 @@ def test_banners_respect_schedule_and_placement(api):
 def test_pages_are_sanitised(api):
     Page.objects.create(
         title="About",
-        body='<p onclick="steal()">Hello</p><script>alert(1)</script><a href="javascript:x()">bad</a><a href="/shop">ok</a>',
+        body=(
+            '<p onclick="steal()">Hello</p><script>alert(1)</script>'
+            '<a href="javascript:x()">bad</a><a href="/shop">ok</a>'
+        ),
     )
     body = api.get("/api/v1/pages/about/").data["body"]
     assert "script" not in body and "onclick" not in body and "javascript" not in body
