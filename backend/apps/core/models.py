@@ -21,6 +21,31 @@ class OrderedModel(models.Model):
         ordering = ("position", "id")
 
 
+class RenditionsMixin(models.Model):
+    """WebP copies of a model's image fields at several widths, built in the background on save.
+
+    Stored as {field: {"src": <file name>, "400": url, "800": url, ...}}; a stale entry (src no
+    longer matching the file) is ignored until it is rebuilt.
+    """
+
+    RENDITION_FIELDS: tuple[str, ...] = ()
+
+    renditions = models.JSONField(default=dict, blank=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def srcset(self, field: str) -> dict[str, str]:
+        entry = (self.renditions or {}).get(field) or {}
+        file = getattr(self, field)
+        if not file or entry.get("src") != file.name:
+            return {}
+        return {k: v for k, v in entry.items() if k != "src"}
+
+    def srcsets(self) -> dict[str, dict[str, str]]:
+        return {f: s for f in self.RENDITION_FIELDS if (s := self.srcset(f))}
+
+
 class StoreSettings(BaseModel):
     """Singleton holding every store-wide value the storefront reads."""
 

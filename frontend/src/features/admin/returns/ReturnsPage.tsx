@@ -8,6 +8,7 @@ import { StatusBadge } from '../components/StatusBadge';
 import { FilterSelect, SearchInput, Toolbar } from '../components/Toolbar';
 import { useTableState } from '../components/useTableState';
 import { dateTime } from '../orders/types';
+import { RETURN_REASONS } from './reasons';
 
 interface ReturnRow {
   number: string;
@@ -24,14 +25,6 @@ interface ReturnRow {
   created_at: string;
 }
 
-export const RETURN_REASONS = [
-  { value: 'wrong_size', label: "Doesn't fit" },
-  { value: 'damaged', label: 'Arrived damaged' },
-  { value: 'defective', label: 'Faulty or not working' },
-  { value: 'not_as_described', label: 'Not as described' },
-  { value: 'changed_mind', label: 'Changed my mind' },
-  { value: 'other', label: 'Something else' },
-];
 
 const QUICK = [
   { label: 'All', status: '' },

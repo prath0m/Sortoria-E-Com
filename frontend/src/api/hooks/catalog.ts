@@ -1,5 +1,5 @@
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { api } from '../client';
+import { api, buildQuery, peekInlined } from '../client';
 import { qk } from '../queryKeys';
 import type {
   Brand,
@@ -15,6 +15,7 @@ export function useCategory(slug: string | undefined) {
   return useQuery({
     queryKey: qk.category(slug ?? ''),
     queryFn: () => api<CategoryDetail>(`/categories/${slug}/`),
+    initialData: () => peekInlined<CategoryDetail>(`/categories/${slug}/`),
     enabled: !!slug,
     staleTime: 5 * 60_000,
   });
@@ -33,6 +34,7 @@ export function useProducts(params: URLSearchParams, enabled = true) {
   return useQuery({
     queryKey: qk.products(key),
     queryFn: ({ signal }) => api<Paginated<ProductCard>>('/products/', { query: params, signal }),
+    initialData: () => peekInlined<Paginated<ProductCard>>(`/products/${buildQuery(params)}`),
     placeholderData: keepPreviousData,
     enabled,
   });
@@ -49,6 +51,12 @@ export function useInfiniteProducts(params: URLSearchParams, enabled = true) {
       return api<Paginated<ProductCard>>('/products/', { query, signal });
     },
     initialPageParam: 1,
+    initialData: () => {
+      const first = new URLSearchParams(base);
+      first.set('page', '1');
+      const page = peekInlined<Paginated<ProductCard>>(`/products/${buildQuery(first)}`);
+      return page ? { pages: [page], pageParams: [1] } : undefined;
+    },
     getNextPageParam: (last) => (last.page < last.total_pages ? last.page + 1 : undefined),
     enabled,
   });
@@ -62,6 +70,7 @@ export function useFacets(params: URLSearchParams) {
   return useQuery({
     queryKey: qk.facets(query.toString()),
     queryFn: ({ signal }) => api<Facets>('/products/facets/', { query, signal }),
+    initialData: () => peekInlined<Facets>(`/products/facets/${buildQuery(query)}`),
     placeholderData: keepPreviousData,
     staleTime: 60_000,
   });
@@ -71,6 +80,7 @@ export function useProduct(slug: string | undefined) {
   return useQuery({
     queryKey: qk.product(slug ?? ''),
     queryFn: () => api<ProductDetail>(`/products/${slug}/`),
+    initialData: () => peekInlined<ProductDetail>(`/products/${slug}/`),
     enabled: !!slug,
   });
 }

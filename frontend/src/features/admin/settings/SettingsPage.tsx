@@ -8,7 +8,8 @@ import { Checkbox, SelectField, TextArea, TextField } from '@/components/ui/Fiel
 import { Skeleton } from '@/components/ui/Skeleton';
 import { INDIAN_STATES } from '@/lib/states';
 import { ErrorState } from '../components/ErrorState';
-import { filesForm, ImageInput, type FileChange } from '../components/ImageInput';
+import { ImageInput } from '../components/ImageInput';
+import { filesForm, type FileChange } from '../components/files';
 import { MoneyInput } from '../components/inputs';
 import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';

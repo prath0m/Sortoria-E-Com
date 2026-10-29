@@ -74,7 +74,7 @@ function Section({ section }: { section: HomeSectionData }) {
     case 'testimonials':
       return <Testimonials eyebrow={section.eyebrow} title={section.title} items={section.data} />;
     case 'editorial':
-      return <Editorial eyebrow={section.eyebrow} title={section.title} body={section.body} image={section.image} cta={cta} />;
+      return <Editorial eyebrow={section.eyebrow} title={section.title} body={section.body} image={section.image} renditions={section.renditions} cta={cta} />;
     case 'newsletter':
       return <NewsletterSection eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />;
     default:

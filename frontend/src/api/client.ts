@@ -124,8 +124,34 @@ export function buildQuery(query?: Query | URLSearchParams): string {
   return s ? `?${s}` : '';
 }
 
+declare global {
+  interface Window {
+    /** First-load API responses inlined by the server, keyed by path + query. Each is used once. */
+    __SARTORIA_DATA__?: Record<string, unknown>;
+  }
+}
+
+/** Read inlined data without consuming it, for a query's initialData (so the first render already has it). */
+export function peekInlined<T>(key: string): T | undefined {
+  const store = typeof window !== 'undefined' ? window.__SARTORIA_DATA__ : undefined;
+  return store && key in store ? (store[key] as T) : undefined;
+}
+
+function takeInlined<T>(key: string): T | undefined {
+  const store = typeof window !== 'undefined' ? window.__SARTORIA_DATA__ : undefined;
+  if (!store || !(key in store)) return undefined;
+  const data = store[key] as T;
+  delete store[key];
+  return data;
+}
+
 export async function api<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, query, signal, noRetry } = options;
+  if (method === 'GET' && !accessToken) {
+    // Inlined data is anonymous, so a signed-in session always asks the API.
+    const inlined = takeInlined<T>(`${path}${buildQuery(query)}`);
+    if (inlined !== undefined) return inlined;
+  }
   const isForm = typeof FormData !== 'undefined' && body instanceof FormData;
 
   const send = () => {

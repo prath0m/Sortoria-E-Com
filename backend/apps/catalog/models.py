@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from treebeard.mp_tree import MP_Node
 
-from apps.core.models import BaseModel, OrderedModel, StoreSettings
+from apps.core.models import BaseModel, OrderedModel, RenditionsMixin, StoreSettings
 from apps.core.sanitize import clean_html
 from apps.core.utils import unique_slug
 
@@ -20,7 +20,9 @@ class ReturnPolicy(models.TextChoices):
     NON_RETURNABLE = "non_returnable", "Non-returnable"
 
 
-class Category(MP_Node, BaseModel):
+class Category(MP_Node, RenditionsMixin, BaseModel):
+    RENDITION_FIELDS = ("image", "banner_image", "banner_mobile_image", "menu_image")
+
     name = models.CharField(max_length=80)
     slug = models.SlugField(max_length=90, unique=True)
     description = models.TextField(blank=True)

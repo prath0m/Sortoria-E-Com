@@ -1,5 +1,6 @@
 import { useEffect, useId, useState, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
+import { toLocalInput } from './dates';
 
 const control =
   'block h-12 w-full rounded-xs border border-line-strong/70 bg-surface-raised px-4 text-[0.9375rem] text-ink focus:border-burgundy-800 focus:outline-none focus:ring-2 focus:ring-gold-300/60 aria-[invalid=true]:border-danger';
@@ -53,13 +54,6 @@ export function MoneyInput({ label, value, onChange, hint, error, optional }: { 
   );
 }
 
-const pad = (n: number) => String(n).padStart(2, '0');
-/** ISO string -> value for <input type="datetime-local"> in the viewer's timezone. */
-export function toLocalInput(iso: string | null | undefined) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export function DateTimeInput({ label, value, onChange, hint, error, optional }: { label: string; value: string | null | undefined; onChange: (iso: string | null) => void; hint?: ReactNode; error?: string; optional?: boolean }) {
   const id = useId();

@@ -79,12 +79,17 @@ export interface Address {
   is_default_billing: boolean;
 }
 
+/** WebP copies by width ("400" → url), per image field. */
+export type Srcset = Record<string, string>;
+export type Renditions = Partial<Record<string, Srcset>>;
+
 export interface NavNode {
   id: number;
   name: string;
   slug: string;
   image: string | null;
   menu_image: string | null;
+  renditions?: Renditions;
   children: NavNode[];
 }
 
@@ -101,6 +106,7 @@ export interface ReturnPolicy {
 
 export interface CategoryDetail extends CategoryLink {
   description: string;
+  renditions?: Renditions;
   image: string | null;
   banner_image: string | null;
   banner_mobile_image: string | null;
@@ -109,7 +115,7 @@ export interface CategoryDetail extends CategoryLink {
   seo_title: string;
   seo_description: string;
   breadcrumbs: CategoryLink[];
-  children: { id: number; name: string; slug: string; image: string | null }[];
+  children: { id: number; name: string; slug: string; image: string | null; renditions?: Renditions }[];
   return_policy: ReturnPolicy;
 }
 
@@ -492,6 +498,7 @@ export interface HeroSlide {
   secondary_cta_url: string;
   text_theme: 'light' | 'dark';
   text_align: 'left' | 'center' | 'right';
+  renditions?: Renditions;
 }
 
 export interface Banner {
@@ -504,6 +511,7 @@ export interface Banner {
   cta_label: string;
   cta_url: string;
   badge_text: string;
+  renditions?: Renditions;
 }
 
 interface SectionBase {
@@ -513,13 +521,14 @@ interface SectionBase {
   subtitle: string;
   body: string;
   image: string | null;
+  renditions?: Srcset;
   cta_label: string;
   cta_url: string;
 }
 
 export type HomeSectionData =
   | (SectionBase & { type: 'hero'; data: HeroSlide[] })
-  | (SectionBase & { type: 'featured_categories'; data: { id: number; name: string; slug: string; image: string | null }[] })
+  | (SectionBase & { type: 'featured_categories'; data: { id: number; name: string; slug: string; image: string | null; renditions?: Srcset }[] })
   | (SectionBase & { type: 'trending' | 'new_arrivals' | 'best_sellers' | 'featured_products'; data: ProductCard[] })
   | (SectionBase & { type: 'flash_sale' | 'daily_deals'; data: { title: string; slug: string; subtitle: string; ends_at: string; products: ProductCard[] } })
   | (SectionBase & { type: 'bundles'; data: BundleOffer[] })

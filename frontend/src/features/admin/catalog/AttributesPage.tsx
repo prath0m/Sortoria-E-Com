@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ErrorState } from '../components/ErrorState';
 import { PageHeader } from '../components/PageHeader';
-import { flattenErrors } from '../components/Section';
+import { flattenErrors } from '../components/errors';
 
 interface Value {
   id?: number;

@@ -10,6 +10,7 @@ import { cn } from '@/lib/cn';
 import { breadcrumbJsonLd, Seo } from '@/lib/seo';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { ListingView } from './ListingView';
+import { toSrcSet } from '@/lib/srcset';
 
 export default function CategoryPage() {
   const { slug } = useParams();
@@ -47,8 +48,10 @@ export default function CategoryPage() {
       ) : banner && isDepartment ? (
         <section className="relative isolate overflow-hidden">
           <picture>
-            {category.banner_mobile_image ? <source media="(max-width: 767px)" srcSet={category.banner_mobile_image} /> : null}
-            <img src={banner} alt="" {...{ fetchpriority: 'high' }} className="absolute inset-0 -z-10 h-full w-full object-cover" />
+            {category.banner_mobile_image ? (
+              <source media="(max-width: 767px)" srcSet={toSrcSet(category.renditions?.banner_mobile_image) ?? category.banner_mobile_image} sizes="100vw" />
+            ) : null}
+            <img src={banner} srcSet={toSrcSet(category.renditions?.banner_image)} sizes="100vw" alt="" {...{ fetchpriority: 'high' }} className="absolute inset-0 -z-10 h-full w-full object-cover" />
           </picture>
           <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/70 via-ink/35 to-transparent" />
           <div className="container-page grain flex min-h-[18rem] flex-col justify-end py-10 md:min-h-[26rem] md:py-14">

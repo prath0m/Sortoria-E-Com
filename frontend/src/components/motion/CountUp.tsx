@@ -15,7 +15,8 @@ export function CountUp({ to, prefix = '', suffix = '', className }: { to: numbe
     return () => controls.stop();
   }, [inView, reduce, to]);
   return (
-    <span ref={ref} className={className} aria-label={`${prefix}${fmt.format(to)}${suffix}`}>
+    <span ref={ref} className={className}>
+      <span className="sr-only">{`${prefix}${fmt.format(to)}${suffix}`}</span>
       <span aria-hidden="true">
         {prefix}
         {fmt.format(value)}

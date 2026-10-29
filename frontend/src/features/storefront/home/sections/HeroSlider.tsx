@@ -7,6 +7,7 @@ import { buttonClasses } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 import { usePrefersReducedMotion } from '@/lib/hooks';
 import { gsap } from '../useScrollTrigger';
+import { toSrcSet } from '@/lib/srcset';
 
 const INTERVAL = 7000;
 
@@ -95,9 +96,13 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             animate={{ scale: 1 }}
             transition={{ duration: reduce ? 0 : 9, ease: 'linear' }}
           >
-            {slide.mobile_image ? <source media="(max-width: 767px)" srcSet={slide.mobile_image} /> : null}
+            {slide.mobile_image ? (
+              <source media="(max-width: 767px)" srcSet={toSrcSet(slide.renditions?.mobile_image) ?? slide.mobile_image} sizes="100vw" />
+            ) : null}
             <img
               src={slide.image}
+              srcSet={toSrcSet(slide.renditions?.image)}
+              sizes="100vw"
               alt={slide.image_alt}
               className="h-full w-full object-cover"
               {...{ fetchpriority: index === 0 ? 'high' : 'auto' }}

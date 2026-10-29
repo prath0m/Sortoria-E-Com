@@ -29,7 +29,7 @@ export function StorefrontLayout() {
       </a>
       <AnnouncementBar />
       <Header />
-      <main id="main" tabIndex={-1} className="min-h-[60vh] outline-none">
+      <main id="main" tabIndex={-1} className="min-h-[100svh] outline-none">
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
             <Suspense fallback={<PageLoader />}>

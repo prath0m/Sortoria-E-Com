@@ -15,6 +15,7 @@ def _build_tree(menu_only: bool) -> list[dict]:
             "slug": cat.slug,
             "image": cat.image.url if cat.image else None,
             "menu_image": cat.menu_image.url if cat.menu_image else None,
+            "renditions": cat.srcsets(),
             "position": cat.position,
             "children": [],
         }

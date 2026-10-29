@@ -11,12 +11,13 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { formatMoney } from '@/lib/money';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ErrorState } from '../components/ErrorState';
-import { ImageInput, type FileChange } from '../components/ImageInput';
+import { ImageInput } from '../components/ImageInput';
+import { type FileChange } from '../components/files';
 import { DateTimeInput, MoneyInput, Switch } from '../components/inputs';
 import { PageHeader } from '../components/PageHeader';
 import { ProductChip, ProductPicker } from '../components/ProductPicker';
 import { saveWithFiles } from '../components/save';
-import { flattenErrors } from '../components/Section';
+import { flattenErrors } from '../components/errors';
 import { StateBadge } from './state';
 import type { Bundle } from './types';
 

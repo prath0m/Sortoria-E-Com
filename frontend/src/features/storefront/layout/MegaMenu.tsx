@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import type { NavNode } from '@/api/types';
 import { cn } from '@/lib/cn';
 import { ease } from '@/design/motion';
+import { toSrcSet } from '@/lib/srcset';
 
 /**
  * Desktop department menu. Opens on hover (with intent delay) or keyboard; each department panel
@@ -49,7 +50,8 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
 
   return (
     <nav ref={navRef} aria-label="Departments" className="relative" onMouseLeave={closeSoon}>
-      <ul className="scrollbar-none container-page flex items-center justify-between gap-1 overflow-x-auto">
+      {/* Fixed height so the header doesn't grow when the departments arrive. */}
+      <ul className="scrollbar-none container-page flex h-[2.625rem] items-center justify-between gap-1 overflow-x-auto">
         {categories.map((cat, i) => (
           <li key={cat.id} onMouseEnter={() => openSoon(cat.id)}>
             <button
@@ -139,6 +141,8 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img
                       src={current.menu_image}
+                      srcSet={toSrcSet(current.renditions?.menu_image)}
+                      sizes="400px"
                       alt=""
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-105"

@@ -123,6 +123,16 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(env("MEDIA_ROOT", str(BASE_DIR / "media")))
 FRONTEND_DIST = REPO_DIR / "frontend" / "dist"
+# WhiteNoise serves the built SPA's hashed assets, icons and fonts from the site root.
+WHITENOISE_ROOT = FRONTEND_DIST if FRONTEND_DIST.exists() else None
+
+
+def _immutable_asset(path, url):
+    # Vite fingerprints everything under /assets/, so those can be cached forever.
+    return url.startswith("/assets/")
+
+
+WHITENOISE_IMMUTABLE_FILE_TEST = _immutable_asset
 FRONTEND_URL = env("FRONTEND_URL", "http://localhost:5173")
 BACKEND_PUBLIC_URL = env("BACKEND_PUBLIC_URL", "http://localhost:8000")
 DATA_UPLOAD_MAX_MEMORY_SIZE = 15 * 1024 * 1024

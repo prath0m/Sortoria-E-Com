@@ -101,7 +101,7 @@ export default function CheckoutPage() {
     setAddressId(preferred.id);
   }, [addresses, addressId, newAddress]);
 
-  const methods = config?.payment_methods ?? [];
+  const methods = useMemo(() => config?.payment_methods ?? [], [config]);
   useEffect(() => {
     if (!paymentMethod && methods.length) setPaymentMethod(methods[0].code);
   }, [methods, paymentMethod]);

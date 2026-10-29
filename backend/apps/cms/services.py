@@ -35,6 +35,7 @@ def hero_slides() -> list[dict]:
             "secondary_cta_url": s.secondary_cta_url,
             "text_theme": s.text_theme,
             "text_align": s.text_align,
+            "renditions": s.srcsets(),
         }
         for s in HeroSlide.objects.live()
     ]
@@ -52,6 +53,7 @@ def banners(placement: str) -> list[dict]:
             "cta_label": b.cta_label,
             "cta_url": b.cta_url,
             "badge_text": b.badge_text,
+            "renditions": b.srcsets(),
         }
         for b in PromoBanner.objects.live().filter(placement=placement)
     ]
@@ -81,11 +83,26 @@ def _categories(section: HomeSection) -> list[dict]:
     chosen = list(section.categories.all())
     if chosen:
         return [
-            {"id": c.pk, "name": c.name, "slug": c.slug, "image": _url(c.image) or _url(c.menu_image)}
+            {
+                "id": c.pk,
+                "name": c.name,
+                "slug": c.slug,
+                "image": _url(c.image) or _url(c.menu_image),
+                "renditions": c.srcset("image") or c.srcset("menu_image"),
+            }
             for c in chosen
             if c.is_active
         ]
-    return [{"id": n["id"], "name": n["name"], "slug": n["slug"], "image": n["image"]} for n in category_tree(True)]
+    return [
+        {
+            "id": n["id"],
+            "name": n["name"],
+            "slug": n["slug"],
+            "image": n["image"],
+            "renditions": n["renditions"].get("image") or {},
+        }
+        for n in category_tree(True)
+    ]
 
 
 def _sale(kind: str) -> dict | None:
@@ -157,6 +174,7 @@ def _resolve(section: HomeSection) -> dict | None:
         "subtitle": section.subtitle,
         "body": section.body,
         "image": _url(section.image),
+        "renditions": section.srcset("image"),
         "cta_label": section.cta_label,
         "cta_url": section.cta_url,
         "data": data,

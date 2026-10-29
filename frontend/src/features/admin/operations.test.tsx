@@ -7,7 +7,7 @@ import { useAuth } from '@/stores/auth';
 import { renderWithProviders } from '@/test/render';
 import { server } from '@/test/server';
 import InventoryPage from './catalog/InventoryPage';
-import { flattenErrors } from './components/Section';
+import { flattenErrors } from './components/errors';
 import { RequireCapability } from './layout/RequireCapability';
 import OrderDetailPage from './orders/OrderDetailPage';
 import type { AdminOrder } from './orders/types';

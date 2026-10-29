@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../client';
+import { api, peekInlined } from '../client';
 import { qk } from '../queryKeys';
 import type { NavNode, StoreSettings } from '../types';
 
@@ -23,6 +23,7 @@ export function useNavigation() {
   return useQuery({
     queryKey: qk.navigation,
     queryFn: () => api<{ categories: NavNode[] }>('/store/navigation/').then((r) => r.categories),
+    initialData: () => peekInlined<{ categories: NavNode[] }>('/store/navigation/')?.categories,
     staleTime: 10 * 60_000,
   });
 }

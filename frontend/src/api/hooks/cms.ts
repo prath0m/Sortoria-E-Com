@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { api } from '../client';
+import { api, peekInlined } from '../client';
 import type { Banner, CmsPage, HomeSectionData } from '../types';
 
 export function useHome() {
   return useQuery({
     queryKey: ['home'],
     queryFn: () => api<{ sections: HomeSectionData[] }>('/home/').then((r) => r.sections),
+    initialData: () => peekInlined<{ sections: HomeSectionData[] }>('/home/')?.sections,
     staleTime: 60_000,
   });
 }
@@ -19,7 +20,12 @@ export function usePage(slug: string | undefined) {
 }
 
 export function useFooterPages() {
-  return useQuery({ queryKey: ['pages'], queryFn: () => api<{ title: string; slug: string }[]>('/pages/'), staleTime: 10 * 60_000 });
+  return useQuery({
+    queryKey: ['pages'],
+    queryFn: () => api<{ title: string; slug: string }[]>('/pages/'),
+    initialData: () => peekInlined<{ title: string; slug: string }[]>('/pages/'),
+    staleTime: 10 * 60_000,
+  });
 }
 
 export function useSubscribe() {

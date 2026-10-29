@@ -38,7 +38,7 @@ function Sparkline({ data, dataKey }: { data: Dashboard['revenue_series']; dataK
   return (
     <div className="h-10" aria-hidden="true">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+        <AreaChart data={data} margin={{ top: 4, right: 0, bottom: 0, left: 0 }} accessibilityLayer={false}>
           <Area type="monotone" dataKey={dataKey} stroke="var(--chart-1)" strokeWidth={2} fill="var(--chart-1)" fillOpacity={0.08} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>

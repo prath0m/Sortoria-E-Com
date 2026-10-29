@@ -60,7 +60,7 @@
     --line-strong: 165 167 155;
     --success: 46 107 62;
     --danger: 166 31 36;
-    --warning: 138 98 10;
+    --warning: 122 86 8;
     --primary: 89 9 7;
     --primary-hover: 108 37 34;
     --on-primary: 251 248 243;
@@ -261,6 +261,33 @@ html.lenis body {
   --swiper-pagination-bullet-inactive-color: rgb(var(--sage-500));
   --swiper-pagination-bullet-inactive-opacity: 0.6;
   --swiper-pagination-bullet-size: 6px;
+}
+
+/* Keep the 6px dots but give each a 24×24px touch target (WCAG 2.5.8). */
+.swiper-pagination-bullets .swiper-pagination-bullet {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 0 !important;
+  background: transparent;
+  opacity: 1;
+}
+.swiper-pagination-bullets .swiper-pagination-bullet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--swiper-pagination-bullet-size);
+  height: var(--swiper-pagination-bullet-size);
+  border-radius: 9999px;
+  background: var(--swiper-pagination-bullet-inactive-color);
+  opacity: var(--swiper-pagination-bullet-inactive-opacity);
+  transition: transform 0.25s, opacity 0.25s;
+}
+.swiper-pagination-bullets .swiper-pagination-bullet-active::before {
+  background: var(--swiper-pagination-color, var(--swiper-theme-color));
+  opacity: 1;
+  transform: scale(1.35);
 }
 
 /*

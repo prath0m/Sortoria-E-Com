@@ -105,7 +105,7 @@ function HoverZoom({ image, priority, onOpen }: { image: ProductImage; priority?
       onClick={onOpen}
       onMouseMove={move}
       onMouseLeave={() => setZoom(null)}
-      aria-label="Open full-screen view"
+      aria-label={`Hover to zoom, or open ${image.alt || 'this image'} full screen`}
       className="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-sm bg-cream-200"
     >
       <ResponsiveImage

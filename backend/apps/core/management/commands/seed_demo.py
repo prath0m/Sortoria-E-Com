@@ -171,6 +171,13 @@ class Command(BaseCommand):
             self.stdout.write(f"Building WebP renditions for {len(missing)} images…")
         for image_id in missing:
             build_image_renditions(image_id)
+        # Category and homepage imagery: the task skips anything already built.
+        from apps.cms.models import HeroSlide, HomeSection, PromoBanner
+        from apps.core.tasks import build_model_renditions
+
+        for model in (Category, HeroSlide, HomeSection, PromoBanner):
+            for pk in model.objects.values_list("pk", flat=True):
+                build_model_renditions(model._meta.label, pk)
 
     # ------------------------------------------------------------------ helpers
     def _flush(self):

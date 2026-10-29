@@ -22,6 +22,8 @@ export default defineConfig({
   build: {
     target: 'es2020',
     sourcemap: false,
+    // Django reads this to modulepreload the current route's chunks (see apps/core/seo.py).
+    manifest: true,
     cssCodeSplit: true,
     rollupOptions: {
       output: {

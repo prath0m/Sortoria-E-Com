@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { staggerChild, staggerParent } from '@/components/motion/Reveal';
 import { cn } from '@/lib/cn';
 import { SectionHeading } from './SectionHeading';
+import { toSrcSet } from '@/lib/srcset';
 
-type Category = { id: number; name: string; slug: string; image: string | null };
+type Category = { id: number; name: string; slug: string; image: string | null; renditions?: Record<string, string> };
 
 /** Editorial mosaic: one tall feature tile, then a grid. */
 export function CategoryShowcase({ eyebrow, title, subtitle, categories }: { eyebrow: string; title: string; subtitle: string; categories: Category[] }) {
@@ -23,7 +24,7 @@ export function CategoryShowcase({ eyebrow, title, subtitle, categories }: { eye
           <motion.li key={c.id} variants={staggerChild} className={cn(i === 0 && 'col-span-2 row-span-2', i === 5 && 'md:col-span-2')}>
             <Link to={`/shop/${c.slug}`} className="group relative block h-full overflow-hidden rounded-sm bg-cream-200">
               {c.image ? (
-                <img src={c.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.06]" />
+                <img src={c.image} srcSet={toSrcSet(c.renditions)} sizes={i === 0 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.06]" />
               ) : null}
               <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
               <span className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-2 md:inset-x-5 md:bottom-5">

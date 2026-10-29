@@ -3,6 +3,7 @@ from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 
 from apps.core import caching
+from apps.core.tasks import register_renditions
 
 from .models import Attribute, AttributeValue, Brand, Category, Product, ProductImage, ProductVariant
 from .tasks import build_image_renditions
@@ -52,3 +53,6 @@ def _image_saved(sender, instance, created, update_fields=None, **kwargs):
 @receiver(m2m_changed, sender=ProductVariant.option_values.through, dispatch_uid="variant-options-changed")
 def _variant_options_changed(**_kwargs):
     _bump_catalog()
+
+
+register_renditions(Category)

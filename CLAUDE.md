@@ -17,6 +17,8 @@ Premium general store (electronics, fashion, home, sports, beauty, books, toys, 
 | Lint | `make lint` (ruff + eslint + tsc) |
 | Regenerate API types | `make gen-api` (backend must be running) |
 | Regenerate logo assets | `make brand` |
+| Production build (served by Django on :8000) | `make build` |
+| Playwright smoke/axe/layout (stack running, seeded) | `make e2e` (`E2E_BASE_URL=http://localhost:8000` for the build) |
 
 Local services: Homebrew `postgresql@14` and `redis` (`brew services start …`). Docker Compose is provided for machines with Docker.
 
@@ -45,6 +47,8 @@ frontend/src/content/     brand-voice copy that isn't admin-managed (microcopy, 
 - **No N+1 queries:** list querysets use `select_related`/`prefetch_related`, and hot endpoints have query-count tests.
 - **Store-facing text and settings come from the DB** (`StoreSettings`, the CMS models). Never hardcode the store name, contact details or policies.
 - API prefix is `/api/v1/`, admin endpoints are under `/api/v1/admin/`, and docs are at `/api/docs/`.
+- **Server-side SEO lives in `apps/core/seo.py`.** A new public route that should be indexed needs entries in `ROUTES` (meta), `ROUTE_MODULES` (chunk preload) and, if it reads data on first load, `INLINE_DATA` (keys must match the client's `path + buildQuery()` exactly). Private routes go in `PRIVATE_PREFIXES`.
+- New admin endpoints must be added to `tests/admin/test_permission_matrix.py`.
 
 ## Frontend conventions
 - Import with `@/` aliases. Merge classes with `cn()`.
@@ -53,6 +57,7 @@ frontend/src/content/     brand-voice copy that isn't admin-managed (microcopy, 
 - Every data view has a skeleton, an empty state and an error state.
 - Motion: animate only transform and opacity. Use `useReducedMotion()`: Lenis turns off and GSAP and Framer animations collapse to simple fades. Shared easing is `ease-luxe` / `motion.ts`.
 - Code-split each route with `lazy()`. The admin, GSAP, Swiper and Recharts must not load in the storefront's initial bundle.
+- First-load queries read server-inlined data via `initialData: () => peekInlined(key)` so the first render has it (no skeleton flash, no layout shift).
 
 ## Design tokens
 | Token | Value | Use |

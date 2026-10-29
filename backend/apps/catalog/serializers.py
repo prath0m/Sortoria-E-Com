@@ -52,6 +52,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     breadcrumbs = serializers.SerializerMethodField()
     children = serializers.SerializerMethodField()
     return_policy = serializers.SerializerMethodField()
+    renditions = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
@@ -60,6 +61,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
             "name",
             "slug",
             "description",
+            "renditions",
             "image",
             "banner_image",
             "banner_mobile_image",
@@ -75,6 +77,10 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     def get_image(self, obj) -> str | None:
         return file_url(obj.image)
 
+    @extend_schema_field(serializers.DictField())
+    def get_renditions(self, obj):
+        return obj.srcsets()
+
     def get_banner_image(self, obj) -> str | None:
         return file_url(obj.banner_image)
 
@@ -88,7 +94,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     @extend_schema_field(serializers.ListField(child=serializers.DictField()))
     def get_children(self, obj):
         return [
-            {"id": c.id, "name": c.name, "slug": c.slug, "image": file_url(c.image)}
+            {"id": c.id, "name": c.name, "slug": c.slug, "image": file_url(c.image), "renditions": c.srcsets()}
             for c in obj.get_children().filter(is_active=True)
         ]
 

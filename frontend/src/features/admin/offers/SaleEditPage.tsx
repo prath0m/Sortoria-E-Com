@@ -10,12 +10,14 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { formatMoney } from '@/lib/money';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ErrorState } from '../components/ErrorState';
-import { ImageInput, type FileChange } from '../components/ImageInput';
+import { ImageInput } from '../components/ImageInput';
+import { type FileChange } from '../components/files';
 import { DateTimeInput } from '../components/inputs';
 import { PageHeader } from '../components/PageHeader';
 import { ProductChip, ProductPicker } from '../components/ProductPicker';
 import { saveWithFiles } from '../components/save';
-import { flattenErrors, Section } from '../components/Section';
+import { Section } from '../components/Section';
+import { flattenErrors } from '../components/errors';
 import { StateBadge } from './state';
 import { salePrice, type Sale } from './types';
 

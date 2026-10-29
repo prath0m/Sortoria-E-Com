@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
-from apps.core.models import BaseModel, OrderedModel
+from apps.core.models import BaseModel, OrderedModel, RenditionsMixin
 from apps.core.sanitize import clean_html
 from apps.core.utils import unique_slug
 
@@ -29,7 +29,9 @@ class Scheduled(models.Model):
         abstract = True
 
 
-class HeroSlide(OrderedModel, Scheduled, BaseModel):
+class HeroSlide(OrderedModel, Scheduled, RenditionsMixin, BaseModel):
+    RENDITION_FIELDS = ("image", "mobile_image")
+
     class Theme(models.TextChoices):
         LIGHT = "light", "Light text on dark image"
         DARK = "dark", "Dark text on light image"
@@ -59,7 +61,9 @@ class HeroSlide(OrderedModel, Scheduled, BaseModel):
         return self.headline
 
 
-class HomeSection(OrderedModel, BaseModel):
+class HomeSection(OrderedModel, RenditionsMixin, BaseModel):
+    RENDITION_FIELDS = ("image",)
+
     class Type(models.TextChoices):
         HERO = "hero", "Hero slider"
         FEATURED_CATEGORIES = "featured_categories", "Featured categories"
@@ -101,7 +105,9 @@ class HomeSection(OrderedModel, BaseModel):
         return f"{self.get_type_display()}: {self.title}" if self.title else self.get_type_display()
 
 
-class PromoBanner(OrderedModel, Scheduled, BaseModel):
+class PromoBanner(OrderedModel, Scheduled, RenditionsMixin, BaseModel):
+    RENDITION_FIELDS = ("image", "mobile_image")
+
     class Placement(models.TextChoices):
         HOME = "home", "Homepage"
         OFFERS = "offers", "Offers page"

@@ -1,9 +1,8 @@
 import { ImagePlus, Trash2 } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
 import { cn } from '@/lib/cn';
+import type { FileChange } from './files';
 
-/** A chosen file, '' to clear the stored image, or null for "leave as is". */
-export type FileChange = File | '' | null;
 
 /** Single image picker that previews the current or newly chosen file. */
 export function ImageInput({
@@ -54,13 +53,4 @@ export function ImageInput({
       {hint ? <p className="mt-1 text-xs text-ink-muted">{hint}</p> : null}
     </div>
   );
-}
-
-/** Build multipart data from a map of file changes, or null when there's nothing to send. */
-export function filesForm(files: Record<string, FileChange>) {
-  const entries = Object.entries(files).filter(([, f]) => f !== null) as [string, File | ''][];
-  if (!entries.length) return null;
-  const form = new FormData();
-  entries.forEach(([k, f]) => form.append(k, f));
-  return form;
 }

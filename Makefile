@@ -51,8 +51,9 @@ brand: ## Regenerate logo SVG/PNG assets from the font outlines
 gen-api: ## Regenerate TypeScript API types from the running backend
 	cd frontend && npm run gen:api
 
-build:
+build: ## Production build: SPA bundle (pre-compressed for WhiteNoise) and Django static files
 	cd frontend && npm run build
+	$(PY) -m whitenoise.compress frontend/dist
 	$(MANAGE) collectstatic --noinput
 
 e2e:

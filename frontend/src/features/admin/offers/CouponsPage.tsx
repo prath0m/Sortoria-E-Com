@@ -17,7 +17,8 @@ import { FilterSelect, SearchInput, Toolbar } from '../components/Toolbar';
 import { useTableState } from '../components/useTableState';
 import { categoryOptions, useCatalogOptions } from '../products/useCatalogOptions';
 import { shortDate } from '../orders/types';
-import { STATE_FILTER, StateBadge } from './state';
+import { StateBadge } from './state';
+import { STATE_FILTER } from './stateFilter';
 
 interface Coupon {
   id?: number;

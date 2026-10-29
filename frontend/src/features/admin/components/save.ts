@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { filesForm, type FileChange } from './ImageInput';
+import { filesForm, type FileChange } from './files';
 
 function toForm(body: Record<string, unknown>, files: Record<string, FileChange>) {
   const form = new FormData();
