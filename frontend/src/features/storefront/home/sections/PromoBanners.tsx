@@ -9,12 +9,12 @@ import { toSrcSet } from '@/lib/srcset';
 
 function BannerCard({ banner, large }: { banner: Banner; large?: boolean }) {
   return (
-    <Link to={banner.cta_url || '/shop'} className={cn('group relative block overflow-hidden rounded-sm bg-ink', large ? 'h-[26rem] md:h-[34rem]' : 'h-[22rem] md:h-[26rem]')}>
+    <Link to={banner.cta_url || '/shop'} className={cn('group relative block overflow-hidden rounded-sm bg-shade', large ? 'h-[26rem] md:h-[34rem]' : 'h-[22rem] md:h-[26rem]')}>
       <picture className="absolute inset-[-12%_0] block" data-parallax>
         {banner.mobile_image ? <source media="(max-width: 767px)" srcSet={toSrcSet(banner.renditions?.mobile_image) ?? banner.mobile_image} sizes="100vw" /> : null}
         <img src={banner.image} srcSet={toSrcSet(banner.renditions?.image)} sizes={large ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.03]" />
       </picture>
-      <span className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent" />
+      <span className="absolute inset-0 bg-gradient-to-t from-shade/80 via-shade/25 to-transparent" />
       {banner.badge_text ? (
         <Badge tone="sale" className="absolute left-6 top-6">
           {banner.badge_text}

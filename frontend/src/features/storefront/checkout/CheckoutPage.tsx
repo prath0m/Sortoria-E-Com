@@ -473,7 +473,7 @@ export default function CheckoutPage() {
                         {line.image ? (
                           <ResponsiveImage src={line.image.url} renditions={line.image.renditions} alt="" sizes="56px" className="h-full w-full object-cover" />
                         ) : null}
-                        <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-xs bg-ink/80 px-1 text-[0.625rem] font-bold text-cream-50">
+                        <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-xs bg-shade/80 px-1 text-[0.625rem] font-bold text-cream-50">
                           {line.quantity}
                         </span>
                       </div>

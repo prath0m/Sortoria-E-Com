@@ -49,6 +49,9 @@
     --cream-200: 234 225 209;
     --cream-300: 221 208 186;
 
+    /* Fixed deep brown for scrims and photo backdrops: never remapped, unlike ink. */
+    --shade: 42 20 19;
+
     /* Semantic tokens (remapped in .dark). */
     --ink: 42 20 19;
     --ink-soft: 74 51 49;
@@ -56,6 +59,9 @@
     --surface: 243 237 226;
     --surface-raised: 251 248 243;
     --surface-sunken: 234 225 209;
+    /* Stand-ins for cream-200/300 panels and image placeholders (remapped in .dark). */
+    --surface-muted: 234 225 209;
+    --surface-strong: 221 208 186;
     --line: 203 203 195;
     --line-strong: 165 167 155;
     --success: 46 107 62;
@@ -78,6 +84,8 @@
     --surface: 22 14 13;
     --surface-raised: 33 22 21;
     --surface-sunken: 15 9 9;
+    --surface-muted: 45 31 29;
+    --surface-strong: 58 42 40;
     --line: 61 47 45;
     --line-strong: 92 74 71;
     --success: 120 196 140;
@@ -89,6 +97,24 @@
     --accent: 222 178 173;
     --accent-soft: 60 26 25;
     color-scheme: dark;
+  }
+
+  /*
+   * Areas that keep their light design in dark mode (e.g. a hero slide set to dark text on a
+   * light photo): restore the light semantic tokens so everything inside reads as in light mode.
+   */
+  .dark [data-light-surface] {
+    --ink: 42 20 19;
+    --ink-soft: 74 51 49;
+    --ink-muted: 97 99 91;
+    --surface: 243 237 226;
+    --surface-raised: 251 248 243;
+    --surface-muted: 234 225 209;
+    --surface-strong: 221 208 186;
+    --line: 203 203 195;
+    --accent: 89 9 7;
+    --accent-soft: 239 229 225;
+    color-scheme: light;
   }
 
   html {
@@ -323,4 +349,44 @@ html.lenis body {
   --rdp-day_button-width: 2.125rem;
   color: rgb(var(--ink));
   font-size: 0.8125rem;
+}
+
+/*
+ * Storefront dark mode. The storefront uses the brand scales directly, where the same colour can be
+ * text on cream or a band behind cream text. So rather than inverting the scales, map the specific
+ * uses: cream panels become dark surfaces, burgundy text/borders become the light accent. Cream text
+ * (over photos and burgundy bands) and burgundy bands stay as they are. Inside [data-light-surface]
+ * the semantic tokens are light again, so these mappings fall back to the light look there.
+ */
+@layer utilities {
+  .dark .bg-cream-50 { background-color: rgb(var(--surface-raised)); }
+  .dark .bg-cream-50\/30 { background-color: rgb(var(--surface-raised) / 0.3); }
+  .dark .bg-cream-50\/70 { background-color: rgb(var(--surface-raised) / 0.7); }
+  .dark .bg-cream-100 { background-color: rgb(var(--surface)); }
+  .dark .bg-cream-200 { background-color: rgb(var(--surface-muted)); }
+  .dark .bg-cream-200\/50 { background-color: rgb(var(--surface-muted) / 0.5); }
+  .dark .bg-cream-200\/60 { background-color: rgb(var(--surface-muted) / 0.6); }
+  .dark .bg-cream-200\/70 { background-color: rgb(var(--surface-muted) / 0.7); }
+  .dark .bg-cream-300 { background-color: rgb(var(--surface-strong)); }
+  .dark .bg-gold-50,
+  .dark .bg-gold-100 { background-color: rgb(var(--accent-soft)); }
+  .dark .bg-burgundy-50\/40 { background-color: rgb(var(--accent-soft) / 0.4); }
+
+  .dark .text-burgundy-700,
+  .dark .text-burgundy-800,
+  .dark .text-burgundy-900,
+  .dark .hover\:text-burgundy-700:hover,
+  .dark .hover\:text-burgundy-800:hover { color: rgb(var(--accent)); }
+  .dark .text-gold-600,
+  .dark .text-gold-700,
+  .dark .text-gold-800 { color: rgb(var(--gold-300)); }
+
+  .dark .border-burgundy-800,
+  .dark .hover\:border-burgundy-800:hover,
+  .dark .focus\:border-burgundy-800:focus { border-color: rgb(var(--accent)); }
+  .dark .border-burgundy-800\/40 { border-color: rgb(var(--accent) / 0.4); }
+  .dark .ring-burgundy-800 { --tw-ring-color: rgb(var(--accent)); }
+  .dark .outline-burgundy-800 { outline-color: rgb(var(--accent)); }
+
+  .dark .gallery-swiper { --swiper-theme-color: rgb(var(--accent)); }
 }

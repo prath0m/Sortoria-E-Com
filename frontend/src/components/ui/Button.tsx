@@ -14,7 +14,8 @@ const variants: Record<Variant, string> = {
   secondary: 'border border-accent text-accent hover:bg-primary hover:border-primary hover:text-primary-on',
   ghost: 'text-ink hover:bg-ink/5',
   link: 'link-underline px-0 tracking-[0.12em] text-accent',
-  gold: 'bg-gold-300 text-ink hover:bg-gold-200 shadow-soft',
+  // Fixed dark text: gold stays light in dark mode, so the semantic ink (light there) would vanish.
+  gold: 'bg-gold-300 text-burgundy-950 hover:bg-gold-200 shadow-soft',
   danger: 'bg-danger text-white hover:opacity-90',
 };
 

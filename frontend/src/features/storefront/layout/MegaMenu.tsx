@@ -7,8 +7,8 @@ import { ease } from '@/design/motion';
 import { toSrcSet } from '@/lib/srcset';
 
 /**
- * Desktop department menu. Opens on hover (with intent delay) or keyboard; each department panel
- * lists its subcategories alongside an editorial image.
+ * Desktop department menu. Each department is a link to its category page; the panel opens on
+ * hover (with intent delay) or with the Down arrow, listing subcategories beside an editorial image.
  */
 export function MegaMenu({ categories }: { categories: NavNode[] }) {
   const [active, setActive] = useState<number | null>(null);
@@ -18,6 +18,14 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
   const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => setActive(null), [pathname]);
+
+  // Opened from the keyboard: move focus into the panel once it has rendered.
+  const focusPanel = useRef(false);
+  useEffect(() => {
+    if (active === null || !focusPanel.current) return;
+    focusPanel.current = false;
+    document.querySelector<HTMLElement>('[data-mega-panel] a')?.focus();
+  }, [active]);
 
   const openSoon = (id: number) => {
     window.clearTimeout(closeTimer.current);
@@ -30,7 +38,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
   };
 
   const onKeyDown = (e: React.KeyboardEvent, index: number) => {
-    const buttons = navRef.current?.querySelectorAll<HTMLButtonElement>('[data-menu-trigger]');
+    const buttons = navRef.current?.querySelectorAll<HTMLAnchorElement>('[data-menu-trigger]');
     if (!buttons) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       e.preventDefault();
@@ -41,8 +49,8 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
       setActive(null);
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
+      focusPanel.current = true;
       setActive(categories[index].id);
-      requestAnimationFrame(() => document.querySelector<HTMLElement>('[data-mega-panel] a')?.focus());
     }
   };
 
@@ -54,15 +62,14 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
       <ul className="scrollbar-none container-page flex h-[2.625rem] items-center justify-between gap-1 overflow-x-auto">
         {categories.map((cat, i) => (
           <li key={cat.id} onMouseEnter={() => openSoon(cat.id)}>
-            <button
-              type="button"
+            <Link
+              to={`/shop/${cat.slug}`}
               data-menu-trigger
               aria-expanded={active === cat.id}
               aria-controls="mega-panel"
-              onClick={() => setActive(active === cat.id ? null : cat.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                'relative whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-burgundy-800 2xl:px-2.5',
+                'relative block whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-burgundy-800 2xl:px-2.5',
                 active === cat.id && 'text-burgundy-800',
               )}
             >
@@ -73,7 +80,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                   active === cat.id && 'scale-x-100',
                 )}
               />
-            </button>
+            </Link>
           </li>
         ))}
         <li>
@@ -110,7 +117,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                 <p className="eyebrow mb-2">Department</p>
                 <Link
                   to={`/shop/${current.slug}`}
-                  className="font-display text-display-md text-burgundy-800 hover:text-burgundy-700"
+                  className="block w-fit font-display text-display-md text-burgundy-800 hover:text-burgundy-700"
                 >
                   {current.name}
                 </Link>
@@ -147,7 +154,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-shade/50 to-transparent" />
                     <span className="absolute bottom-4 left-5 font-display text-2xl italic text-cream-50">
                       Discover {current.name}
                     </span>

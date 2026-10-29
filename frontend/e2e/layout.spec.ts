@@ -43,3 +43,24 @@ test('pages work without smooth scrolling surprises on a phone', async ({ page }
   await expect(page.getByRole('dialog')).toBeHidden();
   noErrors();
 });
+
+test('the theme switch turns on dark mode and remembers it without a light flash', async ({ page }) => {
+  const noErrors = watchErrors(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Switch to dark mode' }).click();
+  await expect(page.locator('html')).toHaveClass(/dark/);
+  // Applied by the inline script in index.html before the app boots.
+  await page.goto('/shop');
+  expect(await page.evaluate(() => document.documentElement.classList.contains('dark'))).toBe(true);
+  await expect(page.getByRole('button', { name: 'Switch to light mode' })).toBeVisible();
+  await page.getByRole('button', { name: 'Switch to light mode' }).click();
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
+  noErrors();
+});
+
+test('department links in the header go to their category', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('[data-menu-trigger]').first().click();
+  await expect(page).toHaveURL(/\/shop\/[\w-]+$/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});

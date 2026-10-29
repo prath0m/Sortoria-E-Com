@@ -30,6 +30,14 @@ for (const path of STOREFRONT) {
   });
 }
 
+test('the storefront in dark mode has no serious accessibility issues', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('sartoria-theme', 'dark'));
+  for (const path of ['/', '/shop', '/offers', '/login', `/products/${await firstProductSlug(page)}`]) {
+    await page.goto(path);
+    await test.step(`dark ${path}`, () => scan(page));
+  }
+});
+
 test('a product page has no serious accessibility issues', async ({ page }) => {
   await page.goto(`/products/${await firstProductSlug(page)}`);
   await scan(page);

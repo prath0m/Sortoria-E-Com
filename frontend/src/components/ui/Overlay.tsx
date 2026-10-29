@@ -19,7 +19,7 @@ interface OverlayProps {
 function Backdrop({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
-      className="fixed inset-0 bg-ink/40 backdrop-blur-[2px]"
+      className="fixed inset-0 bg-shade/40 backdrop-blur-[2px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

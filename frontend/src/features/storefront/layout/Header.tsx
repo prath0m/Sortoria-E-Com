@@ -1,10 +1,11 @@
-import { Menu, Search, User } from 'lucide-react';
+import { Menu, Moon, Search, Sun, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigation, useStoreSettings } from '@/api/hooks/store';
 import { Logo, Monogram } from '@/components/brand/Logo';
 import { IconButton } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
+import { useColorTheme } from '@/lib/theme';
 import { useAuth } from '@/stores/auth';
 import { useUI } from '@/stores/ui';
 import { HeaderActions } from '../cart/HeaderActions';
@@ -16,6 +17,7 @@ export function Header() {
   const user = useAuth((s) => s.user);
   const setSearchOpen = useUI((s) => s.setSearchOpen);
   const setMobileNavOpen = useUI((s) => s.setMobileNavOpen);
+  const { theme, toggle: toggleTheme } = useColorTheme('store');
   const [scrolled, setScrolled] = useState(false);
   const ref = useRef<HTMLElement>(null);
 
@@ -85,6 +87,9 @@ export function Header() {
         </Link>
 
         <div className="flex items-center justify-end gap-0.5">
+          <IconButton label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} onClick={toggleTheme}>
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </IconButton>
           <Link
             to={user ? '/account' : '/login'}
             aria-label={user ? 'Your account' : 'Sign in'}

@@ -48,7 +48,7 @@ export function VariantSelector({ axes, variants, selection, onChange }: Variant
                         <Check className="absolute inset-0 m-auto h-4 w-4 text-white mix-blend-difference" aria-hidden="true" />
                       ) : null}
                       {state === 'out_of_stock' ? (
-                        <span className="absolute left-1/2 top-1/2 h-px w-9 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-ink/60" aria-hidden="true" />
+                        <span className="absolute left-1/2 top-1/2 h-px w-9 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-shade/60" aria-hidden="true" />
                       ) : null}
                     </button>
                   );

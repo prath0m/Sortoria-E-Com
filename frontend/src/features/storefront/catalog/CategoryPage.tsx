@@ -53,7 +53,7 @@ export default function CategoryPage() {
             ) : null}
             <img src={banner} srcSet={toSrcSet(category.renditions?.banner_image)} sizes="100vw" alt="" {...{ fetchpriority: 'high' }} className="absolute inset-0 -z-10 h-full w-full object-cover" />
           </picture>
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/70 via-ink/35 to-transparent" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-shade/70 via-shade/35 to-transparent" />
           <div className="container-page grain flex min-h-[18rem] flex-col justify-end py-10 md:min-h-[26rem] md:py-14">
             <Breadcrumbs items={crumbs} className="mb-auto text-cream-200 [&_a]:text-cream-100 [&_[aria-current]]:text-cream-50" />
             <Reveal>

@@ -71,7 +71,9 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
     <section
       aria-roledescription="carousel"
       aria-label="Featured collections"
-      className="grain relative isolate h-[78svh] min-h-[32rem] overflow-hidden bg-ink md:h-[88vh] md:max-h-[56rem]"
+      // Dark-text slides sit on a light scrim: keep their light colours (text, controls) in dark mode.
+      data-light-surface={light ? undefined : ''}
+      className="grain relative isolate h-[78svh] min-h-[32rem] overflow-hidden bg-shade md:h-[88vh] md:max-h-[56rem]"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onFocus={() => setHovering(true)}
@@ -113,7 +115,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
               'absolute inset-0',
               // Mobile text spans the width, so the scrim runs bottom-up there and left-right on larger screens.
               light
-                ? 'bg-gradient-to-t from-ink/85 via-ink/50 to-ink/20 md:bg-gradient-to-r md:from-ink/75 md:via-ink/35 md:to-transparent'
+                ? 'bg-gradient-to-t from-shade/85 via-shade/50 to-shade/20 md:bg-gradient-to-r md:from-shade/75 md:via-shade/35 md:to-transparent'
                 : 'bg-gradient-to-t from-cream-50/95 via-cream-50/75 to-cream-50/30 md:bg-gradient-to-r md:from-cream-50/90 md:via-cream-50/50 md:to-transparent',
             )}
           />

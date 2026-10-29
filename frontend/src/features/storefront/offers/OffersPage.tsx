@@ -48,7 +48,7 @@ export default function OffersPage() {
             {banners?.map((b) => (
               <Link key={b.id} to={b.cta_url || '/shop'} className="group relative block h-56 overflow-hidden rounded-md md:h-72">
                 <img src={b.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.03]" />
-                <span className="absolute inset-0 bg-gradient-to-r from-ink/80 to-ink/10" />
+                <span className="absolute inset-0 bg-gradient-to-r from-shade/80 to-shade/10" />
                 <span className="absolute inset-y-0 left-6 flex max-w-lg flex-col justify-center md:left-12">
                   {b.badge_text ? <Badge tone="sale" className="mb-3 self-start">{b.badge_text}</Badge> : null}
                   <span className="font-display text-display-md text-cream-50">{b.title}</span>

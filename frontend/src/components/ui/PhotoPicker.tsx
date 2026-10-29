@@ -30,7 +30,7 @@ export function PhotoPicker({
               type="button"
               onClick={() => onChange(files.filter((_, j) => j !== i))}
               aria-label={`Remove photo ${i + 1}`}
-              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-ink/70 text-cream-50"
+              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-shade/70 text-cream-50"
             >
               <X className="h-3.5 w-3.5" />
             </button>

@@ -50,6 +50,7 @@ export default {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           soft: 'rgb(var(--accent-soft) / <alpha-value>)',
         },
+        shade: 'rgb(var(--shade) / <alpha-value>)',
         success: 'rgb(var(--success) / <alpha-value>)',
         danger: 'rgb(var(--danger) / <alpha-value>)',
         warning: 'rgb(var(--warning) / <alpha-value>)',

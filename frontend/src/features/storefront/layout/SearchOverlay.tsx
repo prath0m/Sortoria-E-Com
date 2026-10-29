@@ -89,7 +89,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-modal">
       <motion.div
-        className="absolute inset-0 bg-ink/40 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-shade/40 backdrop-blur-[2px]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

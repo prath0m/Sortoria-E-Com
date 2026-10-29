@@ -446,8 +446,8 @@ def first_paint(meta: Meta) -> str:
         else "display:block;width:100%;max-width:46rem;aspect-ratio:4/5;object-fit:cover;margin:0 auto"
     )
     return (
-        '<div aria-hidden="true" style="background:#F3EDE2;min-height:100vh">'
-        '<div style="height:96px;border-bottom:1px solid rgba(165,167,155,.4)"></div>'
+        '<div aria-hidden="true" style="background:rgb(var(--surface));min-height:100vh">'
+        '<div style="height:96px;border-bottom:1px solid rgb(var(--line))"></div>'
         f"<picture>{''.join(sources)}"
         f'<img src="{escape(_abs(ordered[-1][1]))}" srcset="{escape(candidates)}" sizes="{escape(sizes)}" '
         f'alt="" fetchpriority="high" style="{frame}" /></picture></div>'
