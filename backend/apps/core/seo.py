@@ -441,13 +441,14 @@ def first_paint(meta: Meta) -> str:
     candidates = ", ".join(f"{_abs(u)} {w}w" for w, u in ordered)
     hero = meta.type == "website"
     frame = (
-        "display:block;width:100%;height:78svh;min-height:32rem;object-fit:cover"
+        "display:block;width:100%;height:100svh;min-height:38rem;object-fit:cover"
         if hero
         else "display:block;width:100%;max-width:46rem;aspect-ratio:4/5;object-fit:cover;margin:0 auto"
     )
     return (
         '<div aria-hidden="true" style="background:rgb(var(--surface));min-height:100vh">'
-        '<div style="height:96px;border-bottom:1px solid rgb(var(--line))"></div>'
+        # The homepage hero runs under the floating header; other pages leave room for it.
+        f'<div style="height:{0 if hero else 76}px"></div>'
         f"<picture>{''.join(sources)}"
         f'<img src="{escape(_abs(ordered[-1][1]))}" srcset="{escape(candidates)}" sizes="{escape(sizes)}" '
         f'alt="" fetchpriority="high" style="{frame}" /></picture></div>'

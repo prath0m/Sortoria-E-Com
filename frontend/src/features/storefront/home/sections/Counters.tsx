@@ -3,12 +3,22 @@ import { Reveal } from '@/components/motion/Reveal';
 
 export function Counters({ counters }: { counters: { value: number; prefix: string; suffix: string; label: string }[] }) {
   return (
-    <section aria-label="Sartoria in numbers" className="grain bg-charcoal-900 text-paper-50">
-      <ul className="container-page relative z-[2] grid grid-cols-2 gap-y-10 py-16 text-center md:grid-cols-4 lg:py-20">
+    <section aria-label="Sartoria in numbers" className="container-page py-16 lg:py-24">
+      <ul className="grid grid-cols-2 border-t border-line md:grid-cols-4">
         {counters.map((c, i) => (
-          <Reveal as="li" key={c.label} delay={i * 0.08}>
-            <CountUp to={c.value} prefix={c.prefix} suffix={c.suffix} className="block font-display text-display-xl text-iris-200" />
-            <span className="mt-2 block text-xs font-semibold text-paper-200">{c.label}</span>
+          <Reveal
+            as="li"
+            key={c.label}
+            delay={i * 0.08}
+            className="flex min-h-[12rem] flex-col justify-between border-b border-line p-5 even:border-l md:min-h-[16rem] md:border-b-0 md:border-l md:p-6 md:first:border-l-0"
+          >
+            <span className="text-sm text-ink-muted">{c.label}</span>
+            <CountUp
+              to={c.value}
+              prefix={c.prefix}
+              suffix={c.suffix}
+              className="block text-[clamp(2.75rem,1.5rem+4.5vw,6rem)] font-semibold leading-none tracking-[-0.05em] text-ink"
+            />
           </Reveal>
         ))}
       </ul>

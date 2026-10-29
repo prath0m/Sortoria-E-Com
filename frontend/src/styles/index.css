@@ -57,12 +57,13 @@
     /* Semantic tokens (remapped in .dark). */
     --ink: 10 10 10;
     --ink-soft: 64 64 64;
-    --ink-muted: 102 102 102; /* 5.7:1 on white, 5.3:1 on stone-100: the lightest allowed text colour */
-    --surface: 255 255 255;
+    --ink-muted: 102 102 102; /* 5.7:1 on white, 5.3:1 on the page, 4.9:1 on surface-muted: lightest allowed text */
+    /* Gallery off-white page; cards and panels sit on pure white. */
+    --surface: 247 247 245;
     --surface-raised: 255 255 255;
-    --surface-sunken: 244 244 245;
+    --surface-sunken: 239 239 236;
     /* Stand-ins for paper-200/300 panels and image placeholders (remapped in .dark). */
-    --surface-muted: 244 244 245;
+    --surface-muted: 239 239 236;
     --surface-strong: 228 228 231;
     --line: 229 229 231;
     --line-strong: 212 212 216;

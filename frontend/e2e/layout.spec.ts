@@ -58,9 +58,13 @@ test('the theme switch turns on dark mode and remembers it without a light flash
   noErrors();
 });
 
-test('department links in the header go to their category', async ({ page }) => {
+test('the Shop menu lists departments and opens their pages', async ({ page }) => {
   await page.goto('/');
-  await page.locator('[data-menu-trigger]').first().click();
+  await page.getByRole('button', { name: 'Shop', exact: true }).click();
+  const menu = page.getByRole('dialog', { name: 'Shop departments' });
+  await expect(menu).toBeVisible();
+  await menu.getByRole('navigation', { name: 'Departments' }).getByRole('link').first().click();
   await expect(page).toHaveURL(/\/shop\/[\w-]+$/);
+  await expect(menu).toBeHidden();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 });

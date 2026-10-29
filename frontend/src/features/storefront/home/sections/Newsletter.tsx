@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { ApiError } from '@/api/client';
 import { useSubscribe } from '@/api/hooks/cms';
-import { Illustration } from '@/components/brand/Illustrations';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 
@@ -52,9 +51,9 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
               autoComplete="email"
               aria-invalid={!!error}
               className={cn(
-                'h-12 min-w-0 flex-1 rounded-xs border px-4 text-sm focus:outline-none',
+                'h-12 min-w-0 flex-1 rounded-full border px-5 text-sm focus:outline-none',
                 dark
-                  ? 'border-paper-100/30 bg-transparent text-paper-50 placeholder:text-paper-200/70 focus:border-iris-300'
+                  ? 'border-white/25 bg-white/5 text-white placeholder:text-white/50 focus:border-white'
                   : 'border-line-strong bg-surface-raised focus:border-charcoal-800',
               )}
             />
@@ -63,7 +62,7 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
             </Button>
           </div>
           {error ? (
-            <p role="alert" className={cn('mt-2 text-sm', dark ? 'text-iris-200' : 'text-danger')}>
+            <p role="alert" className={cn('mt-2 text-sm', dark ? 'text-[#fca5a5]' : 'text-danger')}>
               {error}
             </p>
           ) : null}
@@ -75,14 +74,19 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
 
 export function NewsletterSection({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
   return (
-    <section className="grain relative overflow-hidden py-16 lg:py-24">
-      <div className="container-page relative z-[2] flex flex-col items-center text-center">
-        <Illustration name="letter" className="h-24 w-24" />
-        <p className="eyebrow mt-4">{eyebrow}</p>
-        <h2 className="mt-2 max-w-2xl text-display-lg">{title}</h2>
-        {subtitle ? <p className="mt-3 max-w-xl text-ink-soft">{subtitle}</p> : null}
-        <div className="mt-8 flex w-full justify-center">
-          <NewsletterForm source="homepage" />
+    <section className="container-page py-16 lg:py-24">
+      <div className="relative overflow-hidden rounded-[2rem] bg-[#0a0a0a] px-6 py-14 text-white md:px-14 md:py-20">
+        {/* A soft indigo glow: the one flourish in an otherwise monochrome page. */}
+        <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-40 h-[30rem] w-[30rem] rounded-full bg-[#4f46e5] opacity-30 blur-[120px]" />
+        <div className="relative grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <div>
+            {eyebrow ? <p className="text-sm text-white/60">{eyebrow}</p> : null}
+            <h2 className="mt-4 text-[clamp(2.25rem,1.2rem+4.4vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.05em] text-white">{title}</h2>
+          </div>
+          <div>
+            {subtitle ? <p className="mb-6 max-w-md text-white/70">{subtitle}</p> : null}
+            <NewsletterForm source="homepage" tone="dark" />
+          </div>
         </div>
       </div>
     </section>

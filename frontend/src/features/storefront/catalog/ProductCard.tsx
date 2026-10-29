@@ -24,7 +24,7 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
   const imageSizes = sizes ?? (view === 'list' ? '(min-width: 768px) 240px, 40vw' : '(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw');
 
   const media = (
-    <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-paper-200">
+    <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-surface-muted">
       {first ? (
         <ResponsiveImage
           src={first.url}
@@ -61,28 +61,42 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
     </div>
   );
 
-  const details = (
-    <div className={cn('min-w-0', view === 'grid' ? 'mt-4 space-y-1' : 'space-y-2')}>
-      {product.brand ? <p className="text-[0.8125rem] text-ink-muted">{product.brand}</p> : null}
-      <h3 className={cn('font-sans font-medium text-ink', view === 'grid' ? 'line-clamp-2 text-[0.9375rem]' : 'text-lg')}>
-        <Link to={href} className="after:absolute after:inset-0">
-          {product.name}
-        </Link>
-      </h3>
-      {view === 'list' && product.short_description ? (
-        <p className="line-clamp-2 max-w-prose text-sm text-ink-soft">{product.short_description}</p>
-      ) : null}
-      <Price price={product.price_paise} mrp={product.mrp_paise} maxPrice={product.max_price_paise} size="sm" />
-      <Rating value={product.rating_avg} count={product.rating_count} />
-      {product.swatches.length > 1 ? (
-        <ul className="flex items-center gap-1.5 pt-1" aria-label={`${product.swatches.length} colours`}>
-          {product.swatches.map((s) => (
-            <li key={s.slug} title={s.value} className="h-3 w-3 rounded-full ring-1 ring-line-strong ring-offset-1 ring-offset-surface" style={{ backgroundColor: s.hex }} />
-          ))}
-        </ul>
-      ) : null}
-    </div>
-  );
+  const details =
+    view === 'grid' ? (
+      <div className="mt-4 min-w-0">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="line-clamp-2 font-sans text-[0.9375rem] font-medium leading-snug text-ink">
+            <Link to={href} className="after:absolute after:inset-0">
+              {product.name}
+            </Link>
+          </h3>
+          <Price price={product.price_paise} mrp={product.mrp_paise} maxPrice={product.max_price_paise} size="sm" showDiscount={false} className="shrink-0 flex-col items-end gap-y-0 text-right" />
+        </div>
+        <p className="mt-1 flex items-center gap-2 text-[0.8125rem] text-ink-muted">
+          {product.brand ? <span className="truncate">{product.brand}</span> : null}
+          {product.rating_count ? <Rating value={product.rating_avg} count={product.rating_count} className="shrink-0" /> : null}
+        </p>
+        {product.swatches.length > 1 ? (
+          <ul className="mt-2 flex items-center gap-1.5" aria-label={`${product.swatches.length} colours`}>
+            {product.swatches.map((s) => (
+              <li key={s.slug} title={s.value} className="h-3 w-3 rounded-full ring-1 ring-line-strong ring-offset-1 ring-offset-surface" style={{ backgroundColor: s.hex }} />
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    ) : (
+      <div className="min-w-0 space-y-2">
+        {product.brand ? <p className="text-[0.8125rem] text-ink-muted">{product.brand}</p> : null}
+        <h3 className="font-sans text-lg font-medium text-ink">
+          <Link to={href} className="after:absolute after:inset-0">
+            {product.name}
+          </Link>
+        </h3>
+        {product.short_description ? <p className="line-clamp-2 max-w-prose text-sm text-ink-soft">{product.short_description}</p> : null}
+        <Price price={product.price_paise} mrp={product.mrp_paise} maxPrice={product.max_price_paise} size="sm" />
+        <Rating value={product.rating_avg} count={product.rating_count} />
+      </div>
+    );
 
   return (
     <motion.article

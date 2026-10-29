@@ -9,7 +9,7 @@ import { toSrcSet } from '@/lib/srcset';
 
 function BannerCard({ banner, large }: { banner: Banner; large?: boolean }) {
   return (
-    <Link to={banner.cta_url || '/shop'} className={cn('group relative block overflow-hidden rounded-sm bg-shade', large ? 'h-[26rem] md:h-[34rem]' : 'h-[22rem] md:h-[26rem]')}>
+    <Link to={banner.cta_url || '/shop'} className={cn('group relative block overflow-hidden rounded-md bg-shade', large ? 'h-[30rem] md:h-[40rem]' : 'h-[24rem] md:h-[30rem]')}>
       <picture className="absolute inset-[-12%_0] block" data-parallax>
         {banner.mobile_image ? <source media="(max-width: 767px)" srcSet={toSrcSet(banner.renditions?.mobile_image) ?? banner.mobile_image} sizes="100vw" /> : null}
         <img src={banner.image} srcSet={toSrcSet(banner.renditions?.image)} sizes={large ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-[1.03]" />
@@ -21,9 +21,9 @@ function BannerCard({ banner, large }: { banner: Banner; large?: boolean }) {
         </Badge>
       ) : null}
       <span className={cn('absolute inset-x-6 bottom-6 md:inset-x-10 md:bottom-10', large && 'max-w-xl')}>
-        {banner.eyebrow ? <span className="eyebrow block text-iris-200">{banner.eyebrow}</span> : null}
-        <span className={cn('mt-2 block font-display text-paper-50', large ? 'text-display-xl' : 'text-display-md')}>{banner.title}</span>
-        {banner.subtitle ? <span className="mt-3 block max-w-md text-paper-100">{banner.subtitle}</span> : null}
+        {banner.eyebrow ? <span className="block text-sm text-white/75">{banner.eyebrow}</span> : null}
+        <span className={cn('mt-3 block font-semibold tracking-[-0.045em] text-white', large ? 'text-[clamp(2.25rem,1.2rem+4vw,5rem)] leading-[0.95]' : 'text-display-lg')}>{banner.title}</span>
+        {banner.subtitle ? <span className="mt-3 block max-w-md text-white/80">{banner.subtitle}</span> : null}
         {banner.cta_label ? <span className={cn(buttonClasses({ variant: 'inverse', size: 'md' }), 'mt-6')}>{banner.cta_label}</span> : null}
       </span>
     </Link>
@@ -40,10 +40,10 @@ export function PromoBanners({ banners }: { banners: Banner[] }) {
   }, [banners.length]);
   const [first, ...rest] = banners;
   return (
-    <section ref={ref} className="container-page space-y-5 py-12 lg:py-16" aria-label="Featured stories">
+    <section ref={ref} className="container-page space-y-4 py-16 lg:py-24" aria-label="Featured stories">
       <BannerCard banner={first} large />
       {rest.length ? (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           {rest.map((b) => (
             <BannerCard key={b.id} banner={b} />
           ))}

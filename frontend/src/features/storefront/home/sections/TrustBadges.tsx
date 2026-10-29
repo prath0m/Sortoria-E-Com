@@ -1,27 +1,41 @@
-import { Award, Gift, Leaf, MessageCircle, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
-import { Reveal } from '@/components/motion/Reveal';
+import { Fragment } from 'react';
+import { usePrefersReducedMotion } from '@/lib/hooks';
 
-const ICONS = { truck: Truck, return: RotateCcw, shield: ShieldCheck, chat: MessageCircle, gift: Gift, leaf: Leaf, award: Award };
+type Badge = { icon: string; title: string; text: string };
 
-export function TrustBadges({ badges }: { badges: { icon: string; title: string; text: string }[] }) {
+function Run({ badges, hidden }: { badges: Badge[]; hidden?: boolean }) {
   return (
-    <section aria-label="Why shop with us" className="border-b border-line bg-paper-50">
-      <ul className="container-page grid grid-cols-2 gap-x-6 gap-y-8 py-10 lg:grid-cols-4">
-        {badges.map((b, i) => {
-          const Icon = ICONS[b.icon as keyof typeof ICONS] ?? Award;
-          return (
-            <Reveal as="li" key={b.title} delay={i * 0.08} className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-iris-400/60 text-charcoal-800">
-                <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold text-ink">{b.title}</span>
-                {b.text ? <span className="mt-0.5 block text-[0.8125rem] leading-snug text-ink-muted">{b.text}</span> : null}
-              </span>
-            </Reveal>
-          );
-        })}
-      </ul>
+    <ul className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>
+      {badges.map((b) => (
+        <Fragment key={b.title}>
+          <li className="flex items-baseline gap-3 whitespace-nowrap px-8">
+            <span className="text-[clamp(1.25rem,1rem+1vw,1.75rem)] font-semibold tracking-tight text-ink">{b.title}</span>
+            {b.text ? <span className="text-sm text-ink-muted">{b.text}</span> : null}
+          </li>
+          <li aria-hidden="true" className="text-ink-muted">
+            ✳
+          </li>
+        </Fragment>
+      ))}
+    </ul>
+  );
+}
+
+/** The store's promises as a slow ticker; a plain wrapped list for reduced motion. */
+export function TrustBadges({ badges }: { badges: Badge[] }) {
+  const reduce = usePrefersReducedMotion();
+  return (
+    <section aria-label="Why shop with us" className="overflow-hidden border-y border-line py-6">
+      {reduce ? (
+        <div className="container-page flex flex-wrap justify-center">
+          <Run badges={badges} />
+        </div>
+      ) : (
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+          <Run badges={badges} />
+          <Run badges={badges} hidden />
+        </div>
+      )}
     </section>
   );
 }

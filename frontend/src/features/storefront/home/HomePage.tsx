@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useHome } from '@/api/hooks/cms';
 import type { HomeSectionData } from '@/api/types';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -17,6 +16,7 @@ import { PromoBanners } from './sections/PromoBanners';
 import { SectionHeading } from './sections/SectionHeading';
 import { Testimonials } from './sections/Testimonials';
 import { TrustBadges } from './sections/TrustBadges';
+import { SectionIndexContext } from './sectionIndex';
 
 function Section({ section }: { section: HomeSectionData }) {
   const cta = section.cta_label ? { label: section.cta_label, url: section.cta_url } : undefined;
@@ -36,13 +36,7 @@ function Section({ section }: { section: HomeSectionData }) {
           eyebrow={section.eyebrow}
           title={section.title}
           products={section.data}
-          action={
-            cta ? (
-              <Link to={cta.url} className="hidden text-xs font-semibold text-charcoal-800 link-underline sm:inline">
-                {cta.label}
-              </Link>
-            ) : undefined
-          }
+          cta={cta}
         />
       );
     case 'flash_sale':
@@ -82,6 +76,13 @@ function Section({ section }: { section: HomeSectionData }) {
   }
 }
 
+/** Sections that show a heading get a running number, "(01)", "(02)"…, in admin order. */
+const UNNUMBERED = new Set(['hero', 'trust_badges', 'counters', 'promo_banners', 'daily_deals']);
+function numbered(sections: HomeSectionData[]) {
+  let n = 0;
+  return sections.map((section) => ({ section, index: !UNNUMBERED.has(section.type) && section.title ? ++n : null }));
+}
+
 export default function HomePage() {
   const { data: sections, isLoading } = useHome();
   const { data: store } = useStoreSettings();
@@ -105,7 +106,11 @@ export default function HomePage() {
           <Skeleton className="h-[78svh] w-full rounded-none md:h-[88vh]" />
         </div>
       ) : (
-        sections.map((section) => <Section key={section.id} section={section} />)
+        numbered(sections).map(({ section, index }) => (
+          <SectionIndexContext.Provider key={section.id} value={index}>
+            <Section section={section} />
+          </SectionIndexContext.Provider>
+        ))
       )}
     </>
   );

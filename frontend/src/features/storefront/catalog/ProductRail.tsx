@@ -1,8 +1,8 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRef, type ReactNode } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRef } from 'react';
 import type { ProductCard as Product } from '@/api/types';
-import { Reveal } from '@/components/motion/Reveal';
 import { ProductCardSkeleton } from '@/components/ui/Skeleton';
+import { SectionHeading } from '../home/sections/SectionHeading';
 import { ProductCard } from './ProductCard';
 
 interface ProductRailProps {
@@ -10,11 +10,11 @@ interface ProductRailProps {
   eyebrow?: string;
   products?: Product[];
   loading?: boolean;
-  action?: ReactNode;
+  cta?: { label: string; url: string };
 }
 
 /** Horizontal, scroll-snapping product row with arrow controls (no carousel library needed). */
-export function ProductRail({ title, eyebrow, products, loading, action }: ProductRailProps) {
+export function ProductRail({ title, eyebrow, products, loading, cta }: ProductRailProps) {
   const track = useRef<HTMLUListElement>(null);
   const scroll = (dir: 1 | -1) => {
     const node = track.current;
@@ -22,25 +22,23 @@ export function ProductRail({ title, eyebrow, products, loading, action }: Produ
   };
   if (!loading && !products?.length) return null;
   return (
-    <section className="py-12 lg:py-16" aria-label={title}>
+    <section className="py-16 lg:py-24" aria-label={title}>
       <div className="container-page">
-        <Reveal className="mb-8 flex items-end justify-between gap-6">
-          <div>
-            {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
-            <h2 className="text-display-lg">{title}</h2>
-          </div>
-          <div className="flex items-center gap-4">
-            {action}
+        <SectionHeading
+          eyebrow={eyebrow}
+          title={title}
+          cta={cta}
+          action={
             <div className="hidden gap-2 md:flex">
-              <button type="button" onClick={() => scroll(-1)} aria-label="Scroll back" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-charcoal-800 hover:text-charcoal-800">
-                <ChevronLeft className="h-5 w-5" />
+              <button type="button" onClick={() => scroll(-1)} aria-label="Scroll back" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink hover:bg-ink hover:text-surface">
+                <ArrowLeft className="h-4 w-4" />
               </button>
-              <button type="button" onClick={() => scroll(1)} aria-label="Scroll forward" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-charcoal-800 hover:text-charcoal-800">
-                <ChevronRight className="h-5 w-5" />
+              <button type="button" onClick={() => scroll(1)} aria-label="Scroll forward" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink hover:bg-ink hover:text-surface">
+                <ArrowRight className="h-4 w-4" />
               </button>
             </div>
-          </div>
-        </Reveal>
+          }
+        />
         <ul
           ref={track}
           data-lenis-prevent-horizontal
@@ -48,13 +46,13 @@ export function ProductRail({ title, eyebrow, products, loading, action }: Produ
         >
           {loading
             ? Array.from({ length: 5 }, (_, i) => (
-                <li key={i} className="w-[46%] shrink-0 snap-start sm:w-[31%] lg:w-[23%]">
+                <li key={i} className="w-[72%] shrink-0 snap-start sm:w-[40%] lg:w-[28%]">
                   <ProductCardSkeleton />
                 </li>
               ))
             : products!.map((p) => (
-                <li key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[31%] lg:w-[23%]">
-                  <ProductCard product={p} sizes="(min-width: 1024px) 23vw, (min-width: 640px) 31vw, 46vw" />
+                <li key={p.id} className="w-[72%] shrink-0 snap-start sm:w-[40%] lg:w-[28%]">
+                  <ProductCard product={p} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 40vw, 72vw" />
                 </li>
               ))}
         </ul>

@@ -46,7 +46,7 @@ export default function CategoryPage() {
           <Skeleton className="h-56 w-full md:h-80" />
         </div>
       ) : banner && isDepartment ? (
-        <section className="relative isolate overflow-hidden">
+        <section className="relative isolate mx-3 overflow-hidden rounded-[1.75rem] sm:mx-4">
           <picture>
             {category.banner_mobile_image ? (
               <source media="(max-width: 767px)" srcSet={toSrcSet(category.renditions?.banner_mobile_image) ?? category.banner_mobile_image} sizes="100vw" />

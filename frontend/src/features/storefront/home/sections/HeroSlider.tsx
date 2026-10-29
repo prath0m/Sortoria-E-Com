@@ -73,7 +73,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       aria-label="Featured collections"
       // Dark-text slides sit on a light scrim: keep their light colours (text, controls) in dark mode.
       data-light-surface={light ? undefined : ''}
-      className="grain relative isolate h-[78svh] min-h-[32rem] overflow-hidden bg-shade md:h-[88vh] md:max-h-[56rem]"
+      className="relative isolate h-[100svh] min-h-[38rem] overflow-hidden bg-shade"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onFocus={() => setHovering(true)}
@@ -114,39 +114,45 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             className={cn(
               'absolute inset-0',
               // Mobile text spans the width, so the scrim runs bottom-up there and left-right on larger screens.
+              // Text sits at the bottom, so the scrim rises from there; a light veil at the top keeps the nav legible.
               light
-                ? 'bg-gradient-to-t from-shade/85 via-shade/50 to-shade/20 md:bg-gradient-to-r md:from-shade/75 md:via-shade/35 md:to-transparent'
-                : 'bg-gradient-to-t from-paper-50/95 via-paper-50/75 to-paper-50/30 md:bg-gradient-to-r md:from-paper-50/90 md:via-paper-50/50 md:to-transparent',
+                ? 'bg-gradient-to-t from-shade/85 via-shade/35 to-shade/15'
+                : 'bg-gradient-to-t from-paper-50/95 via-paper-50/55 to-paper-50/20',
             )}
           />
         </motion.div>
       </AnimatePresence>
 
-      <div className="container-page relative z-[2] flex h-full items-center">
+      <div className="container-page relative z-[2] flex h-full items-end pb-28 md:pb-32">
         <div
           key={slide.id}
           ref={textRef}
           className={cn(
-            'max-w-2xl',
+            'max-w-6xl',
             slide.text_align === 'center' && 'mx-auto text-center',
             slide.text_align === 'right' && 'ml-auto text-right',
           )}
           aria-live={running ? 'off' : 'polite'}
         >
           {slide.eyebrow ? (
-            <p data-eyebrow className={cn('eyebrow', light ? 'text-iris-200' : 'text-charcoal-700')}>
+            <p data-eyebrow className={cn('text-sm font-medium', light ? 'text-white/75' : 'text-ink-soft')}>
               {slide.eyebrow}
             </p>
           ) : null}
-          <h1 className={cn('mt-4 text-display-2xl', light ? 'text-paper-50' : 'text-charcoal-900')}>
+          <h1
+            className={cn(
+              'mt-4 text-balance text-[clamp(3rem,1.6rem+7vw,9.5rem)] font-semibold leading-[0.9] tracking-[-0.055em]',
+              light ? 'text-white' : 'text-ink',
+            )}
+          >
             <Words text={slide.headline} />
           </h1>
           {slide.subtext ? (
-            <p data-sub className={cn('mt-6 max-w-xl text-lg', light ? 'text-paper-100' : 'text-ink-soft')}>
+            <p data-sub className={cn('mt-6 max-w-md text-base md:text-lg', light ? 'text-white/80' : 'text-ink-soft', slide.text_align === 'center' && 'mx-auto')}>
               {slide.subtext}
             </p>
           ) : null}
-          <div className={cn('mt-10 flex flex-wrap gap-3', slide.text_align === 'center' && 'justify-center')}>
+          <div className={cn('mt-8 flex flex-wrap gap-3', slide.text_align === 'center' && 'justify-center')}>
             {slide.cta_label ? (
               <Link data-cta to={slide.cta_url} className={buttonClasses({ size: 'lg', variant: light ? 'inverse' : 'primary' })}>
                 {slide.cta_label}
@@ -158,7 +164,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                 to={slide.secondary_cta_url}
                 className={cn(
                   buttonClasses({ size: 'lg', variant: 'secondary' }),
-                  light && 'border-paper-100 text-paper-50 hover:bg-paper-50 hover:text-charcoal-900',
+                  light && 'border-white/40 bg-white/10 text-white backdrop-blur hover:border-white hover:bg-white hover:text-[#0a0a0a]',
                 )}
               >
                 {slide.secondary_cta_label}
@@ -169,7 +175,10 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       </div>
 
       {count > 1 ? (
-        <div className="container-page absolute inset-x-0 bottom-6 z-[3] flex items-center gap-4 md:bottom-10">
+        <div className="container-page absolute inset-x-0 bottom-6 z-[3] flex items-center gap-5 md:bottom-10">
+          <p className={cn('text-sm tabular-nums', light ? 'text-white/80' : 'text-ink-soft')} aria-hidden="true">
+            {String(index + 1).padStart(2, '0')} <span className="opacity-50">/ {String(count).padStart(2, '0')}</span>
+          </p>
           <div className="flex flex-1 gap-2" role="group" aria-label="Choose slide">
             {slides.map((s, i) => (
               <button
@@ -184,7 +193,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                   {i === index ? (
                     <motion.span
                       key={`${index}-${running}`}
-                      className="block h-full origin-left bg-iris-300"
+                      className={cn('block h-full origin-left', light ? 'bg-white' : 'bg-ink')}
                       initial={{ scaleX: running ? 0 : 1 }}
                       animate={{ scaleX: 1 }}
                       transition={{ duration: running ? INTERVAL / 1000 : 0, ease: 'linear' }}

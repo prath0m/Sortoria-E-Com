@@ -11,8 +11,9 @@ import { QuickView } from '@/features/storefront/catalog/QuickView';
 import { AnnouncementBar } from './AnnouncementBar';
 import { Footer } from './Footer';
 import { Header } from './Header';
-import { MobileNav } from './MobileNav';
 import { SearchOverlay } from './SearchOverlay';
+import { ShopMenu } from './ShopMenu';
+import { cn } from '@/lib/cn';
 
 export function StorefrontLayout() {
   const location = useLocation();
@@ -29,7 +30,8 @@ export function StorefrontLayout() {
       </a>
       <AnnouncementBar />
       <Header />
-      <main id="main" tabIndex={-1} className="min-h-[100svh] outline-none">
+      {/* The homepage hero runs under the floating header; other pages clear it. */}
+      <main id="main" tabIndex={-1} className={cn('min-h-[100svh] outline-none', location.pathname !== '/' && 'pt-[4.75rem]')}>
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
             <Suspense fallback={<PageLoader />}>
@@ -39,7 +41,7 @@ export function StorefrontLayout() {
         </AnimatePresence>
       </main>
       <Footer />
-      <MobileNav />
+      <ShopMenu />
       <SearchOverlay />
       <QuickView />
       <MiniCartDrawer />

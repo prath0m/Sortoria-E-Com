@@ -36,12 +36,11 @@ export function Footer() {
   ].filter((s) => s.href);
 
   return (
-    <footer className="mt-24 bg-[#0a0a0a] text-white">
+    <footer className="mt-24 rounded-t-[2rem] bg-[#0a0a0a] text-white">
       <div className="container-page relative z-[2] py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-sm">
-            <Logo src={store?.logo} label={name} tone="light" className="h-6" />
-            {store?.footer_blurb ? <p className="mt-6 text-sm leading-relaxed text-white/65">{store.footer_blurb}</p> : null}
+                        {store?.footer_blurb ? <p className="mt-6 text-sm leading-relaxed text-white/65">{store.footer_blurb}</p> : null}
             <div className="mt-8">
               <p className="mb-3 text-sm font-semibold text-white">The {name} letter</p>
               <NewsletterForm source="footer" tone="dark" compact />
@@ -55,7 +54,7 @@ export function Footer() {
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label={`${name} on ${label}`}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper-100/25 text-paper-100 transition-colors hover:border-white hover:text-white"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:border-white hover:text-white"
                     >
                       <Icon className="h-4 w-4" />
                     </a>
@@ -97,7 +96,9 @@ export function Footer() {
             </FooterColumn>
           </div>
         </div>
-        <div className="mt-14 flex flex-col gap-3 border-t border-paper-100/15 pt-6 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
+        {/* The wordmark set edge to edge: the page signs off. */}
+        <Logo src={store?.logo} label={name} tone="light" className="mt-16 h-auto w-full lg:mt-24" />
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/15 pt-6 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {name}. All prices include GST.
           </p>

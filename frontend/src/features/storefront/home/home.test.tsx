@@ -35,7 +35,8 @@ describe('homepage', () => {
     expect(headline).toHaveTextContent('Rooms that feel like you');
     const order = [
       headline,
-      screen.getByText('Complimentary shipping'),
+      // The ticker repeats its run for a seamless loop; the first copy is the readable one.
+      screen.getAllByText('Complimentary shipping')[0],
       screen.getByRole('heading', { level: 2, name: 'Considered news' }),
     ];
     for (let i = 1; i < order.length; i++) {
