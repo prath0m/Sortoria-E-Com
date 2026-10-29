@@ -95,7 +95,7 @@ export default function InventoryPage() {
       sortKey: 'product__name',
       cell: (r) => (
         <div className="min-w-0">
-          <Link to={`/admin-panel/products/${r.product_id}`} className="font-medium text-ink hover:text-accent">{r.product}</Link>
+          <Link to={`/admin/products/${r.product_id}`} className="font-medium text-ink hover:text-accent">{r.product}</Link>
           <p className="text-xs text-ink-muted">{r.label || 'Single variant'}</p>
         </div>
       ),
@@ -128,7 +128,7 @@ export default function InventoryPage() {
       header: '',
       align: 'right',
       cell: (r) => (
-        <button type="button" onClick={() => setHistory(r)} aria-label={`Stock history for ${r.sku}`} className="text-ink-muted hover:text-ink">
+        <button type="button" onClick={() => setHistory(r)} aria-label={`Stock history for ${r.sku}`} className="-m-2 inline-flex p-2 text-ink-muted hover:text-ink">
           <History className="h-4 w-4" />
         </button>
       ),

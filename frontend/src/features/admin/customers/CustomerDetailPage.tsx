@@ -74,7 +74,7 @@ export default function CustomerDetailPage() {
       <PageHeader
         title={c.full_name || c.email}
         eyebrow="Customer"
-        back={{ to: '/admin-panel/customers', label: 'All customers' }}
+        back={{ to: '/admin/customers', label: 'All customers' }}
         actions={
           canManage ? (
             <Button size="sm" variant={c.is_active ? 'ghost' : 'secondary'} className={c.is_active ? 'text-danger' : undefined} onClick={() => setConfirm(true)}>
@@ -102,7 +102,7 @@ export default function CustomerDetailPage() {
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0">
           <h2 className="mb-3 font-sans text-sm font-semibold text-ink">Order history</h2>
-          <DataTable rows={c.orders} columns={columns} rowKey={(o) => o.number} onRowClick={(o) => navigate(`/admin-panel/orders/${o.number}`)} emptyTitle="No orders yet" emptyText="This customer hasn't placed an order." />
+          <DataTable rows={c.orders} columns={columns} rowKey={(o) => o.number} onRowClick={(o) => navigate(`/admin/orders/${o.number}`)} emptyTitle="No orders yet" emptyText="This customer hasn't placed an order." />
         </div>
         <Section title="Saved addresses">
           {c.addresses.length === 0 ? <p className="text-sm text-ink-muted">None saved.</p> : null}
@@ -118,7 +118,7 @@ export default function CustomerDetailPage() {
             </address>
           ))}
           <p className="text-xs text-ink-muted">
-            Last signed in {c.last_login ? dateTime(c.last_login) : 'never'}. <Link to={`/admin-panel/orders?search=${encodeURIComponent(c.email)}`} className="text-accent hover:underline">Find guest orders by email</Link>
+            Last signed in {c.last_login ? dateTime(c.last_login) : 'never'}. <Link to={`/admin/orders?search=${encodeURIComponent(c.email)}`} className="text-accent hover:underline">Find guest orders by email</Link>
           </p>
         </Section>
       </div>

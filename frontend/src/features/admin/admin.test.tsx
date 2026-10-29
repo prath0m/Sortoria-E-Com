@@ -44,12 +44,12 @@ describe('admin', () => {
     act(() => useAuth.setState({ status: 'anonymous', user: null }));
     renderWithProviders(
       <Routes>
-        <Route path="/admin-panel/orders" element={<RequireStaff><p>Orders</p></RequireStaff>} />
-        <Route path="/admin-panel/login" element={<Where />} />
+        <Route path="/admin/orders" element={<RequireStaff><p>Orders</p></RequireStaff>} />
+        <Route path="/admin/login" element={<Where />} />
       </Routes>,
-      { route: '/admin-panel/orders', path: '*' },
+      { route: '/admin/orders', path: '*' },
     );
-    expect(await screen.findByText('At /admin-panel/login?next=%2Fadmin-panel%2Forders')).toBeInTheDocument();
+    expect(await screen.findByText('At /admin/login?next=%2Fadmin%2Forders')).toBeInTheDocument();
   });
 
   it('turns customers away without showing admin data', async () => {
@@ -69,7 +69,7 @@ describe('admin', () => {
         return HttpResponse.json(dashboard);
       }),
     );
-    renderWithProviders(<DashboardPage />, { route: '/admin-panel' });
+    renderWithProviders(<DashboardPage />, { route: '/admin' });
     const revenue = (await screen.findByText('Revenue', { selector: 'p' })).parentElement!;
     expect(within(revenue).getByText('₹12,345')).toBeInTheDocument();
     expect(within(revenue).getByText(/\+12\.5%/)).toBeInTheDocument();

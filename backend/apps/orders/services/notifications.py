@@ -63,7 +63,7 @@ def order_placed(order_id: int) -> None:
     AdminNotification.objects.create(
         kind=AdminNotification.Kind.NEW_ORDER,
         title=f"New order {order.number} · {rupees(order.grand_total_paise)}",
-        link=f"/admin-panel/orders/{order.number}",
+        link=f"/admin/orders/{order.number}",
         payload={"order": order.number, "total_paise": order.grand_total_paise},
     )
     _clear_ordered_lines(order)
@@ -98,5 +98,5 @@ def notify_status_change(order_id: int, status: str) -> None:
         AdminNotification.objects.create(
             kind=AdminNotification.Kind.PAYMENT_FAILED,
             title=f"Payment failed for {order.number}",
-            link=f"/admin-panel/orders/{order.number}",
+            link=f"/admin/orders/{order.number}",
         )

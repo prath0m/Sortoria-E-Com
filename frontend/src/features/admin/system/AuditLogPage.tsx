@@ -81,8 +81,8 @@ export default function AuditLogPage() {
         <FilterSelect label="Anyone" value={state.actor ?? ''} onChange={(v) => set({ actor: v })} options={(facets?.actors ?? []).map((a) => ({ value: String(a.id), label: a.email }))} />
         <FilterSelect label="Any action" value={state.action ?? ''} onChange={(v) => set({ action: v })} options={facets?.actions ?? []} />
         <FilterSelect label="Any record" value={state.object_type ?? ''} onChange={(v) => set({ object_type: v })} options={(facets?.object_types ?? []).map((t) => ({ value: t, label: pretty(t) }))} />
-        <label className="flex items-center gap-1.5 text-xs text-ink-muted">From<input type="date" value={state.date_from ?? ''} onChange={(e) => set({ date_from: e.target.value })} className="h-10 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink" /></label>
-        <label className="flex items-center gap-1.5 text-xs text-ink-muted">To<input type="date" value={state.date_to ?? ''} onChange={(e) => set({ date_to: e.target.value })} className="h-10 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink" /></label>
+        <label className="flex min-w-0 items-center gap-1.5 text-xs text-ink-muted">From<input type="date" value={state.date_from ?? ''} onChange={(e) => set({ date_from: e.target.value })} className="h-10 min-w-0 flex-1 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink sm:flex-none" /></label>
+        <label className="flex min-w-0 items-center gap-1.5 text-xs text-ink-muted">To<input type="date" value={state.date_to ?? ''} onChange={(e) => set({ date_to: e.target.value })} className="h-10 min-w-0 flex-1 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink sm:flex-none" /></label>
       </Toolbar>
       {isError ? (
         <ErrorState onRetry={() => refetch()} />

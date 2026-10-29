@@ -84,7 +84,7 @@ def notify_low_stock() -> int:
         AdminNotification.objects.create(
             kind=AdminNotification.Kind.LOW_STOCK,
             title=f"Low stock: {variant.product.name} ({variant.sku}) has {variant.stock} left",
-            link=f"/admin-panel/inventory?search={variant.sku}",
+            link=f"/admin/inventory?search={variant.sku}",
             payload={"variant_id": variant.pk, "stock": variant.stock},
             dedupe_key=key,
         )

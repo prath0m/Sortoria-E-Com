@@ -43,7 +43,7 @@ export default function SalesPage() {
       <PageHeader
         title={kind === 'flash' ? 'Flash sales' : 'Daily deals'}
         eyebrow="Offers"
-        actions={<ButtonLink to={`/admin-panel/offers/sales/new?kind=${kind}`} icon={<Plus className="h-4 w-4" />}>{kind === 'flash' ? 'New flash sale' : 'New daily deal'}</ButtonLink>}
+        actions={<ButtonLink to={`/admin/offers/sales/new?kind=${kind}`} icon={<Plus className="h-4 w-4" />}>{kind === 'flash' ? 'New flash sale' : 'New daily deal'}</ButtonLink>}
       >
         <p className="mt-1 max-w-2xl text-sm text-ink-muted">Prices drop automatically when a sale starts and return when it ends. Drag to set the order on the offers page.</p>
       </PageHeader>
@@ -75,7 +75,7 @@ export default function SalesPage() {
           onReorder={reorder}
           label={(s) => s.title}
           render={(s) => (
-            <button type="button" onClick={() => navigate(`/admin-panel/offers/sales/${s.id}`)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+            <button type="button" onClick={() => navigate(`/admin/offers/sales/${s.id}`)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
               <span className="h-12 w-20 shrink-0 overflow-hidden rounded-xs bg-ink/5">{s.banner_image ? <img src={s.banner_image} alt="" className="h-full w-full object-cover" /> : null}</span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium text-ink hover:text-accent">{s.title}</span>

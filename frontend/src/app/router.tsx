@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { PageLoader } from '@/components/ui/PageLoader';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom';
 import { StorefrontLayout } from '@/features/storefront/layout/StorefrontLayout';
 import { RequireCapability } from '@/features/admin/layout/RequireCapability';
 import { ErrorPage } from '@/features/storefront/pages/ErrorPage';
@@ -67,9 +67,16 @@ const OverviewPage = lazy(() => import('@/features/storefront/account/OverviewPa
 const ProfilePage = lazy(() => import('@/features/storefront/account/ProfilePage'));
 const AddressesPage = lazy(() => import('@/features/storefront/account/AddressesPage'));
 
+/** Old bookmarks: /admin-panel/... moved to /admin/... */
+function LegacyAdminRedirect() {
+  const { pathname, search } = useLocation();
+  return <Navigate to={`${pathname.replace(/^\/admin-panel/, '/admin')}${search}`} replace />;
+}
+
 export const router = createBrowserRouter([
+  { path: 'admin-panel/*', element: <LegacyAdminRedirect /> },
   {
-    path: 'admin-panel',
+    path: 'admin',
     errorElement: <ErrorPage />,
     children: [
       { path: 'login', element: <Suspense fallback={<PageLoader />}><AdminLogin /></Suspense> },

@@ -54,9 +54,10 @@ test('staff sign in and move an order along', async ({ page }) => {
   const noErrors = watchErrors(page);
   await adminLogin(page);
   await expect(page.getByRole('heading', { name: /Good to see you/ })).toBeVisible();
-  await page.goto('/admin-panel/orders?status=placed');
-  await page.locator('tbody tr').first().click();
-  await page.waitForURL(/\/admin-panel\/orders\/SRT-/);
+  await page.goto('/admin/orders?status=placed');
+  // Table rows on desktop, cards on phones: the order number link exists in both.
+  await page.locator('a[href^="/admin/orders/SRT-"]').first().click();
+  await page.waitForURL(/\/admin\/orders\/SRT-/);
   await page.getByRole('button', { name: 'Mark confirmed' }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Confirm' }).click();
   await expect(page.getByRole('button', { name: 'Mark packed' })).toBeVisible();
@@ -64,8 +65,8 @@ test('staff sign in and move an order along', async ({ page }) => {
 });
 
 test('customers are kept out of the admin', async ({ page }) => {
-  await page.goto('/admin-panel/orders');
-  await page.waitForURL(/\/admin-panel\/login\?next=/);
+  await page.goto('/admin/orders');
+  await page.waitForURL(/\/admin\/login\?next=/);
   const api = await page.request.get('/api/v1/admin/orders/');
   expect(api.status()).toBe(401);
 });

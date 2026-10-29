@@ -56,7 +56,7 @@ export default function SaleEditPage() {
       const saved = await saveWithFiles<Sale & { id: number }>('sales', draft.id, body, { banner_image: banner });
       qc.invalidateQueries({ queryKey: ['admin', 'sales'] });
       toast.success('Sale saved');
-      if (isNew) navigate(`/admin-panel/offers/sales/${saved.id}`, { replace: true });
+      if (isNew) navigate(`/admin/offers/sales/${saved.id}`, { replace: true });
       else {
         setBanner(null);
         refetch();
@@ -75,7 +75,7 @@ export default function SaleEditPage() {
     await adminApi.remove('sales', draft.id!);
     qc.invalidateQueries({ queryKey: ['admin', 'sales'] });
     toast.success('Sale deleted; prices are back to normal.');
-    navigate(`/admin-panel/offers/sales?kind=${draft.kind}`);
+    navigate(`/admin/offers/sales?kind=${draft.kind}`);
   };
 
   const itemErrors = errors.items ? flattenErrors(errors.items, 'Product').join(' · ') : '';
@@ -85,7 +85,7 @@ export default function SaleEditPage() {
       <PageHeader
         title={isNew ? (draft.kind === 'flash' ? 'New flash sale' : 'New daily deal') : draft.title}
         eyebrow={draft.kind === 'flash' ? 'Flash sale' : 'Daily deal'}
-        back={{ to: `/admin-panel/offers/sales?kind=${draft.kind}`, label: draft.kind === 'flash' ? 'Flash sales' : 'Daily deals' }}
+        back={{ to: `/admin/offers/sales?kind=${draft.kind}`, label: draft.kind === 'flash' ? 'Flash sales' : 'Daily deals' }}
         actions={
           <>
             {!isNew ? <Button size="sm" variant="ghost" className="text-danger" onClick={() => setConfirmDelete(true)}>Delete</Button> : null}

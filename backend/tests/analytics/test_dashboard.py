@@ -96,7 +96,7 @@ def test_beacon_records_visits_and_product_views(api):
     payload = {"session_id": "abcd1234-ef", "path": "/products/x", "product_id": product.pk}
     assert api.post("/api/v1/analytics/events/", payload, format="json").status_code == 204
     api.post("/api/v1/analytics/events/", {"session_id": "bad id!", "path": "/"}, format="json")
-    api.post("/api/v1/analytics/events/", {"session_id": "abcd1234-ef", "path": "/admin-panel"}, format="json")
+    api.post("/api/v1/analytics/events/", {"session_id": "abcd1234-ef", "path": "/admin"}, format="json")
     assert PageVisit.objects.count() == 1
     assert ProductView.objects.get(product=product).views == 1
 

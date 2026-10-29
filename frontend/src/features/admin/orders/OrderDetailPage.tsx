@@ -184,7 +184,7 @@ export default function OrderDetailPage() {
       <PageHeader
         title={order.number}
         eyebrow="Order"
-        back={{ to: '/admin-panel/orders', label: 'All orders' }}
+        back={{ to: '/admin/orders', label: 'All orders' }}
         actions={
           <>
             {order.has_invoice ? (
@@ -292,7 +292,7 @@ export default function OrderDetailPage() {
                 {order.customer_id ? `${order.customer_order_count} successful ${order.customer_order_count === 1 ? 'order' : 'orders'}` : 'Guest checkout'}
               </p>
               {order.customer_id && canSeeCustomers ? (
-                <Link to={`/admin-panel/customers/${order.customer_id}`} className="mt-2 inline-block text-xs font-semibold text-accent hover:underline">
+                <Link to={`/admin/customers/${order.customer_id}`} className="mt-2 inline-block text-xs font-semibold text-accent hover:underline">
                   View customer
                 </Link>
               ) : null}
@@ -323,7 +323,7 @@ export default function OrderDetailPage() {
               <ul className="space-y-2">
                 {order.returns.map((r) => (
                   <li key={r.number} className="flex items-center justify-between text-sm">
-                    <Link to={`/admin-panel/returns/${r.number}`} className="font-medium text-ink hover:text-accent">{r.number}</Link>
+                    <Link to={`/admin/returns/${r.number}`} className="font-medium text-ink hover:text-accent">{r.number}</Link>
                     <StatusBadge status={r.status} label={r.status_label} />
                   </li>
                 ))}

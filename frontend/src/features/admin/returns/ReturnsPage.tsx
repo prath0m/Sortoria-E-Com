@@ -49,7 +49,7 @@ export default function ReturnsPage() {
       sortKey: 'created_at',
       cell: (r) => (
         <div>
-          <Link to={`/admin-panel/returns/${r.number}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">{r.number}</Link>
+          <Link to={`/admin/returns/${r.number}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">{r.number}</Link>
           <p className="whitespace-nowrap text-xs text-ink-muted">{dateTime(r.created_at)}</p>
         </div>
       ),
@@ -114,7 +114,7 @@ export default function ReturnsPage() {
         totalPages={data?.total_pages}
         count={data?.count}
         onPage={(p) => set({ page: String(p) })}
-        onRowClick={(r) => navigate(`/admin-panel/returns/${r.number}`)}
+        onRowClick={(r) => navigate(`/admin/returns/${r.number}`)}
         emptyTitle="No returns here"
         emptyText="Return requests matching these filters will appear here."
       />

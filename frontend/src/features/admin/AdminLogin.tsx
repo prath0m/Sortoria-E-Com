@@ -17,7 +17,7 @@ const schema = z.object({ email: z.string().email('Enter your work email.'), pas
 
 export default function AdminLogin() {
   const [params] = useSearchParams();
-  const next = params.get('next')?.startsWith('/admin-panel') ? params.get('next')! : '/admin-panel';
+  const next = params.get('next')?.startsWith('/admin') ? params.get('next')! : '/admin';
   const { status, user } = useAuth();
   const { data: store } = useStoreSettings();
   const login = useLogin();

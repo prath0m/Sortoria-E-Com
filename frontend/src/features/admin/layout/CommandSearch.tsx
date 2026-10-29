@@ -22,9 +22,9 @@ export function CommandSearch({ open, onClose }: { open: boolean; onClose: () =>
   const hits: Hit[] = useMemo(() => {
     if (!data || debounced.trim().length < 2) return [];
     return [
-      ...data.orders.map((o) => ({ key: `o${o.number}`, label: o.number, detail: `${o.email} · ${o.status} · ${formatMoney(o.total)}`, href: `/admin-panel/orders/${o.number}`, icon: ShoppingBag, group: 'Orders' })),
-      ...data.products.map((p) => ({ key: `p${p.id}`, label: p.name, detail: 'Product', href: `/admin-panel/products/${p.id}`, icon: Package, group: 'Products' })),
-      ...data.customers.map((c) => ({ key: `c${c.id}`, label: c.name, detail: c.email, href: `/admin-panel/customers/${c.id}`, icon: User, group: 'Customers' })),
+      ...data.orders.map((o) => ({ key: `o${o.number}`, label: o.number, detail: `${o.email} · ${o.status} · ${formatMoney(o.total)}`, href: `/admin/orders/${o.number}`, icon: ShoppingBag, group: 'Orders' })),
+      ...data.products.map((p) => ({ key: `p${p.id}`, label: p.name, detail: 'Product', href: `/admin/products/${p.id}`, icon: Package, group: 'Products' })),
+      ...data.customers.map((c) => ({ key: `c${c.id}`, label: c.name, detail: c.email, href: `/admin/customers/${c.id}`, icon: User, group: 'Customers' })),
     ];
   }, [data, debounced]);
 

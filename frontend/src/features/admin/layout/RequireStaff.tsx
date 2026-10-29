@@ -11,7 +11,7 @@ export function RequireStaff({ children }: { children: ReactNode }) {
   const location = useLocation();
   if (status === 'unknown') return <PageLoader />;
   if (status === 'anonymous') {
-    return <Navigate to={`/admin-panel/login?next=${encodeURIComponent(location.pathname + location.search)}`} replace />;
+    return <Navigate to={`/admin/login?next=${encodeURIComponent(location.pathname + location.search)}`} replace />;
   }
   if (!can(user?.capabilities, 'dashboard.view')) {
     return (

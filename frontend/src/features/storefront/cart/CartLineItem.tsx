@@ -49,10 +49,10 @@ export function CartLineItem({ line, compact, saved, onNavigate }: { line: Quote
               label={`Quantity of ${line.name}`}
             />
           ) : null}
-          <button type="button" className="text-sm text-ink-soft link-underline hover:text-ink" onClick={() => setSaved.mutate({ ...ref, saved: !saved })}>
+          <button type="button" className="inline-flex min-h-11 items-center text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline" onClick={() => setSaved.mutate({ ...ref, saved: !saved })}>
             {saved ? 'Move to bag' : 'Save for later'}
           </button>
-          <button type="button" className="text-sm text-ink-muted link-underline hover:text-danger" onClick={() => remove.mutate(ref)}>
+          <button type="button" className="inline-flex min-h-11 items-center text-sm text-ink-muted underline-offset-4 hover:text-danger hover:underline" onClick={() => remove.mutate(ref)}>
             Remove
           </button>
         </div>

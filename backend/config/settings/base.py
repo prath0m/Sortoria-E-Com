@@ -169,6 +169,12 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "apps.core.exceptions.exception_handler",
 }
 
+# Any rate can be overridden per deployment, e.g. THROTTLE_ANON=2000/min behind a proxy that pools
+# client IPs, or for a load test from one machine. Unset keeps the defaults above.
+for _scope in REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]:
+    if _override := env(f"THROTTLE_{_scope.upper()}", ""):
+        REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"][_scope] = _override
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),

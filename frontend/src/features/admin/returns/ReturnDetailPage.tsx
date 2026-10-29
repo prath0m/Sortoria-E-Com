@@ -99,7 +99,7 @@ export default function ReturnDetailPage() {
       <PageHeader
         title={ret.number}
         eyebrow="Return"
-        back={{ to: '/admin-panel/returns', label: 'All returns' }}
+        back={{ to: '/admin/returns', label: 'All returns' }}
         actions={
           <>
             {canReject ? <Button size="sm" variant="ghost" className="text-danger" onClick={() => setTarget({ status: 'rejected', label: 'Rejected' })}>Reject</Button> : null}
@@ -115,7 +115,7 @@ export default function ReturnDetailPage() {
           <StatusBadge status={ret.status} label={ret.status_label} />
           <span>
             For order{' '}
-            <Link to={`/admin-panel/orders/${ret.order_number}`} className="font-medium text-accent hover:underline">{ret.order_number}</Link>
+            <Link to={`/admin/orders/${ret.order_number}`} className="font-medium text-accent hover:underline">{ret.order_number}</Link>
           </span>
           <span>· Requested {dateTime(ret.created_at)}</span>
         </div>

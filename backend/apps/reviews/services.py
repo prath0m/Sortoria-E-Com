@@ -42,7 +42,7 @@ def submit_review(user, product: Product, *, rating: int, title: str, body: str,
     AdminNotification.objects.create(
         kind=AdminNotification.Kind.REVIEW_PENDING,
         title=f"New {rating}★ review of {product.name} awaiting approval",
-        link="/admin-panel/reviews?status=pending",
+        link="/admin/reviews?status=pending",
         payload={"review_id": review.pk},
     )
     return review

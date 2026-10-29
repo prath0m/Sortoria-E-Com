@@ -94,7 +94,7 @@ export default function ProductEditPage() {
       setForm(saved);
       toast.success(isNew ? 'Product created. Add some images next.' : 'Product saved');
       if (isNew) {
-        navigate(`/admin-panel/products/${saved.id}`, { replace: true });
+        navigate(`/admin/products/${saved.id}`, { replace: true });
         setTab('images');
       }
     } catch (err) {
@@ -117,7 +117,7 @@ export default function ProductEditPage() {
       await adminApi.remove('products', id!);
       qc.invalidateQueries({ queryKey: ['admin', 'products'] });
       toast.success('Product deleted');
-      navigate('/admin-panel/products');
+      navigate('/admin/products');
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : 'Could not delete the product.');
       setConfirmDelete(false);
@@ -133,7 +133,7 @@ export default function ProductEditPage() {
       <PageHeader
         title={isNew ? 'New product' : form.name || 'Untitled product'}
         eyebrow="Catalogue"
-        back={{ to: '/admin-panel/products', label: 'All products' }}
+        back={{ to: '/admin/products', label: 'All products' }}
         actions={
           <>
             {!isNew && form.slug ? (

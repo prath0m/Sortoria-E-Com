@@ -56,7 +56,7 @@ test('admin screens have no serious accessibility issues (light and dark)', asyn
   for (const theme of ['light', 'dark']) {
     if (theme === 'dark') await page.getByRole('button', { name: 'Switch to dark mode' }).click();
     for (const path of ADMIN_PAGES) {
-      await page.goto(`/admin-panel${path}`);
+      await page.goto(`/admin${path}`);
       await test.step(`${theme} ${path || '/'}`, () => scan(page));
     }
   }

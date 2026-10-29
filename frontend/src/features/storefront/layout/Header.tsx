@@ -55,7 +55,7 @@ export function Header() {
             scrolled ? 'border-line bg-surface-raised/85 shadow-lift' : 'border-white/40 bg-surface-raised/60 dark:border-white/10',
           )}
         >
-          <Link to="/" aria-label={`${name} home`} className="mr-3 shrink-0">
+          <Link to="/" aria-label={`${name} home`} className="mr-3 flex h-11 shrink-0 items-center">
             <Logo src={store?.logo} label={name} className="h-3.5 w-auto sm:h-4" />
           </Link>
 

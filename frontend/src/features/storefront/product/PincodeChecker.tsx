@@ -34,7 +34,7 @@ export function PincodeChecker({ productSlug }: { productSlug: string }) {
           placeholder="Enter pincode for delivery date"
           className="h-9 min-w-0 flex-1 bg-transparent text-sm focus:outline-none"
         />
-        <button type="submit" disabled={!valid} className="text-xs font-semibold text-charcoal-800 disabled:opacity-40">
+        <button type="submit" disabled={!valid} className="inline-flex min-h-11 items-center px-2 text-xs font-semibold text-charcoal-800 disabled:opacity-40">
           Check
         </button>
       </form>

@@ -13,11 +13,11 @@ export function watchErrors(page: Page) {
 }
 
 export async function adminLogin(page: Page) {
-  await page.goto('/admin-panel/login');
+  await page.goto('/admin/login');
   await page.getByLabel('Email').fill(ADMIN.email);
   await page.getByLabel('Password', { exact: true }).fill(ADMIN.password);
   await page.getByRole('button', { name: /sign in/i }).click();
-  await page.waitForURL(/\/admin-panel$/);
+  await page.waitForURL(/\/admin$/);
 }
 
 export async function firstProductSlug(page: Page, query = '') {

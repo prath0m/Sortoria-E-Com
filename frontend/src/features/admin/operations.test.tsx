@@ -77,7 +77,7 @@ describe('products list', () => {
         return HttpResponse.json({ updated: 1 });
       }),
     );
-    renderWithProviders(<ProductsPage />, { route: '/admin-panel/products' });
+    renderWithProviders(<ProductsPage />, { route: '/admin/products' });
     const row = (await screen.findByText('Linen Shirt')).closest('tr')!;
     await userEvent.click(within(row).getByRole('checkbox', { name: 'Select row' }));
     expect(screen.getByText('1 selected')).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('inventory', () => {
         return HttpResponse.json({ updated: 1 });
       }),
     );
-    renderWithProviders(<InventoryPage />, { route: '/admin-panel/inventory' });
+    renderWithProviders(<InventoryPage />, { route: '/admin/inventory' });
     const input = await screen.findByLabelText('Stock for A-1');
     await userEvent.clear(input);
     await userEvent.type(input, '20');
@@ -141,7 +141,7 @@ describe('order detail', () => {
         return HttpResponse.json({ ...order, status: 'shipped', status_label: 'Shipped', allowed_transitions: [] });
       }),
     );
-    renderWithProviders(<OrderDetailPage />, { route: '/admin-panel/orders/SRT-2026-000001', path: '/admin-panel/orders/:number' });
+    renderWithProviders(<OrderDetailPage />, { route: '/admin/orders/SRT-2026-000001', path: '/admin/orders/:number' });
     await userEvent.click(await screen.findByRole('button', { name: 'Mark shipped' }));
     const dialog = screen.getByRole('dialog');
     await userEvent.click(within(dialog).getByRole('button', { name: 'Confirm' }));
@@ -157,7 +157,7 @@ describe('order detail', () => {
   it('hides status actions from staff who can only view orders', async () => {
     act(() => useAuth.setState({ status: 'authenticated', user: { ...manager, capabilities: ['dashboard.view', 'orders.view'] } }));
     server.use(http.get('/api/v1/admin/orders/SRT-2026-000001/', () => HttpResponse.json(order)));
-    renderWithProviders(<OrderDetailPage />, { route: '/admin-panel/orders/SRT-2026-000001', path: '/admin-panel/orders/:number' });
+    renderWithProviders(<OrderDetailPage />, { route: '/admin/orders/SRT-2026-000001', path: '/admin/orders/:number' });
     expect(await screen.findByText('Linen Shirt')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Mark shipped' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Cancel order' })).not.toBeInTheDocument();

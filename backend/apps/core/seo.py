@@ -25,7 +25,7 @@ from .models import StoreSettings
 
 # Pages that are personal, transactional or thin: keep them out of search results.
 PRIVATE_PREFIXES = (
-    "/admin-panel",
+    "/admin",
     "/account",
     "/cart",
     "/checkout",

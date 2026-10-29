@@ -287,8 +287,8 @@ export default function DashboardPage() {
             <KpiCard label="Customers" value={String(data.kpis.customers.value)} kpi={data.kpis.customers} compare={compare} />
             <KpiCard label="Conversion" value={`${data.kpis.conversion.value}%`} kpi={data.kpis.conversion} compare={compare} />
             <KpiCard label="Visits" value={new Intl.NumberFormat('en-IN').format(data.visits)} kpi={{ value: data.visits, previous: null, change: null }} />
-            <KpiCard label="Awaiting fulfilment" value={String(data.kpis.pending_orders.value)} kpi={data.kpis.pending_orders} href="/admin-panel/orders?status=placed" />
-            <KpiCard label="Low-stock variants" value={String(data.kpis.low_stock.value)} kpi={data.kpis.low_stock} href="/admin-panel/inventory?stock=low" warn={data.kpis.low_stock.value > 0} />
+            <KpiCard label="Awaiting fulfilment" value={String(data.kpis.pending_orders.value)} kpi={data.kpis.pending_orders} href="/admin/orders?status=placed" />
+            <KpiCard label="Low-stock variants" value={String(data.kpis.low_stock.value)} kpi={data.kpis.low_stock} href="/admin/inventory?stock=low" warn={data.kpis.low_stock.value > 0} />
           </div>
 
           <div className="grid gap-6 xl:grid-cols-3">
@@ -300,7 +300,7 @@ export default function DashboardPage() {
             <RankedBars
               title="Top products"
               subtitle="By revenue in this period"
-              rows={data.top_products.map((p) => ({ key: p.product_id, label: p.name, value: p.revenue, detail: `${p.units} sold`, href: `/admin-panel/products/${p.product_id}` }))}
+              rows={data.top_products.map((p) => ({ key: p.product_id, label: p.name, value: p.revenue, detail: `${p.units} sold`, href: `/admin/products/${p.product_id}` }))}
             />
             <RankedBars
               title="Sales by department"
@@ -311,7 +311,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid gap-6 xl:grid-cols-3">
-            <Panel title="Recent orders" className="xl:col-span-2" action={<Link to="/admin-panel/orders" className="text-xs font-semibold text-accent link-underline">View all</Link>}>
+            <Panel title="Recent orders" className="xl:col-span-2" action={<Link to="/admin/orders" className="text-xs font-semibold text-accent link-underline">View all</Link>}>
               <div className="-mx-5 overflow-x-auto">
                 <table className="w-full min-w-[34rem] text-sm">
                   <thead>
@@ -326,7 +326,7 @@ export default function DashboardPage() {
                     {data.recent_orders.map((o) => (
                       <tr key={o.number} className="border-b border-line/60 last:border-0 hover:bg-ink/[0.03]">
                         <td className="px-5 py-3">
-                          <Link to={`/admin-panel/orders/${o.number}`} className="font-medium text-accent link-underline">
+                          <Link to={`/admin/orders/${o.number}`} className="font-medium text-accent link-underline">
                             {o.number}
                           </Link>
                           <p className="text-xs text-ink-muted">{new Date(o.created_at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}</p>
@@ -345,7 +345,7 @@ export default function DashboardPage() {
                 </table>
               </div>
             </Panel>
-            <Panel title="Low stock" subtitle="Lowest first" action={<Link to="/admin-panel/inventory?stock=low" className="text-xs font-semibold text-accent link-underline">Manage</Link>}>
+            <Panel title="Low stock" subtitle="Lowest first" action={<Link to="/admin/inventory?stock=low" className="text-xs font-semibold text-accent link-underline">Manage</Link>}>
               {data.low_stock.length ? (
                 <ul className="divide-y divide-line">
                   {data.low_stock.map((v) => (

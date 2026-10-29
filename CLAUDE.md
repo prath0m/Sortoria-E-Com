@@ -1,6 +1,6 @@
 # Sartoria — working notes
 
-Premium general store (electronics, fashion, home, sports, beauty, books, toys, jewellery, bags) with a React storefront and a custom admin at `/admin-panel`. Full plan and scope: `PLAN.md`.
+Premium general store (electronics, fashion, home, sports, beauty, books, toys, jewellery, bags) with a React storefront and a custom admin at `/admin`. Full plan and scope: `PLAN.md`.
 
 ## Stack
 - **Backend** `backend/`: Django 5.2, DRF, SimpleJWT, PostgreSQL 14+ (FTS + pg_trgm), Redis (cache, throttles, Celery broker), Celery + beat, WeasyPrint, Pillow, drf-spectacular, django-treebeard.
@@ -13,7 +13,8 @@ Premium general store (electronics, fashion, home, sports, beauty, books, toys, 
 | Run API (:8000) / web (:5173, proxies `/api` + `/media`) | `make backend` / `make frontend` |
 | Celery worker / beat | `make worker` / `make beat` (or set `CELERY_TASK_ALWAYS_EAGER=true`) |
 | Demo data | `make seed` (`make seed ARGS=--flush` to wipe) |
-| Tests | `make test` (pytest in `backend/`, Vitest in `frontend/`) |
+| Tests | `make test` (pytest in `backend/`, Vitest in `frontend/`); `make test-integration` for the HTTP journeys |
+| Load test | `make build`, `make serve-prod LOADTEST=1`, then `make loadtest` (Locust; report in `loadtest/reports/`) |
 | Lint | `make lint` (ruff + eslint + tsc) |
 | Regenerate API types | `make gen-api` (backend must be running) |
 | Regenerate logo assets | `make brand` |
@@ -48,7 +49,8 @@ frontend/src/content/     brand-voice copy that isn't admin-managed (microcopy, 
 - **Store-facing text and settings come from the DB** (`StoreSettings`, the CMS models). Never hardcode the store name, contact details or policies.
 - API prefix is `/api/v1/`, admin endpoints are under `/api/v1/admin/`, and docs are at `/api/docs/`.
 - **Server-side SEO lives in `apps/core/seo.py`.** A new public route that should be indexed needs entries in `ROUTES` (meta), `ROUTE_MODULES` (chunk preload) and, if it reads data on first load, `INLINE_DATA` (keys must match the client's `path + buildQuery()` exactly). Private routes go in `PRIVATE_PREFIXES`.
-- New admin endpoints must be added to `tests/admin/test_permission_matrix.py`.
+- New admin endpoints must be added to `tests/admin/test_permission_matrix.py`. New user journeys belong in `tests/integration/` (HTTP only).
+- The admin SPA lives at `/admin` (Django's own admin is `/django-admin/`); `/admin-panel/*` redirects for old links.
 
 ## Frontend conventions
 - Import with `@/` aliases. Merge classes with `cn()`.

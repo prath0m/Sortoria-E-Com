@@ -95,7 +95,7 @@ export default function AdminShell() {
                 label="Sign out"
                 onClick={async () => {
                   await logout();
-                  navigate('/admin-panel/login');
+                  navigate('/admin/login');
                 }}
               >
                 <LogOut className="h-5 w-5" />

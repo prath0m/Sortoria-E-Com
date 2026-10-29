@@ -211,7 +211,7 @@ def test_staff_invite_and_guards(auth, admin_user, manager):
     shopper.set_password("x-Secret-123")
     shopper.save()
     promoted = client.post("/api/v1/admin/staff/", {"email": "shopper@example.com", "role": "manager"}, format="json")
-    assert promoted.data["invited"] is False and "admin-panel/login" in mail.outbox[-1].body
+    assert promoted.data["invited"] is False and "admin/login" in mail.outbox[-1].body
 
     assert client.patch(f"/api/v1/admin/staff/{admin_user.pk}/", {"role": "manager"}, format="json").status_code == 400
     assert client.post(f"/api/v1/admin/staff/{admin_user.pk}/revoke/").status_code == 400

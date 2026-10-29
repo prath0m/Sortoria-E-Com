@@ -7,7 +7,7 @@ export default function AdminNotFound() {
       illustration="lost"
       title="Nothing here yet"
       description="This page doesn't exist in the admin."
-      action={<ButtonLink to="/admin-panel">Back to dashboard</ButtonLink>}
+      action={<ButtonLink to="/admin">Back to dashboard</ButtonLink>}
     />
   );
 }

@@ -40,7 +40,7 @@ export function DeliveryOptions({ quote }: { quote: Quote }) {
               className="h-11 w-full rounded-xs border border-line-strong bg-surface-raised pl-9 pr-3 text-sm focus:border-charcoal-800 focus:outline-none"
             />
           </div>
-          <button type="submit" disabled={!valid} className="px-3 text-xs font-semibold text-charcoal-800 disabled:opacity-40">
+          <button type="submit" disabled={!valid} className="inline-flex min-h-11 items-center px-3 text-xs font-semibold text-charcoal-800 disabled:opacity-40">
             Check
           </button>
         </div>

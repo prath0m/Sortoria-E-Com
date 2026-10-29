@@ -51,7 +51,8 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
               autoComplete="email"
               aria-invalid={!!error}
               className={cn(
-                'h-12 min-w-0 flex-1 rounded-full border px-5 text-sm focus:outline-none',
+                // flex-none when stacked (compact, on phones), otherwise it would collapse to its content height.
+                'h-12 min-w-0 rounded-full border px-5 text-sm focus:outline-none', compact ? 'flex-none sm:flex-1' : 'flex-1',
                 dark
                   ? 'border-white/25 bg-white/5 text-white placeholder:text-white/50 focus:border-white'
                   : 'border-line-strong bg-surface-raised focus:border-charcoal-800',

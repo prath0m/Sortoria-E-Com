@@ -29,7 +29,7 @@ class BeaconView(APIView):
     def post(self, request):
         session = str(request.data.get("session_id", ""))
         path = str(request.data.get("path", ""))[:300]
-        if not SESSION_RE.match(session) or not path.startswith("/") or path.startswith("/admin-panel"):
+        if not SESSION_RE.match(session) or not path.startswith("/") or path.startswith("/admin"):
             return Response(status=status.HTTP_204_NO_CONTENT)
         PageVisit.objects.create(session_id=session, path=path, referrer=str(request.data.get("referrer", ""))[:300])
         product_id = request.data.get("product_id")

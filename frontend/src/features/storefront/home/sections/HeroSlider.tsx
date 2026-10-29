@@ -187,7 +187,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                 onClick={() => go(i)}
                 aria-label={`Show slide ${i + 1}: ${s.headline}`}
                 aria-current={i === index}
-                className="group relative h-8 flex-1 max-w-24"
+                className="group relative h-11 min-w-6 flex-1 max-w-24"
               >
                 <span className={cn('absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 overflow-hidden rounded-full', light ? 'bg-paper-50/30' : 'bg-ink/20')}>
                   {i === index ? (

@@ -56,7 +56,7 @@ export default function AddressesPage() {
                 +91 {a.phone}
               </address>
               <div className="mt-4 flex flex-wrap gap-4 text-sm">
-                <button type="button" className="text-charcoal-800 link-underline" onClick={() => setEditing(a)}>
+                <button type="button" className="inline-flex min-h-11 items-center text-charcoal-800 underline-offset-4 hover:underline" onClick={() => setEditing(a)}>
                   Edit
                 </button>
                 {!a.is_default_shipping ? (
@@ -66,7 +66,7 @@ export default function AddressesPage() {
                 ) : null}
                 <button
                   type="button"
-                  className="text-ink-muted link-underline hover:text-danger"
+                  className="inline-flex min-h-11 items-center text-ink-muted underline-offset-4 hover:text-danger hover:underline"
                   onClick={() => {
                     if (window.confirm('Remove this address?')) remove.mutate(a.id, { onSuccess: () => toast.success('Address removed') });
                   }}

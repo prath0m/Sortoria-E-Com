@@ -61,7 +61,7 @@ export default function OrdersPage() {
       sortKey: 'created_at',
       cell: (o) => (
         <div>
-          <Link to={`/admin-panel/orders/${o.number}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">
+          <Link to={`/admin/orders/${o.number}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">
             {o.number}
           </Link>
           <p className="whitespace-nowrap text-xs text-ink-muted">{dateTime(o.placed_at ?? o.created_at)}</p>
@@ -114,13 +114,13 @@ export default function OrdersPage() {
         <FilterSelect label="Any status" value={state.status ?? ''} onChange={(v) => set({ status: v })} options={ORDER_STATUSES} />
         <FilterSelect label="Any payment" value={state.payment_method ?? ''} onChange={(v) => set({ payment_method: v })} options={[{ value: 'razorpay', label: 'Online' }, { value: 'cod', label: 'Cash on delivery' }]} />
         <FilterSelect label="Any payment status" value={state.payment_status ?? ''} onChange={(v) => set({ payment_status: v })} options={['pending', 'paid', 'failed', 'refunded', 'partially_refunded'].map((s) => ({ value: s, label: s.replace('_', ' ').replace(/^\w/, (c) => c.toUpperCase()) }))} />
-        <label className="flex items-center gap-1.5 text-xs text-ink-muted">
+        <label className="flex min-w-0 items-center gap-1.5 text-xs text-ink-muted">
           From
-          <input type="date" value={state.date_from ?? ''} onChange={(e) => set({ date_from: e.target.value })} className="h-10 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink" />
+          <input type="date" value={state.date_from ?? ''} onChange={(e) => set({ date_from: e.target.value })} className="h-10 min-w-0 flex-1 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink sm:flex-none" />
         </label>
-        <label className="flex items-center gap-1.5 text-xs text-ink-muted">
+        <label className="flex min-w-0 items-center gap-1.5 text-xs text-ink-muted">
           To
-          <input type="date" value={state.date_to ?? ''} onChange={(e) => set({ date_to: e.target.value })} className="h-10 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink" />
+          <input type="date" value={state.date_to ?? ''} onChange={(e) => set({ date_to: e.target.value })} className="h-10 min-w-0 flex-1 rounded-xs border border-line bg-surface-raised px-2 text-sm text-ink sm:flex-none" />
         </label>
         {Object.keys(state).some((k) => !['ordering', 'page'].includes(k)) ? (
           <Button size="sm" variant="ghost" onClick={() => set({ search: null, status: null, payment_method: null, payment_status: null, date_from: null, date_to: null })}>
@@ -161,7 +161,7 @@ export default function OrdersPage() {
         onPage={(p) => set({ page: String(p) })}
         selected={selected}
         onSelect={setSelected}
-        onRowClick={(o) => navigate(`/admin-panel/orders/${o.number}`)}
+        onRowClick={(o) => navigate(`/admin/orders/${o.number}`)}
         emptyTitle="No orders here"
         emptyText="Orders matching these filters will appear here."
       />

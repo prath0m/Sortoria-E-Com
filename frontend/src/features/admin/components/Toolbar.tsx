@@ -32,12 +32,12 @@ export function SearchInput({ value, onChange, placeholder }: { value: string; o
 
 export function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
-    <label className="flex items-center gap-2 text-sm">
+    <label className="flex min-w-0 items-center gap-2 text-sm">
       <span className="sr-only">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={cn('h-10 rounded-xs border border-line bg-surface-raised px-3 text-sm focus:border-accent focus:outline-none', value ? 'text-ink' : 'text-ink-muted')}
+        className={cn('h-10 w-full rounded-xs border border-line bg-surface-raised px-3 text-sm focus:border-accent focus:outline-none sm:w-auto', value ? 'text-ink' : 'text-ink-muted')}
       >
         <option value="">{label}</option>
         {options.map((o) => (
@@ -51,7 +51,8 @@ export function FilterSelect({ label, value, onChange, options }: { label: strin
 }
 
 export function Toolbar({ children }: { children: ReactNode }) {
-  return <div className="mb-4 flex flex-wrap items-center gap-2">{children}</div>;
+  // Two even columns on phones (search spans both), a wrapping row from sm up.
+  return <div className="mb-4 grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap [&>*:first-child]:col-span-2 sm:[&>*:first-child]:col-auto">{children}</div>;
 }
 
 export function BulkBar({ count, onClear, children }: { count: number; onClear: () => void; children: ReactNode }) {

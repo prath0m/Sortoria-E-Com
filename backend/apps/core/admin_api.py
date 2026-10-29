@@ -138,9 +138,7 @@ def _send_invite(user: User) -> None:
 
     from .emails import send_email
 
-    url = (
-        reset_link(user) if not user.has_usable_password() else f"{settings.FRONTEND_URL.rstrip('/')}/admin-panel/login"
-    )
+    url = reset_link(user) if not user.has_usable_password() else f"{settings.FRONTEND_URL.rstrip('/')}/admin/login"
     send_email(
         "staff_invite",
         user.email,

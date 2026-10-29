@@ -16,7 +16,7 @@ function sessionId(): string {
 }
 
 export function track(path: string, extra: { product_id?: number } = {}) {
-  if (typeof navigator === 'undefined' || path.startsWith('/admin-panel')) return;
+  if (typeof navigator === 'undefined' || /^\/admin(\/|$)/.test(path)) return;
   const body = JSON.stringify({ session_id: sessionId(), path, referrer: document.referrer.slice(0, 300), ...extra });
   const url = '/api/v1/analytics/events/';
   try {

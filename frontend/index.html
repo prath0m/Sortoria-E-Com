@@ -7,7 +7,7 @@
     <script>
       // Apply the saved theme before first paint (keys match src/lib/theme.ts). Admin follows the OS until chosen.
       try {
-        var admin = location.pathname.indexOf('/admin-panel') === 0;
+        var admin = /^\/admin(\/|$)/.test(location.pathname);
         var saved = localStorage.getItem(admin ? 'sartoria-admin-theme' : 'sartoria-theme');
         if (saved === 'dark' || (admin && !saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');

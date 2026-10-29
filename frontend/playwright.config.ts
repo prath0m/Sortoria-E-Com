@@ -18,5 +18,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } }],
+  projects: [
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testIgnore: /mobile\.spec\.ts/ },
+    // Phones: the core journeys plus phone-specific checks. iPhone sizing runs in Chromium so the
+    // suite needs only one browser download; add `browserName: 'webkit'` once WebKit is installed.
+    { name: 'pixel-7', use: { ...devices['Pixel 7'] }, testMatch: /(smoke|mobile)\.spec\.ts/ },
+    { name: 'iphone-13', use: { ...devices['iPhone 13'], browserName: 'chromium' }, testMatch: /(smoke|mobile)\.spec\.ts/ },
+  ],
 });

@@ -41,7 +41,7 @@ export default function ProductsPage() {
         <div className="flex items-center gap-3">
           <div className="h-12 w-10 shrink-0 overflow-hidden rounded-xs bg-ink/5">{p.thumb ? <img src={p.thumb} alt="" className="h-full w-full object-cover" loading="lazy" /> : null}</div>
           <div className="min-w-0">
-            <Link to={`/admin-panel/products/${p.id}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">
+            <Link to={`/admin/products/${p.id}`} onClick={(e) => e.stopPropagation()} className="font-medium text-ink hover:text-accent">
               {p.name}
             </Link>
             <p className="text-xs text-ink-muted">
@@ -75,7 +75,7 @@ export default function ProductsPage() {
 
   return (
     <>
-      <PageHeader title="Products" eyebrow="Catalogue" actions={<ButtonLink to="/admin-panel/products/new" icon={<Plus className="h-4 w-4" />}>New product</ButtonLink>} />
+      <PageHeader title="Products" eyebrow="Catalogue" actions={<ButtonLink to="/admin/products/new" icon={<Plus className="h-4 w-4" />}>New product</ButtonLink>} />
       <Toolbar>
         <SearchInput value={state.search ?? ''} onChange={(v) => set({ search: v })} placeholder="Search name, SKU or brand" />
         <FilterSelect label="All categories" value={state.category ?? ''} onChange={(v) => set({ category: v })} options={categoryOptions(options)} />
@@ -126,7 +126,7 @@ export default function ProductsPage() {
         onPage={(p) => set({ page: String(p) })}
         selected={selected}
         onSelect={setSelected}
-        onRowClick={(p) => navigate(`/admin-panel/products/${p.id}`)}
+        onRowClick={(p) => navigate(`/admin/products/${p.id}`)}
         emptyTitle="No products match"
         emptyText="Try a different search or clear the filters."
       />

@@ -1,6 +1,6 @@
 # Sartoria
 
-A premium general store: electronics, fashion, home, sports, beauty, books, toys, jewellery and bags. It has a React storefront and a custom admin at `/admin-panel`, and everything the shopper sees is managed from the admin: catalogue, prices, offers, homepage, pages, shipping, settings and staff.
+A premium general store: electronics, fashion, home, sports, beauty, books, toys, jewellery and bags. It has a React storefront and a custom admin at `/admin`, and everything the shopper sees is managed from the admin: catalogue, prices, offers, homepage, pages, shipping, settings and staff.
 
 - **Backend:** Django 5.2 + DRF, PostgreSQL 14+, Redis, Celery (worker + beat), WeasyPrint for invoices.
 - **Frontend:** React 18 + Vite + TypeScript, Tailwind, TanStack Query, Zustand, Framer Motion, GSAP.
@@ -36,7 +36,7 @@ make setup                    # venv, pip + npm install, create databases, migra
 make seed                     # demo catalogue, customers, orders, content (about 2 minutes)
 ```
 
-Then run the services, each in its own terminal:
+Then run the services, each in its own terminal (the admin is at http://localhost:5173/admin):
 
 ```bash
 make backend    # API on http://localhost:8000
@@ -97,15 +97,19 @@ Payments are verified by HMAC on both the checkout callback and the webhook. Web
 ## Tests and checks
 
 ```bash
-make test       # pytest (backend) + Vitest (frontend)
-make lint       # ruff format/check, ESLint, tsc
+make test               # pytest (backend, includes the integration journeys) + Vitest (frontend)
+make test-integration   # just the end-to-end business journeys
+make lint               # ruff format/check, ESLint, tsc
 ```
+
+The admin lives at **`/admin`** (old `/admin-panel/...` links redirect).
 
 | Suite | What it covers |
 |---|---|
 | `backend/tests/` | Money and GST maths, pricing engine, checkout races, the order and returns state machines, payments and webhooks, every admin API, CSV import/export, server-side SEO, and a **permission matrix** that checks every admin endpoint against every role (`tests/admin/test_permission_matrix.py`) |
+| `backend/tests/integration/` | **Business journeys over HTTP only**, with separate shopper, guest and staff clients: sign-up → address → coupon → COD checkout → fulfilment → invoice → return → refund (stock, money, emails and audit trail checked); guest online payment with forged and duplicate webhooks → staff cancellation → exactly one gateway refund; a flash sale starting mid-checkout (409 `price_changed`) and a sold-out last unit (409 `stock_changed`); an admin-created product reaching listings and search, then stock-out and deactivation |
 | `frontend/src/**/*.test.tsx` | Cart, checkout, returns, homepage, and the admin screens, against MSW mocks |
-| `frontend/e2e/` (Playwright) | **Smoke:** guest browse → bag → cash-on-delivery checkout → confirmation; staff sign in and confirm an order; customers kept out of the admin. **Accessibility:** axe on storefront and admin pages (light and dark) with no serious or critical issues. **Layout:** no sideways scrolling at 360/768/1024/1440 px, and reduced motion turns off smooth scrolling and the headline animation |
+| `frontend/e2e/` (Playwright) | Runs as three projects: **desktop**, **pixel-7** and **iphone-13**. Phones run the smoke journeys plus `mobile.spec.ts`: the full-screen menu, the filter sheet, buying from the sticky bar, search, admin orders as cards, and the `/admin-panel` redirect. **Smoke:** guest browse → bag → cash-on-delivery checkout → confirmation; staff sign in and confirm an order; customers kept out of the admin. **Accessibility:** axe on storefront and admin pages (light and dark) with no serious or critical issues. **Layout:** no sideways scrolling at 360/768/1024/1440 px, and reduced motion turns off smooth scrolling and the headline animation |
 
 The end-to-end tests need the stack running with seeded data:
 
@@ -116,7 +120,31 @@ make build && E2E_BASE_URL=http://localhost:8000 make e2e   # against the produc
 
 The first run needs the Playwright browser: `cd frontend && npx playwright install chromium`.
 
-**Lighthouse** (production build served by Django, `make build` first):
+### Load testing
+
+`loadtest/locustfile.py` models real traffic: browsing (~85%: home, departments, filtered listings, search, product pages and the server-rendered page shell), building bags (~12%: the pricing engine at different pincodes, delivery estimates) and staff in the admin (~3%). Checkout is opt-in (`LOADTEST_CHECKOUT=1`) because it creates real orders.
+
+```bash
+make build
+make serve-prod LOADTEST=1                      # gunicorn + production settings on :8001 (another terminal)
+make loadtest                                   # 50 users for 2 minutes; HTML report in loadtest/reports/
+make loadtest USERS=500 SPAWN=25 DURATION=90s   # stress
+```
+
+Always measure gunicorn, not `runserver`. `LOADTEST=1` lifts the per-IP rate limits, which would otherwise throttle every simulated user, since they all come from one machine. In production the same limits can be tuned per deployment with `THROTTLE_<SCOPE>` env vars (for example `THROTTLE_ANON=2000/min`).
+
+Measured on a MacBook with 4 gunicorn workers × 4 threads, seeded demo data, Postgres and Redis on the same machine:
+
+| Users | Requests | Throughput | Median | p95 | p99 | Failures |
+|---|---|---|---|---|---|---|
+| 150 | 13,504 in 2 min | 113 req/s | 10 ms | 19 ms | 33 ms | 0 |
+| 500 | 32,348 in 90 s | 360 req/s | 12 ms | 47 ms | 83 ms | 0 |
+
+The slowest common reads are the server-rendered product page (p95 ≈ 46 ms at 500 users) and the admin dashboard (p95 ≈ 40 ms). Checkout averaged about 440 ms with background jobs running inline; with a Celery worker the invoice and emails leave the request path.
+
+### Lighthouse
+
+Run against the production build served by Django (`make build` first):
 
 ```bash
 npx lighthouse http://localhost:8000/ --preset=desktop --only-categories=performance,accessibility,best-practices,seo
@@ -163,7 +191,7 @@ DJANGO_SETTINGS_MODULE=config.settings.prod backend/.venv/bin/python backend/man
 WorkingDirectory=/srv/sartoria/backend
 EnvironmentFile=/srv/sartoria/.env
 ExecStart=/srv/sartoria/backend/.venv/bin/gunicorn config.wsgi:application \
-  --bind 127.0.0.1:8000 --workers 3 --threads 4 --timeout 60 --access-logfile -
+  --bind 127.0.0.1:8000 --workers 3 --threads 4 --keep-alive 10 --timeout 60 --access-logfile -
 Restart=always
 
 # /etc/systemd/system/sartoria-worker.service

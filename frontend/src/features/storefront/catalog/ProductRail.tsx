@@ -42,7 +42,7 @@ export function ProductRail({ title, eyebrow, products, loading, cta }: ProductR
         <ul
           ref={track}
           data-lenis-prevent-horizontal
-          className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 md:gap-6 lg:-mx-10 lg:px-10"
+          className="scrollbar-none -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 md:gap-6 lg:-mx-10 lg:scroll-px-10 lg:px-10"
         >
           {loading
             ? Array.from({ length: 5 }, (_, i) => (

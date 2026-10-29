@@ -169,7 +169,7 @@ def request_return(
     AdminNotification.objects.create(
         kind=AdminNotification.Kind.RETURN_REQUESTED,
         title=f"Return {ret.number} requested for {order.number}",
-        link=f"/admin-panel/returns/{ret.number}",
+        link=f"/admin/returns/{ret.number}",
     )
     transaction.on_commit(lambda: _notify(ret.pk))
     return ret

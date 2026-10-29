@@ -35,7 +35,7 @@ export default function CustomersPage() {
       header: 'Customer',
       cell: (c) => (
         <div className="max-w-[16rem]">
-          <Link to={`/admin-panel/customers/${c.id}`} onClick={(e) => e.stopPropagation()} className="block truncate font-medium text-ink hover:text-accent">
+          <Link to={`/admin/customers/${c.id}`} onClick={(e) => e.stopPropagation()} className="block truncate font-medium text-ink hover:text-accent">
             {c.full_name || c.email}
           </Link>
           <p className="truncate text-xs text-ink-muted">{c.email}</p>
@@ -72,7 +72,7 @@ export default function CustomersPage() {
         totalPages={data?.total_pages}
         count={data?.count}
         onPage={(p) => set({ page: String(p) })}
-        onRowClick={(c) => navigate(`/admin-panel/customers/${c.id}`)}
+        onRowClick={(c) => navigate(`/admin/customers/${c.id}`)}
         emptyTitle="No customers found"
       />
     </>
