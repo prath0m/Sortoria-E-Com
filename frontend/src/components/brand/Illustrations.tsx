@@ -7,9 +7,9 @@ import { cn } from '@/lib/cn';
 export type IllustrationName = 'thread' | 'bag' | 'heart' | 'search' | 'lost' | 'box' | 'error' | 'letter';
 
 const stroke = { fill: 'none', strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
-const SAGE = 'rgb(var(--sage-500))';
-const GOLD = 'rgb(var(--gold-400))';
-const WINE = 'rgb(var(--burgundy-800))';
+const SAGE = 'rgb(var(--stone-500))';
+const GOLD = 'rgb(var(--iris-400))';
+const WINE = 'rgb(var(--charcoal-800))';
 
 function Leaf({ d, rotate = 0, x = 0, y = 0 }: { d?: string; rotate?: number; x?: number; y?: number }) {
   return (
@@ -122,8 +122,8 @@ export function Illustration({ name, className }: { name: IllustrationName; clas
 
 export function BotanicalDivider({ className }: { className?: string }) {
   return (
-    <div className={cn('flex items-center justify-center gap-4 text-sage-400', className)} aria-hidden="true">
-      <span className="h-px w-16 bg-gradient-to-r from-transparent to-sage-300 sm:w-28" />
+    <div className={cn('flex items-center justify-center gap-4 text-stone-400', className)} aria-hidden="true">
+      <span className="h-px w-16 bg-gradient-to-r from-transparent to-stone-300 sm:w-28" />
       <svg viewBox="0 0 64 20" className="h-5 w-16">
         <path d="M2 10 H 26" stroke={SAGE} strokeWidth="1" {...stroke} />
         <path d="M38 10 H 62" stroke={SAGE} strokeWidth="1" {...stroke} />
@@ -131,14 +131,14 @@ export function BotanicalDivider({ className }: { className?: string }) {
         <path d="M24 10 C 20 4, 14 4, 12 8" stroke={SAGE} strokeWidth="1" {...stroke} />
         <path d="M40 10 C 44 16, 50 16, 52 12" stroke={SAGE} strokeWidth="1" {...stroke} />
       </svg>
-      <span className="h-px w-16 bg-gradient-to-l from-transparent to-sage-300 sm:w-28" />
+      <span className="h-px w-16 bg-gradient-to-l from-transparent to-stone-300 sm:w-28" />
     </div>
   );
 }
 
 /** Large, soft organic shape used behind hero and section headings. */
 export function OrganicShape({ className, tone = 'sage' }: { className?: string; tone?: 'sage' | 'gold' | 'burgundy' }) {
-  const fill = { sage: 'rgb(var(--sage-200) / .45)', gold: 'rgb(var(--gold-100) / .55)', burgundy: 'rgb(var(--burgundy-50) / .7)' }[tone];
+  const fill = { sage: 'rgb(var(--stone-200) / .45)', gold: 'rgb(var(--iris-100) / .55)', burgundy: 'rgb(var(--charcoal-50) / .7)' }[tone];
   return (
     <svg viewBox="0 0 600 600" className={cn('pointer-events-none', className)} aria-hidden="true">
       <path

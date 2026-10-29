@@ -52,7 +52,7 @@ export default function LoginPage() {
           error={formState.errors.password?.message}
         />
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-sm text-burgundy-800 link-underline">
+          <Link to="/forgot-password" className="text-sm text-charcoal-800 link-underline">
             Forgotten your password?
           </Link>
         </div>
@@ -62,7 +62,7 @@ export default function LoginPage() {
       </form>
       <p className="mt-6 text-center text-sm text-ink-soft">
         New to Sartoria?{' '}
-        <Link to={`/register${location.search}`} className="font-semibold text-burgundy-800 link-underline">
+        <Link to={`/register${location.search}`} className="font-semibold text-charcoal-800 link-underline">
           Create an account
         </Link>
       </p>

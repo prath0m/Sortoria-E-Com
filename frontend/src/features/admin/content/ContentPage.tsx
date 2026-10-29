@@ -69,7 +69,7 @@ type Tab = (typeof TABS)[number]['id'];
 
 function NewSection({ onPick }: { onPick: (type: string) => void }) {
   return (
-    <select aria-label="Add a section" value="" onChange={(e) => e.target.value && onPick(e.target.value)} className="h-9 rounded-xs border border-primary bg-primary px-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-on">
+    <select aria-label="Add a section" value="" onChange={(e) => e.target.value && onPick(e.target.value)} className="h-9 rounded-xs border border-primary bg-primary px-3 text-xs font-semibold text-primary-on">
       <option value="">Add section…</option>
       {SECTION_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
     </select>
@@ -107,7 +107,7 @@ export default function ContentPage() {
           emptyText="The homepage is empty. Add a hero slider to begin."
           renderRow={(s) => (
             <>
-              <span className="w-36 shrink-0 text-xs font-semibold uppercase tracking-[0.08em] text-ink-muted">{typeLabel(s.type)}</span>
+              <span className="w-36 shrink-0 text-xs font-semibold text-ink-muted">{typeLabel(s.type)}</span>
               <RowText title={String(s.title || '—')} sub={s.subtitle ? String(s.subtitle) : undefined} />
             </>
           )}

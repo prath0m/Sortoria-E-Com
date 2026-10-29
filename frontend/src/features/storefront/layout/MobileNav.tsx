@@ -40,7 +40,7 @@ export function MobileNav() {
                 <button
                   type="button"
                   onClick={() => setStack((s) => s.slice(0, -1))}
-                  className="mb-2 flex items-center gap-1 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted"
+                  className="mb-2 flex items-center gap-1 py-2 text-xs font-semibold text-ink-muted"
                 >
                   <ChevronLeft className="h-4 w-4" /> Back
                 </button>
@@ -54,7 +54,7 @@ export function MobileNav() {
             <ul className="divide-y divide-line">
               {level ? (
                 <li>
-                  <Link to={`/shop/${level.slug}`} onClick={close} className="block py-3.5 font-semibold text-burgundy-800">
+                  <Link to={`/shop/${level.slug}`} onClick={close} className="block py-3.5 font-semibold text-charcoal-800">
                     Shop all
                   </Link>
                 </li>
@@ -83,7 +83,7 @@ export function MobileNav() {
                 <Link to={user ? '/account' : '/login'} onClick={close} className="block">
                   {user ? `Hello, ${user.first_name || 'there'}` : 'Sign in or create an account'}
                 </Link>
-                <Link to="/offers" onClick={close} className="block font-semibold text-burgundy-800">
+                <Link to="/offers" onClick={close} className="block font-semibold text-charcoal-800">
                   Offers
                 </Link>
                 <Link to="/wishlist" onClick={close} className="block">

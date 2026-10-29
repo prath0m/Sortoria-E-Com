@@ -40,7 +40,7 @@ export function ProductDetails({ product }: { product: ProductDetail }) {
           <div className="space-y-6">
             {product.specs.map((group) => (
               <table key={group.group} className="w-full text-sm">
-                <caption className="mb-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted">{group.group}</caption>
+                <caption className="mb-2 text-left text-xs font-semibold text-ink-muted">{group.group}</caption>
                 <tbody>
                   {group.items.map((row) => (
                     <tr key={row.key} className="border-b border-line/70 last:border-0">
@@ -68,9 +68,9 @@ export function ProductDetails({ product }: { product: ProductDetail }) {
         </p>
         <p className="mt-3">{policy}</p>
         <p className="mt-3">
-          <Link to="/pages/shipping-policy" className="link-underline text-burgundy-800">Shipping policy</Link>
+          <Link to="/pages/shipping-policy" className="link-underline text-charcoal-800">Shipping policy</Link>
           {' · '}
-          <Link to="/pages/returns-policy" className="link-underline text-burgundy-800">Returns policy</Link>
+          <Link to="/pages/returns-policy" className="link-underline text-charcoal-800">Returns policy</Link>
           {store?.support_phone ? ` · Questions? Call ${store.support_phone}` : ''}
         </p>
       </AccordionItem>

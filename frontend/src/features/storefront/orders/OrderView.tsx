@@ -38,11 +38,11 @@ export function OrderView({ order, actions }: { order: OrderDetail; actions?: Re
           <ul className="mt-4 divide-y divide-line border-y border-line">
             {order.items.map((item) => (
               <li key={item.id} className="flex gap-4 py-4">
-                <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xs bg-cream-200">
+                <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xs bg-paper-200">
                   {item.image_url ? <img src={item.image_url} alt="" loading="lazy" className="h-full w-full object-cover" /> : null}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <Link to={`/products/${item.product_slug}`} className="font-medium hover:text-burgundy-800">
+                  <Link to={`/products/${item.product_slug}`} className="font-medium hover:text-charcoal-800">
                     {item.product_name}
                   </Link>
                   <p className="text-sm text-ink-muted">
@@ -80,7 +80,7 @@ export function OrderView({ order, actions }: { order: OrderDetail; actions?: Re
                   {order.tracking_url ? (
                     <>
                       {' '}
-                      <a href={order.tracking_url} target="_blank" rel="noreferrer noopener" className="text-burgundy-800 link-underline">
+                      <a href={order.tracking_url} target="_blank" rel="noreferrer noopener" className="text-charcoal-800 link-underline">
                         Track with courier
                       </a>
                     </>
@@ -112,7 +112,7 @@ export function OrderView({ order, actions }: { order: OrderDetail; actions?: Re
           {order.has_invoice ? (
             <a
               href={invoiceUrl(order.number, order.access_token)}
-              className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800 link-underline"
+              className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-charcoal-800 link-underline"
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Download invoice
             </a>

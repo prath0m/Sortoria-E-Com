@@ -14,9 +14,9 @@ export function CouponField({ quote }: { quote: Quote }) {
 
   if (applied) {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-sm border border-dashed border-gold-500 bg-gold-50 px-4 py-3 text-sm">
+      <div className="flex items-center justify-between gap-3 rounded-sm border border-dashed border-iris-500 bg-iris-50 px-4 py-3 text-sm">
         <span className="flex items-center gap-2">
-          <Tag className="h-4 w-4 text-gold-800" aria-hidden="true" />
+          <Tag className="h-4 w-4 text-iris-800" aria-hidden="true" />
           <strong className="tracking-wider">{applied.code}</strong>
           <span className="text-ink-soft">saves {formatMoney(applied.discount_paise)}</span>
         </span>
@@ -56,7 +56,7 @@ export function CouponField({ quote }: { quote: Quote }) {
           autoComplete="off"
           aria-invalid={!!error}
           aria-describedby={error ? 'coupon-error' : undefined}
-          className="h-11 min-w-0 flex-1 rounded-xs border border-line-strong bg-surface-raised px-3 text-sm uppercase tracking-wider focus:border-burgundy-800 focus:outline-none"
+          className="h-11 min-w-0 flex-1 rounded-xs border border-line-strong bg-surface-raised px-3 text-sm uppercase tracking-wider focus:border-charcoal-800 focus:outline-none"
         />
         <Button type="submit" variant="secondary" loading={applyCoupon.isPending}>
           Apply

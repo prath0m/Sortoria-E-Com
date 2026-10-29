@@ -38,7 +38,7 @@ function Section({ section }: { section: HomeSectionData }) {
           products={section.data}
           action={
             cta ? (
-              <Link to={cta.url} className="hidden text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800 link-underline sm:inline">
+              <Link to={cta.url} className="hidden text-xs font-semibold text-charcoal-800 link-underline sm:inline">
                 {cta.label}
               </Link>
             ) : undefined

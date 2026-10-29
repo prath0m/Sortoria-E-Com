@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { BotanicalBranch } from '@/components/brand/Illustrations';
 import { Reveal } from '@/components/motion/Reveal';
 import { ButtonLink } from '@/components/ui/Button';
 import { useGsap } from '../useScrollTrigger';
@@ -16,7 +15,6 @@ export function Editorial({ eyebrow, title, body, image, renditions, cta }: { ey
         {image ? <img data-editorial-img src={image} srcSet={toSrcSet(renditions)} sizes="(min-width: 1024px) 50vw, 100vw" alt="" loading="lazy" className="absolute inset-[-10%_0] h-[120%] w-full object-cover" /> : null}
       </div>
       <Reveal className="relative">
-        <BotanicalBranch className="absolute -right-6 -top-16 h-28 w-48 opacity-70" />
         <p className="eyebrow">{eyebrow}</p>
         <h2 className="mt-3 text-display-xl">{title}</h2>
         <p className="mt-6 text-lg leading-relaxed text-ink-soft">{body}</p>

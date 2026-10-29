@@ -37,10 +37,10 @@ export function DeliveryOptions({ quote }: { quote: Quote }) {
               value={draft}
               onChange={(e) => setDraft(e.target.value.replace(/\D/g, ''))}
               placeholder="Pincode"
-              className="h-11 w-full rounded-xs border border-line-strong bg-surface-raised pl-9 pr-3 text-sm focus:border-burgundy-800 focus:outline-none"
+              className="h-11 w-full rounded-xs border border-line-strong bg-surface-raised pl-9 pr-3 text-sm focus:border-charcoal-800 focus:outline-none"
             />
           </div>
-          <button type="submit" disabled={!valid} className="px-3 text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800 disabled:opacity-40">
+          <button type="submit" disabled={!valid} className="px-3 text-xs font-semibold text-charcoal-800 disabled:opacity-40">
             Check
           </button>
         </div>
@@ -64,14 +64,14 @@ export function DeliveryOptions({ quote }: { quote: Quote }) {
                 key={option.code}
                 className={cn(
                   'flex cursor-pointer items-start gap-3 rounded-xs border p-3 transition-colors',
-                  selected ? 'border-burgundy-800 bg-burgundy-50/40' : 'border-line',
+                  selected ? 'border-charcoal-800 bg-charcoal-50/40' : 'border-line',
                   !option.available && 'cursor-not-allowed opacity-50',
                 )}
               >
                 <input
                   type="radio"
                   name="shipping"
-                  className="mt-1 accent-[rgb(var(--burgundy-800))]"
+                  className="mt-1 accent-[rgb(var(--charcoal-800))]"
                   checked={selected}
                   disabled={!option.available}
                   onChange={() => setShippingMethod(option.code)}

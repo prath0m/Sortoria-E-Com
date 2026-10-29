@@ -6,26 +6,26 @@
 <meta name="color-scheme" content="light only">
 <title>{% block title %}{{ store.name }}{% endblock %}</title>
 </head>
-<body style="margin:0;padding:0;background:#F3EDE2;font-family:'Manrope',Helvetica,Arial,sans-serif;color:#2A1413;">
+<body style="margin:0;padding:0;background:#F4F4F5;font-family:'Inter',Helvetica,Arial,sans-serif;color:#0A0A0A;">
 <span style="display:none!important;opacity:0;color:transparent;height:0;width:0;overflow:hidden;">{% block preheader %}{% endblock %}</span>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3EDE2;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F4F5;">
   <tr><td align="center" style="padding:32px 16px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
       <tr><td align="center" style="padding:8px 0 28px;">
         <a href="{{ site_url }}" style="text-decoration:none;"><img src="{{ logo_url }}" width="220" alt="{{ store.name }}" style="display:block;border:0;width:220px;max-width:70%;height:auto;"></a>
       </td></tr>
-      <tr><td style="background:#FBF8F3;border:1px solid #DDD0BA;border-radius:4px;padding:40px 36px;">
+      <tr><td style="background:#FFFFFF;border:1px solid #D4D4D8;border-radius:4px;padding:40px 36px;">
         {% block content %}{% endblock %}
       </td></tr>
-      <tr><td align="center" style="padding:28px 12px 8px;font-size:12px;line-height:20px;color:#61635B;">
-        {% if store.tagline %}<p style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:#590907;">{{ store.tagline }}</p>{% endif %}
+      <tr><td align="center" style="padding:28px 12px 8px;font-size:12px;line-height:20px;color:#666666;">
+        {% if store.tagline %}<p style="margin:0 0 10px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:16px;color:#0A0A0A;">{{ store.tagline }}</p>{% endif %}
         {% if store.email or store.phone %}<p style="margin:0 0 6px;">Questions? We're here{% if store.hours %} {{ store.hours }}{% endif %}:
-          {% if store.email %}<a href="mailto:{{ store.email }}" style="color:#590907;">{{ store.email }}</a>{% endif %}{% if store.email and store.phone %} · {% endif %}{% if store.phone %}{{ store.phone }}{% endif %}</p>{% endif %}
+          {% if store.email %}<a href="mailto:{{ store.email }}" style="color:#0A0A0A;">{{ store.email }}</a>{% endif %}{% if store.email and store.phone %} · {% endif %}{% if store.phone %}{{ store.phone }}{% endif %}</p>{% endif %}
         {% if store.address %}<p style="margin:0 0 6px;">{{ store.name }}, {{ store.address }}</p>{% endif %}
         <p style="margin:0;">
-          {% if store.instagram %}<a href="{{ store.instagram }}" style="color:#590907;margin:0 6px;">Instagram</a>{% endif %}
-          {% if store.facebook %}<a href="{{ store.facebook }}" style="color:#590907;margin:0 6px;">Facebook</a>{% endif %}
-          {% if store.pinterest %}<a href="{{ store.pinterest }}" style="color:#590907;margin:0 6px;">Pinterest</a>{% endif %}
+          {% if store.instagram %}<a href="{{ store.instagram }}" style="color:#0A0A0A;margin:0 6px;">Instagram</a>{% endif %}
+          {% if store.facebook %}<a href="{{ store.facebook }}" style="color:#0A0A0A;margin:0 6px;">Facebook</a>{% endif %}
+          {% if store.pinterest %}<a href="{{ store.pinterest }}" style="color:#0A0A0A;margin:0 6px;">Pinterest</a>{% endif %}
         </p>
       </td></tr>
     </table>

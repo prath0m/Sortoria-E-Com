@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
           <Illustration name="letter" className="mx-auto h-24 w-24" />
           <p className="mt-4 text-ink">If an account exists for {getValues('email')}, a reset link is on its way.</p>
           <p className="mt-2 text-sm text-ink-muted">It can take a minute or two. Do check your spam folder.</p>
-          <Link to="/login" className="mt-6 inline-block text-sm font-semibold text-burgundy-800 link-underline">
+          <Link to="/login" className="mt-6 inline-block text-sm font-semibold text-charcoal-800 link-underline">
             Back to sign in
           </Link>
         </div>
@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
             Send reset link
           </Button>
           <p className="text-center text-sm">
-            <Link to="/login" className="text-burgundy-800 link-underline">
+            <Link to="/login" className="text-charcoal-800 link-underline">
               Back to sign in
             </Link>
           </p>

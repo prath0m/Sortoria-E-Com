@@ -24,7 +24,7 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
   const imageSizes = sizes ?? (view === 'list' ? '(min-width: 768px) 240px, 40vw' : '(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw');
 
   const media = (
-    <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-cream-200">
+    <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-paper-200">
       {first ? (
         <ResponsiveImage
           src={first.url}
@@ -53,7 +53,7 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
           e.preventDefault();
           openQuickView(product.slug);
         }}
-        className="absolute inset-x-3 bottom-3 z-[2] hidden translate-y-3 items-center justify-center gap-2 rounded-xs bg-surface-raised/95 py-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink opacity-0 shadow-soft backdrop-blur transition-all duration-400 ease-luxe hover:bg-surface-raised focus-visible:translate-y-0 focus-visible:opacity-100 group-hover:translate-y-0 group-hover:opacity-100 md:flex"
+        className="absolute inset-x-3 bottom-3 z-[2] hidden translate-y-2 items-center justify-center gap-2 rounded-full bg-surface-raised/95 py-2.5 text-[0.8125rem] font-medium text-ink opacity-0 shadow-soft backdrop-blur transition-all duration-400 ease-luxe hover:bg-surface-raised focus-visible:translate-y-0 focus-visible:opacity-100 group-hover:translate-y-0 group-hover:opacity-100 md:flex"
         aria-label={`Quick view ${product.name}`}
       >
         <Eye className="h-4 w-4" aria-hidden="true" /> Quick view
@@ -63,7 +63,7 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
 
   const details = (
     <div className={cn('min-w-0', view === 'grid' ? 'mt-4 space-y-1' : 'space-y-2')}>
-      {product.brand ? <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink-muted">{product.brand}</p> : null}
+      {product.brand ? <p className="text-[0.8125rem] text-ink-muted">{product.brand}</p> : null}
       <h3 className={cn('font-sans font-medium text-ink', view === 'grid' ? 'line-clamp-2 text-[0.9375rem]' : 'text-lg')}>
         <Link to={href} className="after:absolute after:inset-0">
           {product.name}
@@ -87,8 +87,6 @@ export function ProductCard({ product, view = 'grid', priority, sizes }: Product
   return (
     <motion.article
       className={cn('group relative', view === 'list' && 'grid grid-cols-[minmax(0,10rem)_1fr] gap-5 sm:grid-cols-[14rem_1fr] sm:gap-8')}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {media}
       {details}

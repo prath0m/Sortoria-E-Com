@@ -3,7 +3,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 const control =
-  'peer block w-full rounded-xs border border-line-strong/70 bg-surface-raised px-4 text-[0.9375rem] text-ink placeholder:text-ink-muted/70 transition-[border-color,box-shadow] duration-250 focus:border-burgundy-800 focus:outline-none focus:ring-2 focus:ring-gold-300/60 disabled:opacity-60 aria-[invalid=true]:border-danger';
+  'peer block w-full rounded-xs border border-line-strong/70 bg-surface-raised px-4 text-[0.9375rem] text-ink placeholder:text-ink-muted/70 transition-[border-color,box-shadow] duration-250 focus:border-charcoal-800 focus:outline-none focus:ring-2 focus:ring-iris-300/60 disabled:opacity-60 aria-[invalid=true]:border-danger';
 
 interface FieldShellProps {
   id: string;
@@ -152,7 +152,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectProps>(function S
 const CHECK_SVG =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' stroke='%23FBF8F3' stroke-width='2' fill='none'/%3E%3C/svg%3E\")";
 const checkboxClass =
-  'mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 cursor-pointer appearance-none rounded-xs border border-line-strong bg-surface-raised bg-center bg-no-repeat transition-colors checked:border-burgundy-800 checked:bg-burgundy-800 checked:[background-image:var(--check)]';
+  'mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 cursor-pointer appearance-none rounded-xs border border-line-strong bg-surface-raised bg-center bg-no-repeat transition-colors checked:border-charcoal-800 checked:bg-charcoal-800 checked:[background-image:var(--check)]';
 
 export const Checkbox = forwardRef<
   HTMLInputElement,

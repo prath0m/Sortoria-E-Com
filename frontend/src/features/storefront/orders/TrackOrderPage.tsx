@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApiError } from '@/api/client';
 import { useTrackOrder } from '@/api/hooks/orders';
-import { BotanicalBranch } from '@/components/brand/Illustrations';
 import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/Field';
@@ -18,10 +17,9 @@ export default function TrackOrderPage() {
   return (
     <div className="relative overflow-hidden">
       <Seo title="Track your order" description="Follow your Sartoria order with your order number and email or mobile." path="/track-order" />
-      <BotanicalBranch className="absolute -right-10 top-10 hidden h-48 w-72 opacity-60 md:block" />
       <div className="container-page flex justify-center py-14 md:py-20">
         <Reveal className="w-full max-w-md">
-          <PackageSearch className="mx-auto h-10 w-10 text-burgundy-800" aria-hidden="true" />
+          <PackageSearch className="mx-auto h-10 w-10 text-charcoal-800" aria-hidden="true" />
           <h1 className="mt-4 text-center text-display-lg">Track your order</h1>
           <p className="mt-3 text-center text-ink-soft">Enter your order number and the email or mobile number you used at checkout.</p>
           <form

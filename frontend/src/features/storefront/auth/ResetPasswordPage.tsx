@@ -47,7 +47,7 @@ export default function ResetPasswordPage() {
             Update password
           </Button>
           <p className="text-center text-sm">
-            <Link to="/forgot-password" className="text-burgundy-800 link-underline">
+            <Link to="/forgot-password" className="text-charcoal-800 link-underline">
               Request a new link
             </Link>
           </p>

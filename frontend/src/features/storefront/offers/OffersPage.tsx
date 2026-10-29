@@ -2,7 +2,6 @@ import { useBanners } from '@/api/hooks/cms';
 import { useBundles, useDailyDeals, useFlashSales } from '@/api/hooks/offers';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/Badge';
-import { BotanicalDivider } from '@/components/brand/Illustrations';
 import { Reveal } from '@/components/motion/Reveal';
 import { ButtonLink } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -29,7 +28,6 @@ export default function OffersPage() {
           <p className="mx-auto mt-3 max-w-xl text-ink-soft">
             We don't run endless sales. When we do lower a price, it's on something worth owning.
           </p>
-          <BotanicalDivider className="mt-6" />
         </Reveal>
         {loading ? (
           <div className="mt-12 space-y-6">
@@ -51,8 +49,8 @@ export default function OffersPage() {
                 <span className="absolute inset-0 bg-gradient-to-r from-shade/80 to-shade/10" />
                 <span className="absolute inset-y-0 left-6 flex max-w-lg flex-col justify-center md:left-12">
                   {b.badge_text ? <Badge tone="sale" className="mb-3 self-start">{b.badge_text}</Badge> : null}
-                  <span className="font-display text-display-md text-cream-50">{b.title}</span>
-                  {b.subtitle ? <span className="mt-2 text-cream-100">{b.subtitle}</span> : null}
+                  <span className="font-display text-display-md text-paper-50">{b.title}</span>
+                  {b.subtitle ? <span className="mt-2 text-paper-100">{b.subtitle}</span> : null}
                 </span>
               </Link>
             ))}

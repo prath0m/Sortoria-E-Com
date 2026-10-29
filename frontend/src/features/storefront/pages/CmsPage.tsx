@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { ApiError } from '@/api/client';
 import { usePage } from '@/api/hooks/cms';
-import { BotanicalDivider } from '@/components/brand/Illustrations';
 import { Reveal } from '@/components/motion/Reveal';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -26,7 +25,6 @@ export default function CmsPage() {
           <Reveal className="mt-8 text-center">
             <h1 className="text-display-xl">{page.title}</h1>
             {page.summary ? <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">{page.summary}</p> : null}
-            <BotanicalDivider className="mt-8" />
           </Reveal>
           {/* Page bodies are sanitised server-side (nh3) on save. */}
           <div className="prose-sartoria mx-auto mt-10" dangerouslySetInnerHTML={{ __html: page.body }} />

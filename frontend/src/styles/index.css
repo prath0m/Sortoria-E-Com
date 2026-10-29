@@ -4,98 +4,101 @@
 
 /*
  * Palette as RGB triplets so Tailwind's /<alpha> modifiers work.
- * Brand anchors: burgundy-800 #590907, sage-400 #A5A79B, gold-300 #E8D258, cream-100 #F3EDE2.
+ * Clean minimal: white and soft-grey surfaces, near-black type, one indigo accent (iris).
+ * charcoal = neutral darks (type, primary buttons, bands) · paper = whites · stone = greys for
+ * borders and quiet text · iris = the accent (links, focus, highlights, stars).
  */
 @layer base {
   :root {
-    --burgundy-50: 239 229 225;
-    --burgundy-100: 220 202 198;
-    --burgundy-200: 201 174 171;
-    --burgundy-300: 183 147 143;
-    --burgundy-400: 164 119 116;
-    --burgundy-500: 145 92 89;
-    --burgundy-600: 126 64 62;
-    --burgundy-700: 108 37 34;
-    --burgundy-800: 89 9 7;
-    --burgundy-900: 71 8 7;
-    --burgundy-950: 52 8 7;
+    --charcoal-50: 245 245 245;
+    --charcoal-100: 229 229 229;
+    --charcoal-200: 212 212 212;
+    --charcoal-300: 163 163 163;
+    --charcoal-400: 115 115 115;
+    --charcoal-500: 82 82 82;
+    --charcoal-600: 64 64 64;
+    --charcoal-700: 38 38 38;
+    --charcoal-800: 23 23 23;
+    --charcoal-900: 10 10 10;
+    --charcoal-950: 5 5 5;
 
-    --sage-50: 241 240 234;
-    --sage-100: 222 221 214;
-    --sage-200: 203 203 195;
-    --sage-300: 184 185 175;
-    --sage-400: 165 167 155;
-    --sage-500: 148 150 139;
-    --sage-600: 131 133 123;
-    --sage-700: 114 116 107;
-    --sage-800: 97 99 91;
-    --sage-900: 81 82 75;
-    --sage-950: 64 65 59;
+    --stone-50: 250 250 250;
+    --stone-100: 244 244 245;
+    --stone-200: 228 228 231;
+    --stone-300: 212 212 216;
+    --stone-400: 161 161 170;
+    --stone-500: 113 113 122;
+    --stone-600: 82 82 91;
+    --stone-700: 63 63 70;
+    --stone-800: 82 82 91;
+    --stone-900: 24 24 27;
+    --stone-950: 9 9 11;
 
-    --gold-50: 251 245 218;
-    --gold-100: 244 233 175;
-    --gold-200: 238 222 131;
-    --gold-300: 232 210 88;
-    --gold-400: 211 191 80;
-    --gold-500: 190 171 71;
-    --gold-600: 169 152 63;
-    --gold-700: 148 132 54;
-    --gold-800: 127 113 46;
-    --gold-900: 105 93 37;
-    --gold-950: 84 74 29;
+    --iris-50: 238 242 255;
+    --iris-100: 224 231 255;
+    --iris-200: 199 210 254;
+    --iris-300: 165 180 252;
+    --iris-400: 129 140 248;
+    --iris-500: 99 102 241;
+    --iris-600: 79 70 229;
+    --iris-700: 67 56 202;
+    --iris-800: 55 48 163;
+    --iris-900: 49 46 129;
+    --iris-950: 30 27 75;
 
-    --cream-50: 251 248 243;
-    --cream-100: 243 237 226;
-    --cream-200: 234 225 209;
-    --cream-300: 221 208 186;
+    --paper-50: 255 255 255;
+    --paper-100: 250 250 250;
+    --paper-200: 244 244 245;
+    --paper-300: 228 228 231;
 
-    /* Fixed deep brown for scrims and photo backdrops: never remapped, unlike ink. */
-    --shade: 42 20 19;
+    /* Fixed near-black for scrims and photo backdrops: never remapped, unlike ink. */
+    --shade: 10 10 10;
 
     /* Semantic tokens (remapped in .dark). */
-    --ink: 42 20 19;
-    --ink-soft: 74 51 49;
-    --ink-muted: 97 99 91; /* sage-800: 5.2:1 on cream — the lightest allowed text colour */
-    --surface: 243 237 226;
-    --surface-raised: 251 248 243;
-    --surface-sunken: 234 225 209;
-    /* Stand-ins for cream-200/300 panels and image placeholders (remapped in .dark). */
-    --surface-muted: 234 225 209;
-    --surface-strong: 221 208 186;
-    --line: 203 203 195;
-    --line-strong: 165 167 155;
-    --success: 46 107 62;
-    --danger: 166 31 36;
-    --warning: 122 86 8;
-    --primary: 89 9 7;
-    --primary-hover: 108 37 34;
-    --on-primary: 251 248 243;
-    --accent: 89 9 7;
-    --accent-soft: 239 229 225;
+    --ink: 10 10 10;
+    --ink-soft: 64 64 64;
+    --ink-muted: 102 102 102; /* 5.7:1 on white, 5.3:1 on stone-100: the lightest allowed text colour */
+    --surface: 255 255 255;
+    --surface-raised: 255 255 255;
+    --surface-sunken: 244 244 245;
+    /* Stand-ins for paper-200/300 panels and image placeholders (remapped in .dark). */
+    --surface-muted: 244 244 245;
+    --surface-strong: 228 228 231;
+    --line: 229 229 231;
+    --line-strong: 212 212 216;
+    /* Deep enough to pass AA on their own 15% tints (status badges): 5.7, 5.0 and 5.5:1. */
+    --success: 22 101 52;
+    --danger: 185 28 28;
+    --warning: 133 77 14;
+    --primary: 10 10 10;
+    --primary-hover: 38 38 38;
+    --on-primary: 255 255 255;
+    --accent: 79 70 229;
+    --accent-soft: 238 242 255;
 
     --header-h: 4.5rem;
     color-scheme: light;
   }
 
   .dark {
-    --ink: 240 232 222;
-    --ink-soft: 214 204 192;
-    --ink-muted: 168 170 158;
-    --surface: 22 14 13;
-    --surface-raised: 33 22 21;
-    --surface-sunken: 15 9 9;
-    --surface-muted: 45 31 29;
-    --surface-strong: 58 42 40;
-    --line: 61 47 45;
-    --line-strong: 92 74 71;
-    --success: 120 196 140;
-    --danger: 240 128 128;
-    --warning: 232 210 88;
-    --primary: 140 40 36;
-    --primary-hover: 160 52 47;
-    --on-primary: 251 248 243;
-    --accent: 222 178 173;
-    --accent-soft: 60 26 25;
+    --ink: 250 250 250;
+    --ink-soft: 212 212 216;
+    --ink-muted: 161 161 170;
+    --surface: 10 10 11;
+    --surface-raised: 24 24 27;
+    --surface-sunken: 0 0 0;
+    --surface-muted: 24 24 27;
+    --surface-strong: 39 39 42;
+    --line: 39 39 42;
+    --line-strong: 63 63 70;
+    --success: 74 222 128;
+    --danger: 248 113 113;
+    --warning: 250 204 21;
+    --primary: 250 250 250;
+    --primary-hover: 228 228 231;
+    --on-primary: 10 10 10;
+    --accent: 165 180 252;
+    --accent-soft: 30 27 75;
     color-scheme: dark;
   }
 
@@ -104,16 +107,19 @@
    * light photo): restore the light semantic tokens so everything inside reads as in light mode.
    */
   .dark [data-light-surface] {
-    --ink: 42 20 19;
-    --ink-soft: 74 51 49;
-    --ink-muted: 97 99 91;
-    --surface: 243 237 226;
-    --surface-raised: 251 248 243;
-    --surface-muted: 234 225 209;
-    --surface-strong: 221 208 186;
-    --line: 203 203 195;
-    --accent: 89 9 7;
-    --accent-soft: 239 229 225;
+    --ink: 10 10 10;
+    --ink-soft: 64 64 64;
+    --ink-muted: 102 102 102;
+    --surface: 255 255 255;
+    --surface-raised: 255 255 255;
+    --surface-muted: 244 244 245;
+    --surface-strong: 228 228 231;
+    --line: 229 229 231;
+    --primary: 10 10 10;
+    --primary-hover: 38 38 38;
+    --on-primary: 255 255 255;
+    --accent: 79 70 229;
+    --accent-soft: 238 242 255;
     color-scheme: light;
   }
 
@@ -129,27 +135,25 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-display font-medium text-accent;
+    @apply font-display font-semibold tracking-tight text-ink;
   }
 
-  /* Cormorant defaults to old-style figures; prices and counts read better lining. */
+  /* Inter's tabular-ready figures; contextual alternates for cleaner punctuation in headings. */
   .font-display,
   h1,
   h2,
   h3,
   h4 {
-    font-variant-numeric: lining-nums;
+    font-feature-settings: 'cv11', 'ss01', 'calt';
   }
 
   ::selection {
-    @apply bg-gold-200 text-ink;
+    @apply bg-iris-200 text-ink;
   }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--burgundy-800));
+    outline: 2px solid rgb(var(--accent));
     outline-offset: 2px;
-    box-shadow: 0 0 0 5px rgb(var(--gold-300) / 0.55);
-    border-radius: 2px;
   }
 
   [hidden] {
@@ -173,11 +177,11 @@
   }
 
   .eyebrow {
-    @apply font-sans text-eyebrow font-semibold uppercase text-ink-muted;
+    @apply font-sans text-eyebrow font-medium uppercase text-ink-muted;
   }
 
   .link-underline {
-    background-image: linear-gradient(rgb(var(--gold-400)), rgb(var(--gold-400)));
+    background-image: linear-gradient(currentColor, currentColor);
     background-size: 0% 1px;
     background-position: 0 100%;
     background-repeat: no-repeat;
@@ -196,24 +200,14 @@
     position: relative;
     isolation: isolate;
   }
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.06;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
 
   .skeleton {
-    @apply relative overflow-hidden rounded-sm bg-cream-200;
+    @apply relative overflow-hidden rounded-sm bg-paper-200;
   }
   .skeleton::after {
     content: '';
     @apply absolute inset-0 -translate-x-full animate-shimmer;
-    background: linear-gradient(90deg, transparent, rgb(var(--cream-50) / 0.7), transparent);
+    background: linear-gradient(90deg, transparent, rgb(var(--paper-50) / 0.7), transparent);
   }
   .dark .skeleton {
     @apply bg-surface-raised;
@@ -242,13 +236,13 @@
     @apply mb-4;
   }
   .prose-sartoria ul {
-    @apply mb-4 list-disc space-y-1 pl-5 marker:text-gold-700;
+    @apply mb-4 list-disc space-y-1 pl-5 marker:text-ink-muted;
   }
   .prose-sartoria ol {
     @apply mb-4 list-decimal space-y-1 pl-5;
   }
   .prose-sartoria a {
-    @apply text-burgundy-800 underline decoration-gold-400 underline-offset-4;
+    @apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
   }
   .prose-sartoria strong {
     @apply font-semibold text-ink;
@@ -283,8 +277,8 @@ html.lenis body {
 
 /* Swiper theming */
 .gallery-swiper {
-  --swiper-theme-color: rgb(var(--burgundy-800));
-  --swiper-pagination-bullet-inactive-color: rgb(var(--sage-500));
+  --swiper-theme-color: rgb(var(--charcoal-800));
+  --swiper-pagination-bullet-inactive-color: rgb(var(--stone-500));
   --swiper-pagination-bullet-inactive-opacity: 0.6;
   --swiper-pagination-bullet-size: 6px;
 }
@@ -317,26 +311,30 @@ html.lenis body {
 }
 
 /*
- * Admin chart palette — validated with the dataviz validator (scripts/validate_palette.js):
- * light on #FBF8F3: all checks pass, worst adjacent CVD ΔE 8.2; dark on #211615: all pass, CVD ΔE 9.3.
- * Order is fixed: burgundy, gold, blue, terracotta, green. Never cycle; fold extras into "Other".
+ * Admin chart palette: the dataviz skill's validated reference order (blue, orange, aqua, yellow,
+ * magenta), checked with its validator against these surfaces:
+ * light on #FFFFFF: all hard checks pass, worst adjacent CVD ΔE 9.1, normal-vision ΔE 19.6. Aqua, yellow
+ * and magenta are below 3:1 on white, so every chart keeps a labelled legend with values (relief rule).
+ * dark on #18181B: all checks pass, worst adjacent CVD ΔE 8.4, normal-vision ΔE 19.3.
+ * Order is fixed. Never cycle; fold extras into "Other".
  */
 :root {
-  --chart-1: #8c2a26;
-  --chart-2: #a87a12;
-  --chart-3: #2f6db5;
-  --chart-4: #c9562a;
-  --chart-5: #2e8a5a;
-  --chart-grid: rgb(var(--line) / 0.7);
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-grid: rgb(var(--line));
   --chart-axis: rgb(var(--ink-muted));
-  --chart-muted: rgb(var(--sage-400));
+  /* Comparison (previous period) series: neutral, never a categorical hue. */
+  --chart-muted: rgb(var(--stone-400));
 }
 .dark {
-  --chart-1: #d0667e;
-  --chart-2: #a88b22;
-  --chart-3: #5f8fd8;
-  --chart-4: #c8653a;
-  --chart-5: #2c9e8a;
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
   --chart-muted: rgb(var(--line-strong));
 }
 
@@ -352,41 +350,41 @@ html.lenis body {
 }
 
 /*
- * Storefront dark mode. The storefront uses the brand scales directly, where the same colour can be
- * text on cream or a band behind cream text. So rather than inverting the scales, map the specific
- * uses: cream panels become dark surfaces, burgundy text/borders become the light accent. Cream text
- * (over photos and burgundy bands) and burgundy bands stay as they are. Inside [data-light-surface]
- * the semantic tokens are light again, so these mappings fall back to the light look there.
+ * Storefront dark mode. The storefront uses the palette scales directly, where the same colour can
+ * be text on white or a band behind white text. So rather than inverting the scales, map specific
+ * uses: paper panels become dark surfaces, charcoal text/borders become light ink. White text (over
+ * photos and charcoal bands) and charcoal bands stay as they are. Inside [data-light-surface] the
+ * semantic tokens are light again, so these mappings fall back to the light look there.
  */
 @layer utilities {
-  .dark .bg-cream-50 { background-color: rgb(var(--surface-raised)); }
-  .dark .bg-cream-50\/30 { background-color: rgb(var(--surface-raised) / 0.3); }
-  .dark .bg-cream-50\/70 { background-color: rgb(var(--surface-raised) / 0.7); }
-  .dark .bg-cream-100 { background-color: rgb(var(--surface)); }
-  .dark .bg-cream-200 { background-color: rgb(var(--surface-muted)); }
-  .dark .bg-cream-200\/50 { background-color: rgb(var(--surface-muted) / 0.5); }
-  .dark .bg-cream-200\/60 { background-color: rgb(var(--surface-muted) / 0.6); }
-  .dark .bg-cream-200\/70 { background-color: rgb(var(--surface-muted) / 0.7); }
-  .dark .bg-cream-300 { background-color: rgb(var(--surface-strong)); }
-  .dark .bg-gold-50,
-  .dark .bg-gold-100 { background-color: rgb(var(--accent-soft)); }
-  .dark .bg-burgundy-50\/40 { background-color: rgb(var(--accent-soft) / 0.4); }
+  .dark .bg-paper-50 { background-color: rgb(var(--surface-raised)); }
+  .dark .bg-paper-50\/30 { background-color: rgb(var(--surface-raised) / 0.3); }
+  .dark .bg-paper-50\/70 { background-color: rgb(var(--surface-raised) / 0.7); }
+  .dark .bg-paper-100 { background-color: rgb(var(--surface)); }
+  .dark .bg-paper-200 { background-color: rgb(var(--surface-muted)); }
+  .dark .bg-paper-200\/50 { background-color: rgb(var(--surface-muted) / 0.5); }
+  .dark .bg-paper-200\/60 { background-color: rgb(var(--surface-muted) / 0.6); }
+  .dark .bg-paper-200\/70 { background-color: rgb(var(--surface-muted) / 0.7); }
+  .dark .bg-paper-300 { background-color: rgb(var(--surface-strong)); }
+  .dark .bg-iris-50,
+  .dark .bg-iris-100 { background-color: rgb(var(--accent-soft)); }
+  .dark .bg-charcoal-50\/40 { background-color: rgb(var(--surface-muted) / 0.6); }
 
-  .dark .text-burgundy-700,
-  .dark .text-burgundy-800,
-  .dark .text-burgundy-900,
-  .dark .hover\:text-burgundy-700:hover,
-  .dark .hover\:text-burgundy-800:hover { color: rgb(var(--accent)); }
-  .dark .text-gold-600,
-  .dark .text-gold-700,
-  .dark .text-gold-800 { color: rgb(var(--gold-300)); }
+  .dark .text-charcoal-700,
+  .dark .text-charcoal-800,
+  .dark .text-charcoal-900,
+  .dark .hover\:text-charcoal-700:hover,
+  .dark .hover\:text-charcoal-800:hover { color: rgb(var(--ink)); }
+  .dark .text-iris-600,
+  .dark .text-iris-700,
+  .dark .text-iris-800 { color: rgb(var(--iris-300)); }
 
-  .dark .border-burgundy-800,
-  .dark .hover\:border-burgundy-800:hover,
-  .dark .focus\:border-burgundy-800:focus { border-color: rgb(var(--accent)); }
-  .dark .border-burgundy-800\/40 { border-color: rgb(var(--accent) / 0.4); }
-  .dark .ring-burgundy-800 { --tw-ring-color: rgb(var(--accent)); }
-  .dark .outline-burgundy-800 { outline-color: rgb(var(--accent)); }
+  .dark .border-charcoal-800,
+  .dark .hover\:border-charcoal-800:hover,
+  .dark .focus\:border-charcoal-800:focus { border-color: rgb(var(--ink)); }
+  .dark .border-charcoal-800\/40 { border-color: rgb(var(--ink) / 0.4); }
+  .dark .ring-charcoal-800 { --tw-ring-color: rgb(var(--ink)); }
+  .dark .outline-charcoal-800 { outline-color: rgb(var(--ink)); }
 
-  .dark .gallery-swiper { --swiper-theme-color: rgb(var(--accent)); }
+  .dark .gallery-swiper { --swiper-theme-color: rgb(var(--ink)); }
 }

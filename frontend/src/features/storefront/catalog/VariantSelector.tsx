@@ -18,7 +18,7 @@ export function VariantSelector({ axes, variants, selection, onChange }: Variant
         return (
           <fieldset key={axis.slug}>
             <legend className="mb-3 flex items-baseline gap-2 text-sm">
-              <span className="font-semibold uppercase tracking-[0.12em] text-ink">{axis.name}</span>
+              <span className="font-semibold text-ink">{axis.name}</span>
               {chosen ? <span className="text-ink-soft">{chosen.value}</span> : null}
             </legend>
             <div role="radiogroup" aria-label={axis.name} className="flex flex-wrap gap-2.5">
@@ -39,7 +39,7 @@ export function VariantSelector({ axes, variants, selection, onChange }: Variant
                       onClick={select}
                       className={cn(
                         'relative h-10 w-10 rounded-full p-1 ring-1 ring-line-strong transition-shadow duration-250',
-                        selected && 'ring-2 ring-burgundy-800',
+                        selected && 'ring-2 ring-charcoal-800',
                         state !== 'available' && 'opacity-50',
                       )}
                     >
@@ -63,7 +63,7 @@ export function VariantSelector({ axes, variants, selection, onChange }: Variant
                     onClick={select}
                     className={cn(
                       'min-w-[3.25rem] rounded-xs border px-4 py-2.5 text-sm transition-colors duration-250',
-                      selected ? 'border-burgundy-800 bg-burgundy-800 text-cream-50' : 'border-line-strong text-ink hover:border-burgundy-800',
+                      selected ? 'border-charcoal-800 bg-charcoal-800 text-paper-50' : 'border-line-strong text-ink hover:border-charcoal-800',
                       state === 'out_of_stock' && !selected && 'text-ink-muted line-through decoration-ink-muted/60',
                       state === 'unavailable' && !selected && 'border-dashed text-ink-muted',
                     )}

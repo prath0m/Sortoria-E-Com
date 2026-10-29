@@ -200,7 +200,7 @@ export default function CheckoutPage() {
                     <Panel
                       title="Contact"
                       action={
-                        <Link to="/login?next=/checkout" className="text-sm text-burgundy-800 link-underline">
+                        <Link to="/login?next=/checkout" className="text-sm text-charcoal-800 link-underline">
                           Have an account? Sign in
                         </Link>
                       }
@@ -236,13 +236,13 @@ export default function CheckoutPage() {
                               key={a.id}
                               className={cn(
                                 'flex cursor-pointer gap-3 rounded-sm border p-4 transition-colors',
-                                addressId === a.id ? 'border-burgundy-800 bg-burgundy-50/40' : 'border-line hover:border-line-strong',
+                                addressId === a.id ? 'border-charcoal-800 bg-charcoal-50/40' : 'border-line hover:border-line-strong',
                               )}
                             >
                               <input
                                 type="radio"
                                 name="address"
-                                className="mt-1 accent-[rgb(var(--burgundy-800))]"
+                                className="mt-1 accent-[rgb(var(--charcoal-800))]"
                                 checked={addressId === a.id}
                                 onChange={() => setAddressId(a.id)}
                               />
@@ -309,14 +309,14 @@ export default function CheckoutPage() {
                               key={option.code}
                               className={cn(
                                 'flex cursor-pointer items-start gap-4 rounded-sm border p-4 transition-colors',
-                                selected ? 'border-burgundy-800 bg-burgundy-50/40' : 'border-line',
+                                selected ? 'border-charcoal-800 bg-charcoal-50/40' : 'border-line',
                                 !option.available && 'cursor-not-allowed opacity-50',
                               )}
                             >
                               <input
                                 type="radio"
                                 name="shipping-method"
-                                className="mt-1 accent-[rgb(var(--burgundy-800))]"
+                                className="mt-1 accent-[rgb(var(--charcoal-800))]"
                                 checked={selected}
                                 disabled={!option.available}
                                 onChange={() => setShippingMethod(option.code)}
@@ -402,14 +402,14 @@ export default function CheckoutPage() {
                               key={method.code}
                               className={cn(
                                 'flex cursor-pointer items-start gap-4 rounded-sm border p-4 transition-colors',
-                                selected && !disabled ? 'border-burgundy-800 bg-burgundy-50/40' : 'border-line',
+                                selected && !disabled ? 'border-charcoal-800 bg-charcoal-50/40' : 'border-line',
                                 disabled && 'cursor-not-allowed opacity-50',
                               )}
                             >
                               <input
                                 type="radio"
                                 name="payment-method"
-                                className="mt-1 accent-[rgb(var(--burgundy-800))]"
+                                className="mt-1 accent-[rgb(var(--charcoal-800))]"
                                 checked={selected && !disabled}
                                 disabled={disabled}
                                 onChange={() => setPaymentMethod(method.code)}
@@ -469,11 +469,11 @@ export default function CheckoutPage() {
                 <ul className="space-y-4">
                   {quote.lines.map((line) => (
                     <li key={line.variant_id} className="flex gap-3">
-                      <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-xs bg-cream-200">
+                      <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-xs bg-paper-200">
                         {line.image ? (
                           <ResponsiveImage src={line.image.url} renditions={line.image.renditions} alt="" sizes="56px" className="h-full w-full object-cover" />
                         ) : null}
-                        <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-xs bg-shade/80 px-1 text-[0.625rem] font-bold text-cream-50">
+                        <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-xs bg-shade/80 px-1 text-[0.625rem] font-bold text-paper-50">
                           {line.quantity}
                         </span>
                       </div>

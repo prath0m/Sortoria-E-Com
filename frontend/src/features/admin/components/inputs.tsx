@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn';
 import { toLocalInput } from './dates';
 
 const control =
-  'block h-12 w-full rounded-xs border border-line-strong/70 bg-surface-raised px-4 text-[0.9375rem] text-ink focus:border-burgundy-800 focus:outline-none focus:ring-2 focus:ring-gold-300/60 aria-[invalid=true]:border-danger';
+  'block h-12 w-full rounded-xs border border-line-strong/70 bg-surface-raised px-4 text-[0.9375rem] text-ink focus:border-charcoal-800 focus:outline-none focus:ring-2 focus:ring-iris-300/60 aria-[invalid=true]:border-danger';
 
 function Shell({ id, label, hint, error, optional, children }: { id: string; label: string; hint?: ReactNode; error?: string; optional?: boolean; children: ReactNode }) {
   return (

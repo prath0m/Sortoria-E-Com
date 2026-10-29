@@ -4,31 +4,30 @@
 <meta charset="utf-8">
 <title>Tax invoice {{ invoice_number }}</title>
 <style>
-  @font-face { font-family: "Cormorant"; src: url("static/fonts/cormorant-garamond-latin-500-normal.woff2"); font-weight: 500; }
-  @font-face { font-family: "Manrope"; src: url("static/fonts/manrope-latin-400-normal.woff2"); font-weight: 400; }
-  @font-face { font-family: "Manrope"; src: url("static/fonts/manrope-latin-600-normal.woff2"); font-weight: 600; }
+    @font-face { font-family: "Inter"; src: url("static/fonts/inter-latin-regular.woff2"); font-weight: 400; }
+  @font-face { font-family: "Inter"; src: url("static/fonts/inter-latin-semibold.woff2"); font-weight: 600; }
   @page { size: A4; margin: 16mm 14mm 18mm;
-    @bottom-center { content: "{{ store.legal_name|default:store.name }} · GSTIN {{ store.gstin }} · Page " counter(page) " of " counter(pages); font: 7.5pt Manrope; color: #61635B; } }
-  body { font: 8.5pt/1.45 Manrope, sans-serif; color: #2A1413; }
-  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 0.6pt solid #E8D258; padding-bottom: 10pt; }
+    @bottom-center { content: "{{ store.legal_name|default:store.name }} · GSTIN {{ store.gstin }} · Page " counter(page) " of " counter(pages); font: 7.5pt Inter; color: #666666; } }
+  body { font: 8.5pt/1.45 Inter, sans-serif; color: #0A0A0A; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 0.6pt solid #4F46E5; padding-bottom: 10pt; }
   .head img { height: 26pt; }
   .title { text-align: right; }
-  .title h1 { font: 500 20pt Cormorant, serif; color: #590907; margin: 0; letter-spacing: .04em; }
-  .muted { color: #61635B; }
-  .eyebrow { font-size: 6.5pt; letter-spacing: .2em; text-transform: uppercase; color: #61635B; font-weight: 600; margin-bottom: 3pt; }
+  .title h1 { font: 600 18pt Inter, sans-serif; color: #0A0A0A; margin: 0; letter-spacing: -.02em; }
+  .muted { color: #666666; }
+  .eyebrow { font-size: 6.5pt; letter-spacing: .2em; text-transform: uppercase; color: #666666; font-weight: 600; margin-bottom: 3pt; }
   .grid { display: flex; gap: 14pt; margin: 12pt 0; }
   .grid > div { flex: 1; }
   table { width: 100%; border-collapse: collapse; }
-  .items th { font-size: 6.5pt; letter-spacing: .12em; text-transform: uppercase; color: #61635B; text-align: right; padding: 5pt 4pt; border-bottom: 0.6pt solid #A5A79B; }
+  .items th { font-size: 6.5pt; letter-spacing: .12em; text-transform: uppercase; color: #666666; text-align: right; padding: 5pt 4pt; border-bottom: 0.6pt solid #A1A1AA; }
   .items th:first-child, .items td:first-child { text-align: left; }
-  .items td { padding: 6pt 4pt; border-bottom: 0.4pt solid #EAE1D1; text-align: right; vertical-align: top; }
+  .items td { padding: 6pt 4pt; border-bottom: 0.4pt solid #E4E4E7; text-align: right; vertical-align: top; }
   .totals { width: 46%; margin-left: auto; margin-top: 10pt; }
   .totals td { padding: 3pt 4pt; }
   .totals td:last-child { text-align: right; }
-  .grand td { border-top: 0.6pt solid #590907; padding-top: 6pt; font-weight: 600; font-size: 10pt; }
-  .grand td:last-child { font: 600 12pt Manrope, sans-serif; color: #590907; }
+  .grand td { border-top: 0.6pt solid #0A0A0A; padding-top: 6pt; font-weight: 600; font-size: 10pt; }
+  .grand td:last-child { font: 600 12pt Inter, sans-serif; color: #0A0A0A; }
   .words { margin-top: 8pt; font-style: italic; }
-  .foot { margin-top: 18pt; padding-top: 8pt; border-top: 0.4pt solid #EAE1D1; font-size: 7.5pt; color: #61635B; }
+  .foot { margin-top: 18pt; padding-top: 8pt; border-top: 0.4pt solid #E4E4E7; font-size: 7.5pt; color: #666666; }
 </style>
 </head>
 <body>

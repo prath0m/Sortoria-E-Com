@@ -32,7 +32,7 @@ function ReviewCard({ review }: { review: Review }) {
         <ul className="mt-3 flex gap-2">
           {review.photos.map((src) => (
             <li key={src}>
-              <a href={src} target="_blank" rel="noreferrer" className="block h-20 w-20 overflow-hidden rounded-xs bg-cream-200">
+              <a href={src} target="_blank" rel="noreferrer" className="block h-20 w-20 overflow-hidden rounded-xs bg-paper-200">
                 <img src={src} alt={`Shared by ${review.author}`} loading="lazy" className="h-full w-full object-cover" />
               </a>
             </li>
@@ -50,8 +50,8 @@ function ReviewCard({ review }: { review: Review }) {
         ) : null}
       </p>
       {review.admin_reply ? (
-        <div className="mt-4 border-l-2 border-gold-400 bg-cream-200/60 px-4 py-3 text-sm text-ink-soft">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800">From Sartoria</p>
+        <div className="mt-4 border-l-2 border-iris-400 bg-paper-200/60 px-4 py-3 text-sm text-ink-soft">
+          <p className="mb-1 text-xs font-semibold text-charcoal-800">From Sartoria</p>
           {review.admin_reply}
         </div>
       ) : null}
@@ -155,7 +155,7 @@ export function ReviewsSection({ slug, productName }: { slug: string; productNam
             Write a review
           </Button>
         ) : (
-          <Link to={`/login?next=${encodeURIComponent(location.pathname + '#reviews')}`} className="text-sm font-semibold text-burgundy-800 link-underline">
+          <Link to={`/login?next=${encodeURIComponent(location.pathname + '#reviews')}`} className="text-sm font-semibold text-charcoal-800 link-underline">
             Sign in to write a review
           </Link>
         )}
@@ -184,11 +184,11 @@ export function ReviewsSection({ slug, productName }: { slug: string; productNam
                       onClick={() => setRating(active ? '' : String(n))}
                       aria-pressed={active}
                       disabled={!count}
-                      className={cn('flex w-full items-center gap-3 rounded-xs px-1 py-0.5 text-sm disabled:opacity-40', active && 'bg-cream-200')}
+                      className={cn('flex w-full items-center gap-3 rounded-xs px-1 py-0.5 text-sm disabled:opacity-40', active && 'bg-paper-200')}
                     >
                       <span className="w-6 text-ink-soft">{n}★</span>
-                      <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-cream-300">
-                        <span className="block h-full rounded-full bg-gold-400" style={{ width: `${total ? (count / total) * 100 : 0}%` }} />
+                      <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-paper-300">
+                        <span className="block h-full rounded-full bg-iris-400" style={{ width: `${total ? (count / total) * 100 : 0}%` }} />
                       </span>
                       <span className="w-8 text-right text-ink-muted">{count}</span>
                     </button>
@@ -207,7 +207,7 @@ export function ReviewsSection({ slug, productName }: { slug: string; productNam
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="h-9 rounded-xs border border-line-strong bg-surface-raised px-2 text-sm focus:border-burgundy-800 focus:outline-none"
+                  className="h-9 rounded-xs border border-line-strong bg-surface-raised px-2 text-sm focus:border-charcoal-800 focus:outline-none"
                 >
                   <option value="newest">Newest</option>
                   <option value="highest">Highest rated</option>

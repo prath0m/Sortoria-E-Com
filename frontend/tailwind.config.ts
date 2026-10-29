@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * Sartoria design tokens. Colours are CSS variables (see src/styles/index.css) so the admin
+ * Sartoria design tokens (clean minimal: neutrals + one indigo accent). Colours are CSS variables (see src/styles/index.css) so the admin
  * dark theme can remap them; every scale is generated and contrast-checked (see CLAUDE.md).
  */
 const scale = (name: string, steps: (string | number)[]) =>
@@ -23,10 +23,10 @@ export default {
     },
     extend: {
       colors: {
-        burgundy: { ...scale('burgundy', steps), DEFAULT: 'rgb(var(--burgundy-800) / <alpha-value>)' },
-        sage: { ...scale('sage', steps), DEFAULT: 'rgb(var(--sage-400) / <alpha-value>)' },
-        gold: { ...scale('gold', steps), DEFAULT: 'rgb(var(--gold-300) / <alpha-value>)' },
-        cream: { ...scale('cream', [50, 100, 200, 300]), DEFAULT: 'rgb(var(--cream-100) / <alpha-value>)' },
+        charcoal: { ...scale('charcoal', steps), DEFAULT: 'rgb(var(--charcoal-800) / <alpha-value>)' },
+        stone: { ...scale('stone', steps), DEFAULT: 'rgb(var(--stone-400) / <alpha-value>)' },
+        iris: { ...scale('iris', steps), DEFAULT: 'rgb(var(--iris-300) / <alpha-value>)' },
+        paper: { ...scale('paper', [50, 100, 200, 300]), DEFAULT: 'rgb(var(--paper-100) / <alpha-value>)' },
         ink: {
           DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
           soft: 'rgb(var(--ink-soft) / <alpha-value>)',
@@ -56,30 +56,30 @@ export default {
         warning: 'rgb(var(--warning) / <alpha-value>)',
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['Manrope', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        display: ['"Inter Variable"', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
       },
       fontSize: {
-        'display-2xl': ['clamp(2.75rem, 1.6rem + 4.8vw, 5.75rem)', { lineHeight: '1.02', letterSpacing: '-0.01em' }],
-        'display-xl': ['clamp(2.25rem, 1.5rem + 3vw, 4rem)', { lineHeight: '1.06', letterSpacing: '-0.005em' }],
-        'display-lg': ['clamp(1.875rem, 1.4rem + 1.9vw, 3rem)', { lineHeight: '1.1' }],
-        'display-md': ['clamp(1.5rem, 1.25rem + 1vw, 2.125rem)', { lineHeight: '1.15' }],
-        'display-sm': ['1.375rem', { lineHeight: '1.25' }],
-        eyebrow: ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.24em' }],
+        'display-2xl': ['clamp(2.5rem, 1.5rem + 4.2vw, 5rem)', { lineHeight: '1.02', letterSpacing: '-0.04em' }],
+        'display-xl': ['clamp(2rem, 1.35rem + 2.7vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '-0.035em' }],
+        'display-lg': ['clamp(1.75rem, 1.3rem + 1.8vw, 2.625rem)', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        'display-md': ['clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem)', { lineHeight: '1.18', letterSpacing: '-0.025em' }],
+        'display-sm': ['1.25rem', { lineHeight: '1.3', letterSpacing: '-0.02em' }],
+        eyebrow: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.08em' }],
       },
       letterSpacing: {
-        wordmark: '0.32em',
+        wordmark: '0.18em',
       },
       borderRadius: {
-        xs: '2px',
-        sm: '4px',
-        DEFAULT: '6px',
-        md: '8px',
+        xs: '8px',
+        sm: '12px',
+        DEFAULT: '12px',
+        md: '16px',
       },
       boxShadow: {
-        soft: '0 1px 2px rgb(42 20 19 / 0.04), 0 4px 16px -4px rgb(42 20 19 / 0.08)',
-        lift: '0 2px 4px rgb(42 20 19 / 0.04), 0 18px 40px -12px rgb(42 20 19 / 0.22)',
-        drawer: '-24px 0 60px -20px rgb(42 20 19 / 0.35)',
+        soft: '0 1px 2px rgb(0 0 0 / 0.04), 0 2px 8px -2px rgb(0 0 0 / 0.06)',
+        lift: '0 1px 3px rgb(0 0 0 / 0.06), 0 16px 40px -12px rgb(0 0 0 / 0.18)',
+        drawer: '-24px 0 60px -20px rgb(0 0 0 / 0.25)',
         ring: '0 0 0 1px rgb(var(--line) / 1)',
       },
       transitionTimingFunction: {

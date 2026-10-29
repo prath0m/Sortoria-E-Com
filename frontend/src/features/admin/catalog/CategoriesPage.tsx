@@ -119,7 +119,7 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
         <TextField label="Menu order" type="number" min={0} value={draft.position} onChange={(e) => set('position', Number(e.target.value))} hint="Lower numbers appear first." />
 
         <fieldset className="space-y-4 border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Imagery</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Imagery</legend>
           <div className="grid grid-cols-2 gap-4">
             <ImageInput clearable label="Tile image" current={existing?.image} file={files.image} onChange={(f) => setFiles((x) => ({ ...x, image: f }))} aspect="aspect-[4/5]" />
             <ImageInput clearable label="Menu image" current={existing?.menu_image} file={files.menu_image} onChange={(f) => setFiles((x) => ({ ...x, menu_image: f }))} aspect="aspect-[4/5]" />
@@ -131,7 +131,7 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
         </fieldset>
 
         <fieldset className="space-y-4 border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Returns</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Returns</legend>
           <SelectField
             label="Return policy"
             value={draft.return_policy}
@@ -142,7 +142,7 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
         </fieldset>
 
         <fieldset className="border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Filters shown on this category</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Filters shown on this category</legend>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {(options?.attributes ?? []).map((a) => (
               <Checkbox
@@ -157,7 +157,7 @@ function Editor({ category, all, onClose }: { category: Category | Draft; all: C
         </fieldset>
 
         <fieldset className="space-y-4 border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Search engines</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Search engines</legend>
           <TextField label="Meta title" optional maxLength={120} value={draft.seo_title} onChange={(e) => set('seo_title', e.target.value)} />
           <TextArea label="Meta description" optional rows={2} maxLength={300} value={draft.seo_description} onChange={(e) => set('seo_description', e.target.value)} />
         </fieldset>

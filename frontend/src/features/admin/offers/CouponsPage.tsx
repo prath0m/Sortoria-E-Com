@@ -106,7 +106,7 @@ function Editor({ coupon, onClose }: { coupon: Coupon; onClose: () => void }) {
         <Checkbox label="First order only" description="Only for shoppers who haven't ordered before." checked={draft.first_order_only} onChange={(e) => set('first_order_only', e.target.checked)} />
         <Checkbox label="Active" checked={draft.is_active} onChange={(e) => set('is_active', e.target.checked)} />
         <fieldset className="space-y-3 border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Limit to</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Limit to</legend>
           <p className="text-xs text-ink-muted">Leave both empty for the whole store. Otherwise only matching items count towards the discount.</p>
           <select
             multiple

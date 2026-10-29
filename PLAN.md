@@ -325,6 +325,8 @@ These are enforced by DRF permission classes (`HasAdminCapability("orders.refund
 ## 7. Frontend
 
 ### 7.1 Design tokens (Tailwind preset + CSS variables)
+
+> **Superseded (Oct 2026):** the storefront and admin were redesigned to a clean minimal style (neutrals, one indigo accent, Inter). The current design system is in `CLAUDE.md` → *Design tokens*. The original brief below is kept for history.
 - **burgundy** 50–900, with `#590907` at **800** (primary). **sage** 50–900, with `#A5A79B` at **400**. **gold** 50–900, with `#E8D258` at **300**. **cream** 50–200, with `#F3EDE2` at **100** (the page background). **ink** `#1E0F0E`-family (near-black with a burgundy undertone) for body text.
 - **Contrast rules** (verified with a script in the test suite): sage-400 and gold-300 never carry text on cream. Muted text uses sage-800 (5.2:1 on cream; sage-700 measured 4.07:1 and fails). Gold appears only as a fill, underline, star or badge background, with ink/burgundy text on it.
 - **Type:** *Cormorant Garamond* (display, 500/600, with italic used for editorial accents) and *Manrope* (UI/body, 400–700), self-hosted through `@fontsource` with the display weights preloaded. Fluid type scale using `clamp()`.

@@ -43,7 +43,7 @@ export function OrderTimeline({ order }: { order: Pick<OrderDetail, 'status' | '
             {!last ? (
               <span className="absolute left-[1.0625rem] top-9 h-[calc(100%-2.25rem)] w-px bg-line" aria-hidden="true">
                 <motion.span
-                  className="block h-full w-full origin-top bg-burgundy-800"
+                  className="block h-full w-full origin-top bg-charcoal-800"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: i < currentIndex ? 1 : 0 }}
                   transition={{ duration: reduce ? 0 : 0.5, delay: reduce ? 0 : 0.2 + i * 0.25 }}
@@ -56,14 +56,14 @@ export function OrderTimeline({ order }: { order: Pick<OrderDetail, 'status' | '
               transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : i * 0.25 }}
               className={cn(
                 'relative z-[1] flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors',
-                done ? 'border-burgundy-800 bg-burgundy-800 text-cream-50' : 'border-line-strong bg-surface text-ink-muted',
-                current && 'ring-4 ring-gold-200/80',
+                done ? 'border-charcoal-800 bg-charcoal-800 text-paper-50' : 'border-line-strong bg-surface text-ink-muted',
+                current && 'ring-4 ring-iris-200/80',
               )}
             >
               <step.Icon className="h-4 w-4" aria-hidden="true" />
               {current && !reduce ? (
                 <motion.span
-                  className="absolute inset-0 rounded-full border border-gold-400"
+                  className="absolute inset-0 rounded-full border border-iris-400"
                   animate={{ scale: [1, 1.5], opacity: [0.7, 0] }}
                   transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
                   aria-hidden="true"

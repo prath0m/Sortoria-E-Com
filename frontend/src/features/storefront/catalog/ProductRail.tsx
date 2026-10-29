@@ -32,10 +32,10 @@ export function ProductRail({ title, eyebrow, products, loading, action }: Produ
           <div className="flex items-center gap-4">
             {action}
             <div className="hidden gap-2 md:flex">
-              <button type="button" onClick={() => scroll(-1)} aria-label="Scroll back" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-burgundy-800 hover:text-burgundy-800">
+              <button type="button" onClick={() => scroll(-1)} aria-label="Scroll back" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-charcoal-800 hover:text-charcoal-800">
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <button type="button" onClick={() => scroll(1)} aria-label="Scroll forward" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-burgundy-800 hover:text-burgundy-800">
+              <button type="button" onClick={() => scroll(1)} aria-label="Scroll forward" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-charcoal-800 hover:text-charcoal-800">
                 <ChevronRight className="h-5 w-5" />
               </button>
             </div>

@@ -75,7 +75,7 @@ function ImportCard({ kind, title, text }: { kind: string; title: string; text: 
       <h3 className="font-sans text-sm font-semibold text-ink">{title}</h3>
       <p className="mt-1 flex-1 text-xs text-ink-muted">{text}</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-xs bg-primary px-4 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-primary-on focus-within:ring-2 focus-within:ring-gold-300 hover:bg-primary-hover">
+        <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-xs bg-primary px-4 text-[0.8125rem] font-semibold text-primary-on focus-within:ring-2 focus-within:ring-iris-300 hover:bg-primary-hover">
           <FileUp className="h-3.5 w-3.5" aria-hidden="true" />
           {uploading ? 'Uploading…' : 'Upload CSV'}
           <input type="file" accept=".csv,text/csv" className="sr-only" disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ''; }} />

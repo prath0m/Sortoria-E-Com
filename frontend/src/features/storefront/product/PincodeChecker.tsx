@@ -21,7 +21,7 @@ export function PincodeChecker({ productSlug }: { productSlug: string }) {
         }}
         className="flex items-center gap-2"
       >
-        <MapPin className="h-4 w-4 shrink-0 text-burgundy-800" aria-hidden="true" />
+        <MapPin className="h-4 w-4 shrink-0 text-charcoal-800" aria-hidden="true" />
         <label htmlFor="pdp-pincode" className="sr-only">
           Delivery pincode
         </label>
@@ -34,7 +34,7 @@ export function PincodeChecker({ productSlug }: { productSlug: string }) {
           placeholder="Enter pincode for delivery date"
           className="h-9 min-w-0 flex-1 bg-transparent text-sm focus:outline-none"
         />
-        <button type="submit" disabled={!valid} className="text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800 disabled:opacity-40">
+        <button type="submit" disabled={!valid} className="text-xs font-semibold text-charcoal-800 disabled:opacity-40">
           Check
         </button>
       </form>

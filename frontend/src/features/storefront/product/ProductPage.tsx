@@ -115,7 +115,7 @@ export default function ProductPage() {
               <ul className="mt-5 space-y-1.5 text-sm text-ink-soft">
                 {product.highlights.map((h) => (
                   <li key={h} className="flex gap-3">
-                    <span className="mt-2 h-1 w-1 shrink-0 rotate-45 bg-gold-500" aria-hidden="true" />
+                    <span className="mt-2 h-1 w-1 shrink-0 rotate-45 bg-iris-500" aria-hidden="true" />
                     {h}
                   </li>
                 ))}

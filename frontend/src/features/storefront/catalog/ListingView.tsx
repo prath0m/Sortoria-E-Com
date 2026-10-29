@@ -114,9 +114,9 @@ export function ListingView({ base, hideBrands, aside, emptyTitle, emptyDescript
         {aside}
         <div className="sticky top-[calc(var(--header-bottom,6rem)+1rem)] max-h-[calc(100vh-var(--header-bottom,6rem)-2rem)] overflow-y-auto pr-2" data-lenis-prevent>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-ink">Refine</h2>
+            <h2 className="font-sans text-xs font-semibold text-ink">Refine</h2>
             {filters ? (
-              <button type="button" onClick={() => update(clearFilters(searchParams))} className="text-xs text-burgundy-800 link-underline">
+              <button type="button" onClick={() => update(clearFilters(searchParams))} className="text-xs text-charcoal-800 link-underline">
                 Clear all
               </button>
             ) : null}
@@ -148,7 +148,7 @@ export function ListingView({ base, hideBrands, aside, emptyTitle, emptyDescript
               id="sort"
               value={searchParams.get('sort') ?? (searchParams.get('q') ? 'relevance' : 'popular')}
               onChange={(e) => update(setValue(searchParams, 'sort', e.target.value))}
-              className="h-9 rounded-xs border border-line-strong bg-surface-raised px-3 text-sm focus:border-burgundy-800 focus:outline-none"
+              className="h-9 rounded-xs border border-line-strong bg-surface-raised px-3 text-sm focus:border-charcoal-800 focus:outline-none"
             >
               {searchParams.get('q') ? <option value="relevance">Best match</option> : null}
               {SORTS.map((s) => (
@@ -165,7 +165,7 @@ export function ListingView({ base, hideBrands, aside, emptyTitle, emptyDescript
                   aria-pressed={view === mode}
                   aria-label={mode === 'grid' ? 'Grid view' : 'List view'}
                   onClick={() => update(setValue(searchParams, 'view', mode === 'grid' ? null : 'list'))}
-                  className={cn('inline-flex h-9 w-9 items-center justify-center', view === mode ? 'bg-burgundy-800 text-cream-50' : 'text-ink-soft')}
+                  className={cn('inline-flex h-9 w-9 items-center justify-center', view === mode ? 'bg-charcoal-800 text-paper-50' : 'text-ink-soft')}
                 >
                   {mode === 'grid' ? <LayoutGrid className="h-4 w-4" /> : <List className="h-4 w-4" />}
                 </button>
@@ -181,7 +181,7 @@ export function ListingView({ base, hideBrands, aside, emptyTitle, emptyDescript
                 <button
                   type="button"
                   onClick={() => update(chip.next)}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-cream-200 px-3 py-1.5 text-xs text-ink transition-colors hover:bg-cream-300"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-paper-200 px-3 py-1.5 text-xs text-ink transition-colors hover:bg-paper-300"
                   aria-label={`Remove filter ${chip.label}`}
                 >
                   {chip.label} <X className="h-3 w-3" aria-hidden="true" />
@@ -189,7 +189,7 @@ export function ListingView({ base, hideBrands, aside, emptyTitle, emptyDescript
               </li>
             ))}
             <li>
-              <button type="button" onClick={() => update(clearFilters(searchParams))} className="px-2 text-xs font-semibold text-burgundy-800 link-underline">
+              <button type="button" onClick={() => update(clearFilters(searchParams))} className="px-2 text-xs font-semibold text-charcoal-800 link-underline">
                 Clear all
               </button>
             </li>

@@ -38,7 +38,7 @@ export function QuickView() {
         </div>
       ) : (
         <div className="grid gap-6 px-5 pb-6 md:grid-cols-2 md:gap-8 md:px-6">
-          <div className="aspect-[4/5] overflow-hidden rounded-sm bg-cream-200">
+          <div className="aspect-[4/5] overflow-hidden rounded-sm bg-paper-200">
             {image ? (
               <ResponsiveImage src={image.url} renditions={image.renditions} alt={image.alt} sizes="(min-width: 768px) 420px, 90vw" className="h-full w-full object-cover" />
             ) : null}
@@ -65,7 +65,7 @@ export function QuickView() {
             <Link
               to={`/products/${product.slug}`}
               onClick={close}
-              className="link-underline mt-6 inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800"
+              className="link-underline mt-6 inline-flex w-fit items-center gap-2 text-xs font-semibold text-charcoal-800"
             >
               View full details <ArrowRight className="h-4 w-4" />
             </Link>

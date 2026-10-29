@@ -53,7 +53,7 @@ export function ProductPurchase({ product, variant, compact, onAdded }: ProductP
           {!inStock ? (
             <span className="font-medium text-danger">This option is sold out. Try another, or check back soon.</span>
           ) : variant.is_low_stock ? (
-            <span className="font-medium text-burgundy-700">Only {variant.stock} left. Selling quickly.</span>
+            <span className="font-medium text-charcoal-700">Only {variant.stock} left. Selling quickly.</span>
           ) : (
             <span className="text-success">In stock and ready to ship</span>
           )}

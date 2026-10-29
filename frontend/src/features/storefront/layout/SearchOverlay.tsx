@@ -109,8 +109,8 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
         className="relative max-h-[88vh] overflow-y-auto bg-surface-raised shadow-lift"
       >
         <div className="container-page py-6 md:py-10">
-          <form onSubmit={submit} role="search" className="flex items-center gap-3 border-b border-burgundy-800/40 pb-3">
-            <Search className="h-6 w-6 shrink-0 text-burgundy-800" aria-hidden="true" />
+          <form onSubmit={submit} role="search" className="flex items-center gap-3 border-b border-charcoal-800/40 pb-3">
+            <Search className="h-6 w-6 shrink-0 text-charcoal-800" aria-hidden="true" />
             <input
               data-autofocus
               autoFocus
@@ -149,7 +149,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                       key={term}
                       type="button"
                       onClick={() => go(`/search?q=${encodeURIComponent(term)}`)}
-                      className="rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-burgundy-800 hover:text-burgundy-800"
+                      className="rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-charcoal-800 hover:text-charcoal-800"
                     >
                       {term}
                     </button>
@@ -171,10 +171,10 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                         {...optionProps(i)}
                         className={cn(
                           'flex cursor-pointer items-center gap-4 rounded-sm p-2 transition-colors',
-                          activeIndex === i && 'bg-cream-200',
+                          activeIndex === i && 'bg-paper-200',
                         )}
                       >
-                        <div className="h-20 w-16 shrink-0 overflow-hidden rounded-xs bg-cream-200">
+                        <div className="h-20 w-16 shrink-0 overflow-hidden rounded-xs bg-paper-200">
                           {p.images[0] ? (
                             <ResponsiveImage
                               src={p.images[0].url}
@@ -197,7 +197,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                     <button
                       type="button"
                       onClick={() => go(`/search?q=${encodeURIComponent(q.trim())}`)}
-                      className="link-underline mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800"
+                      className="link-underline mt-6 inline-flex items-center gap-2 text-xs font-semibold text-charcoal-800"
                     >
                       See all results for “{q.trim()}” <ArrowRight className="h-4 w-4" />
                     </button>
@@ -214,7 +214,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                             <li
                               key={c.slug}
                               {...optionProps(index)}
-                              className={cn('cursor-pointer rounded-xs px-2 py-1.5', activeIndex === index && 'bg-cream-200')}
+                              className={cn('cursor-pointer rounded-xs px-2 py-1.5', activeIndex === index && 'bg-paper-200')}
                             >
                               {c.name}
                             </li>
@@ -233,7 +233,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                             <li
                               key={b.slug}
                               {...optionProps(index)}
-                              className={cn('cursor-pointer rounded-xs px-2 py-1.5', activeIndex === index && 'bg-cream-200')}
+                              className={cn('cursor-pointer rounded-xs px-2 py-1.5', activeIndex === index && 'bg-paper-200')}
                             >
                               {b.name}
                             </li>

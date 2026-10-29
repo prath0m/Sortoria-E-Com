@@ -299,7 +299,7 @@ export default function OrderDetailPage() {
             </div>
             {order.customer_note ? (
               <div className="rounded-xs bg-accent-soft p-3 text-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-muted">Customer note</p>
+                <p className="text-xs font-semibold text-ink-muted">Customer note</p>
                 <p className="mt-1 text-ink">{order.customer_note}</p>
               </div>
             ) : null}

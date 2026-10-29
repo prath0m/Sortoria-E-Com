@@ -4,7 +4,6 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ApiError } from '@/api/client';
 import { useOrder, useRetryPayment } from '@/api/hooks/orders';
-import { BotanicalDivider } from '@/components/brand/Illustrations';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { PageLoader } from '@/components/ui/PageLoader';
 import { Seo } from '@/lib/seo';
@@ -22,7 +21,7 @@ function SuccessMark() {
         cy="40"
         r="36"
         fill="none"
-        stroke="rgb(var(--gold-400))"
+        stroke="rgb(var(--iris-400))"
         strokeWidth="2"
         initial={{ pathLength: reduce ? 1 : 0 }}
         animate={{ pathLength: 1 }}
@@ -31,7 +30,7 @@ function SuccessMark() {
       <motion.path
         d="M25 41 L36 52 L56 30"
         fill="none"
-        stroke="rgb(var(--burgundy-800))"
+        stroke="rgb(var(--charcoal-800))"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -81,12 +80,11 @@ export default function OrderPage() {
               <h1 className="mt-2 text-display-lg">{order.status_label}</h1>
             </>
           )}
-          <BotanicalDivider className="mt-8" />
         </header>
 
         {awaitingPayment ? (
-          <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-4 rounded-sm border border-gold-500 bg-gold-50 p-6 text-center">
-            <AlertCircle className="h-6 w-6 text-gold-800" aria-hidden="true" />
+          <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-4 rounded-sm border border-iris-500 bg-iris-50 p-6 text-center">
+            <AlertCircle className="h-6 w-6 text-iris-800" aria-hidden="true" />
             <p className="text-ink">
               {order.status === 'payment_failed'
                 ? "Your payment didn't go through, and no money was taken. Your pieces are still set aside while stock lasts."

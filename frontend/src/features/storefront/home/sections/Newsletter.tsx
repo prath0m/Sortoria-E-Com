@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { ApiError } from '@/api/client';
 import { useSubscribe } from '@/api/hooks/cms';
-import { Illustration, OrganicShape } from '@/components/brand/Illustrations';
+import { Illustration } from '@/components/brand/Illustrations';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 
@@ -19,7 +19,7 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
           role="status"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className={cn('text-sm', dark ? 'text-cream-100' : 'text-ink-soft')}
+          className={cn('text-sm', dark ? 'text-paper-100' : 'text-ink-soft')}
         >
           {subscribe.data.detail}
         </motion.p>
@@ -54,16 +54,16 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
               className={cn(
                 'h-12 min-w-0 flex-1 rounded-xs border px-4 text-sm focus:outline-none',
                 dark
-                  ? 'border-cream-100/30 bg-transparent text-cream-50 placeholder:text-cream-200/70 focus:border-gold-300'
-                  : 'border-line-strong bg-surface-raised focus:border-burgundy-800',
+                  ? 'border-paper-100/30 bg-transparent text-paper-50 placeholder:text-paper-200/70 focus:border-iris-300'
+                  : 'border-line-strong bg-surface-raised focus:border-charcoal-800',
               )}
             />
-            <Button type="submit" variant={dark ? 'gold' : 'primary'} size="lg" loading={subscribe.isPending}>
+            <Button type="submit" variant={dark ? 'inverse' : 'primary'} size="lg" loading={subscribe.isPending}>
               Subscribe
             </Button>
           </div>
           {error ? (
-            <p role="alert" className={cn('mt-2 text-sm', dark ? 'text-gold-200' : 'text-danger')}>
+            <p role="alert" className={cn('mt-2 text-sm', dark ? 'text-iris-200' : 'text-danger')}>
               {error}
             </p>
           ) : null}
@@ -76,8 +76,6 @@ export function NewsletterForm({ source, tone = 'light', compact }: { source: st
 export function NewsletterSection({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
   return (
     <section className="grain relative overflow-hidden py-16 lg:py-24">
-      <OrganicShape className="absolute -left-24 top-0 h-[28rem] w-[28rem]" tone="burgundy" />
-      <OrganicShape className="absolute -right-24 bottom-0 h-[22rem] w-[22rem]" tone="gold" />
       <div className="container-page relative z-[2] flex flex-col items-center text-center">
         <Illustration name="letter" className="h-24 w-24" />
         <p className="eyebrow mt-4">{eyebrow}</p>

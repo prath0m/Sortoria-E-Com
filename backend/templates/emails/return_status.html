@@ -5,11 +5,11 @@
 <p style="margin:0 0 14px;font-size:15px;line-height:25px;">Dear {{ first_name|default:"friend" }},</p>
 <p style="margin:0 0 14px;font-size:15px;line-height:25px;">{{ message }}</p>
 {% if pickup_date and status == "pickup_scheduled" %}<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Pickup date: <strong>{{ pickup_date }}</strong></p>{% endif %}
-{% if note %}<p style="margin:0 0 14px;padding:14px 16px;background:#F3EDE2;font-size:14px;line-height:22px;">{{ note }}</p>{% endif %}
+{% if note %}<p style="margin:0 0 14px;padding:14px 16px;background:#F4F4F5;font-size:14px;line-height:22px;">{{ note }}</p>{% endif %}
 {% if status == "refunded" and refund %}<p style="margin:0 0 14px;font-size:15px;line-height:25px;">Amount: <strong>{{ refund }}</strong>{% if manual_refund %}, sent to the UPI ID you shared{% else %}, to your original payment method{% endif %}.</p>{% endif %}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:10px 0 0;border-top:1px solid #DDD0BA;">
-{% for item in items %}<tr><td style="padding:10px 0;border-bottom:1px solid #EAE1D1;font-size:14px;">{{ item.name }}</td><td align="right" style="padding:10px 0;border-bottom:1px solid #EAE1D1;font-size:14px;color:#61635B;">Qty {{ item.quantity }}</td></tr>{% endfor %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:10px 0 0;border-top:1px solid #D4D4D8;">
+{% for item in items %}<tr><td style="padding:10px 0;border-bottom:1px solid #E4E4E7;font-size:14px;">{{ item.name }}</td><td align="right" style="padding:10px 0;border-bottom:1px solid #E4E4E7;font-size:14px;color:#666666;">Qty {{ item.quantity }}</td></tr>{% endfor %}
 </table>
 {% include "emails/partials/button.html" with url=url label="View your return" %}
-<p style="margin:0;font-size:13px;line-height:22px;color:#61635B;">Order {{ order_number }}</p>
+<p style="margin:0;font-size:13px;line-height:22px;color:#666666;">Order {{ order_number }}</p>
 {% endblock %}

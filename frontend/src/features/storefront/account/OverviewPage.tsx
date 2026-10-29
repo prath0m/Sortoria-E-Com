@@ -12,14 +12,14 @@ export default function OverviewPage() {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <Link to="/account/profile" className={card}>
-        <User className="h-5 w-5 text-burgundy-800" aria-hidden="true" />
+        <User className="h-5 w-5 text-charcoal-800" aria-hidden="true" />
         <h2 className="mt-4 text-display-sm">Profile</h2>
         <p className="mt-2 text-sm text-ink-soft">{user.full_name || user.email}</p>
         <p className="text-sm text-ink-muted">{user.email}</p>
         {user.phone ? <p className="text-sm text-ink-muted">+91 {user.phone}</p> : null}
       </Link>
       <Link to="/account/addresses" className={card}>
-        <MapPin className="h-5 w-5 text-burgundy-800" aria-hidden="true" />
+        <MapPin className="h-5 w-5 text-charcoal-800" aria-hidden="true" />
         <h2 className="mt-4 text-display-sm">Default address</h2>
         {isLoading ? (
           <Skeleton className="mt-3 h-12 w-3/4" />

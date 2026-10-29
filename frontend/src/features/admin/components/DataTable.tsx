@@ -103,7 +103,7 @@ export function DataTable<T>({
       <div className={cn('overflow-x-auto transition-opacity', fetching && 'opacity-60')}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-line text-left text-xs uppercase tracking-[0.08em] text-ink-muted">
+            <tr className="border-b border-line text-left text-xs text-ink-muted">
               {onSelect ? (
                 <th scope="col" className="w-10 px-4 py-3">
                   <Box state={allOn ? 'on' : someOn ? 'some' : 'off'} onClick={toggleAll} label="Select all on this page" />

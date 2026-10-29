@@ -1,22 +1,22 @@
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 4px;border-top:1px solid #DDD0BA;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 4px;border-top:1px solid #D4D4D8;">
 {% for item in items %}
 <tr>
-  <td width="72" style="padding:14px 14px 14px 0;border-bottom:1px solid #EAE1D1;vertical-align:top;">
-    {% if item.image %}<img src="{{ item.image }}" width="64" height="80" alt="" style="display:block;width:64px;height:80px;object-fit:cover;border-radius:2px;background:#EAE1D1;">{% endif %}
+  <td width="72" style="padding:14px 14px 14px 0;border-bottom:1px solid #E4E4E7;vertical-align:top;">
+    {% if item.image %}<img src="{{ item.image }}" width="64" height="80" alt="" style="display:block;width:64px;height:80px;object-fit:cover;border-radius:2px;background:#E4E4E7;">{% endif %}
   </td>
-  <td style="padding:14px 0;border-bottom:1px solid #EAE1D1;vertical-align:top;font-size:14px;line-height:21px;">
-    <strong style="color:#2A1413;font-weight:600;">{{ item.name }}</strong><br>
-    <span style="color:#61635B;">{% if item.variant %}{{ item.variant }} · {% endif %}Qty {{ item.quantity }}</span>
+  <td style="padding:14px 0;border-bottom:1px solid #E4E4E7;vertical-align:top;font-size:14px;line-height:21px;">
+    <strong style="color:#0A0A0A;font-weight:600;">{{ item.name }}</strong><br>
+    <span style="color:#666666;">{% if item.variant %}{{ item.variant }} · {% endif %}Qty {{ item.quantity }}</span>
   </td>
-  <td align="right" style="padding:14px 0;border-bottom:1px solid #EAE1D1;vertical-align:top;font-size:14px;color:#2A1413;white-space:nowrap;">{{ item.total }}</td>
+  <td align="right" style="padding:14px 0;border-bottom:1px solid #E4E4E7;vertical-align:top;font-size:14px;color:#0A0A0A;white-space:nowrap;">{{ item.total }}</td>
 </tr>
 {% endfor %}
 </table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:24px;color:#4A3331;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:24px;color:#404040;">
   <tr><td>Subtotal</td><td align="right">{{ subtotal }}</td></tr>
-  {% if discount %}<tr><td>Offers{% if coupon_code %} ({{ coupon_code }}){% endif %}</td><td align="right" style="color:#2E6B3E;">−{{ discount }}</td></tr>{% endif %}
+  {% if discount %}<tr><td>Offers{% if coupon_code %} ({{ coupon_code }}){% endif %}</td><td align="right" style="color:#15803D;">−{{ discount }}</td></tr>{% endif %}
   <tr><td>Shipping</td><td align="right">{{ shipping }}</td></tr>
   {% if cod_fee %}<tr><td>Cash on delivery fee</td><td align="right">{{ cod_fee }}</td></tr>{% endif %}
-  <tr><td style="padding-top:10px;border-top:1px solid #DDD0BA;color:#2A1413;font-weight:600;">Total</td><td align="right" style="padding-top:10px;border-top:1px solid #DDD0BA;font-family:'Manrope',Helvetica,Arial,sans-serif;font-size:18px;font-weight:600;color:#590907;">{{ total }}</td></tr>
-  <tr><td colspan="2" align="right" style="font-size:12px;color:#61635B;">Includes {{ tax }} GST</td></tr>
+  <tr><td style="padding-top:10px;border-top:1px solid #D4D4D8;color:#0A0A0A;font-weight:600;">Total</td><td align="right" style="padding-top:10px;border-top:1px solid #D4D4D8;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:18px;font-weight:600;color:#0A0A0A;">{{ total }}</td></tr>
+  <tr><td colspan="2" align="right" style="font-size:12px;color:#666666;">Includes {{ tax }} GST</td></tr>
 </table>

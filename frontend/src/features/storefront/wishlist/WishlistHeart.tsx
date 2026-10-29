@@ -19,7 +19,7 @@ export function WishlistHeart({ productId, name, className, size = 'md' }: { pro
         toggle.mutate(productId);
       }}
       className={cn(
-        'relative inline-flex items-center justify-center rounded-full bg-surface-raised/90 text-ink shadow-soft backdrop-blur transition-colors hover:text-burgundy-800',
+        'relative inline-flex items-center justify-center rounded-full bg-surface-raised/90 text-ink shadow-soft backdrop-blur transition-colors hover:text-charcoal-800',
         dim,
         className,
       )}
@@ -32,7 +32,7 @@ export function WishlistHeart({ productId, name, className, size = 'md' }: { pro
         className="inline-flex"
       >
         <Heart
-          className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4', saved && 'text-burgundy-800')}
+          className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4', saved && 'text-charcoal-800')}
           fill={saved ? 'currentColor' : 'none'}
           strokeWidth={1.8}
         />
@@ -45,7 +45,7 @@ export function WishlistHeart({ productId, name, className, size = 'md' }: { pro
               return (
                 <motion.span
                   key={i}
-                  className="absolute left-1/2 top-1/2 h-1 w-1 rounded-full bg-gold-400"
+                  className="absolute left-1/2 top-1/2 h-1 w-1 rounded-full bg-iris-400"
                   variants={{
                     hidden: { x: 0, y: 0, opacity: 0 },
                     show: {

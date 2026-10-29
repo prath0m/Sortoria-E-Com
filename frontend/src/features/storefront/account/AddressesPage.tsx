@@ -56,11 +56,11 @@ export default function AddressesPage() {
                 +91 {a.phone}
               </address>
               <div className="mt-4 flex flex-wrap gap-4 text-sm">
-                <button type="button" className="text-burgundy-800 link-underline" onClick={() => setEditing(a)}>
+                <button type="button" className="text-charcoal-800 link-underline" onClick={() => setEditing(a)}>
                   Edit
                 </button>
                 {!a.is_default_shipping ? (
-                  <button type="button" className="text-burgundy-800 link-underline" onClick={() => setDefault.mutate(a.id)}>
+                  <button type="button" className="text-charcoal-800 link-underline" onClick={() => setDefault.mutate(a.id)}>
                     Set as default
                   </button>
                 ) : null}

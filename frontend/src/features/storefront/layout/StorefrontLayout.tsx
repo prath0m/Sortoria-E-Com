@@ -23,7 +23,7 @@ export function StorefrontLayout() {
     <SmoothScroll>
       <a
         href="#main"
-        className="sr-only z-toast rounded-xs bg-burgundy-800 px-4 py-2 text-cream-50 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-toast rounded-xs bg-charcoal-800 px-4 py-2 text-paper-50 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Skip to content
       </a>

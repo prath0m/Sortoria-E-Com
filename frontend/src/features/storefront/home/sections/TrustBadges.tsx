@@ -5,13 +5,13 @@ const ICONS = { truck: Truck, return: RotateCcw, shield: ShieldCheck, chat: Mess
 
 export function TrustBadges({ badges }: { badges: { icon: string; title: string; text: string }[] }) {
   return (
-    <section aria-label="Why shop with us" className="border-b border-line bg-cream-50">
+    <section aria-label="Why shop with us" className="border-b border-line bg-paper-50">
       <ul className="container-page grid grid-cols-2 gap-x-6 gap-y-8 py-10 lg:grid-cols-4">
         {badges.map((b, i) => {
           const Icon = ICONS[b.icon as keyof typeof ICONS] ?? Award;
           return (
             <Reveal as="li" key={b.title} delay={i * 0.08} className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold-400/60 text-burgundy-800">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-iris-400/60 text-charcoal-800">
                 <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
               </span>
               <span>

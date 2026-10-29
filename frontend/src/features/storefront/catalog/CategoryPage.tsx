@@ -55,11 +55,11 @@ export default function CategoryPage() {
           </picture>
           <div className="absolute inset-0 -z-10 bg-gradient-to-r from-shade/70 via-shade/35 to-transparent" />
           <div className="container-page grain flex min-h-[18rem] flex-col justify-end py-10 md:min-h-[26rem] md:py-14">
-            <Breadcrumbs items={crumbs} className="mb-auto text-cream-200 [&_a]:text-cream-100 [&_[aria-current]]:text-cream-50" />
+            <Breadcrumbs items={crumbs} className="mb-auto text-paper-200 [&_a]:text-paper-100 [&_[aria-current]]:text-paper-50" />
             <Reveal>
-              <p className="eyebrow text-gold-200">{category.name}</p>
-              <h1 className="mt-3 max-w-2xl text-display-xl text-cream-50">{category.banner_headline || category.name}</h1>
-              {category.banner_subtext ? <p className="mt-4 max-w-xl text-cream-100">{category.banner_subtext}</p> : null}
+              <p className="eyebrow text-iris-200">{category.name}</p>
+              <h1 className="mt-3 max-w-2xl text-display-xl text-paper-50">{category.banner_headline || category.name}</h1>
+              {category.banner_subtext ? <p className="mt-4 max-w-xl text-paper-100">{category.banner_subtext}</p> : null}
             </Reveal>
           </div>
         </section>
@@ -80,7 +80,7 @@ export default function CategoryPage() {
               <li key={child.id} className="shrink-0">
                 <Link
                   to={`/shop/${child.slug}`}
-                  className="inline-flex rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-burgundy-800 hover:text-burgundy-800"
+                  className="inline-flex rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-charcoal-800 hover:text-charcoal-800"
                 >
                   {child.name}
                 </Link>
@@ -112,7 +112,7 @@ export function ShopAllPage() {
         <ul className="scrollbar-none -mx-4 mt-8 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
           {departments.map((d) => (
             <li key={d.id} className="shrink-0">
-              <Link to={`/shop/${d.slug}`} className="inline-flex rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-burgundy-800 hover:text-burgundy-800">
+              <Link to={`/shop/${d.slug}`} className="inline-flex rounded-full border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-charcoal-800 hover:text-charcoal-800">
                 {d.name}
               </Link>
             </li>

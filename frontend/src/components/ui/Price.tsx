@@ -26,7 +26,7 @@ export function Price({ price, mrp, maxPrice, size = 'md', className, showDiscou
             {formatMoney(mrp)}
           </span>
           {showDiscount ? (
-            <span className={cn('font-semibold text-burgundy-700', size === 'lg' ? 'text-base' : 'text-[0.8125rem]')}>
+            <span className={cn('font-semibold text-charcoal-700', size === 'lg' ? 'text-base' : 'text-[0.8125rem]')}>
               {off}% off
             </span>
           ) : null}

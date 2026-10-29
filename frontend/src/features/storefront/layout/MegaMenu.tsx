@@ -59,7 +59,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
   return (
     <nav ref={navRef} aria-label="Departments" className="relative" onMouseLeave={closeSoon}>
       {/* Fixed height so the header doesn't grow when the departments arrive. */}
-      <ul className="scrollbar-none container-page flex h-[2.625rem] items-center justify-between gap-1 overflow-x-auto">
+      <ul className="scrollbar-none container-page flex h-[2.625rem] items-center gap-7 overflow-x-auto 2xl:gap-9">
         {categories.map((cat, i) => (
           <li key={cat.id} onMouseEnter={() => openSoon(cat.id)}>
             <Link
@@ -69,26 +69,22 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
               aria-controls="mega-panel"
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                'relative block whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-burgundy-800 2xl:px-2.5',
-                active === cat.id && 'text-burgundy-800',
+                'relative block whitespace-nowrap py-3 text-[0.8125rem] font-medium text-ink-soft transition-colors hover:text-ink',
+                active === cat.id && 'text-ink',
               )}
             >
               {cat.name}
               <span
                 className={cn(
-                  'absolute inset-x-1.5 bottom-1.5 h-px origin-left scale-x-0 bg-gold-400 transition-transform duration-400 ease-luxe 2xl:inset-x-2.5',
+                  'absolute inset-x-0 bottom-1.5 h-[1.5px] origin-left scale-x-0 bg-ink transition-transform duration-400 ease-luxe',
                   active === cat.id && 'scale-x-100',
                 )}
               />
             </Link>
           </li>
         ))}
-        <li>
-          <Link
-            to="/offers"
-            className="relative whitespace-nowrap px-1.5 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-burgundy-700 transition-colors hover:text-burgundy-900 2xl:px-2.5"
-          >
-            <span className="mr-1.5 inline-block h-1.5 w-1.5 -translate-y-px rotate-45 bg-gold-400" aria-hidden="true" />
+        <li className="ml-auto">
+          <Link to="/offers" className="whitespace-nowrap py-3 text-[0.8125rem] font-semibold text-[#dc2626] transition-opacity hover:opacity-80 dark:text-[#f87171]">
             Offers
           </Link>
         </li>
@@ -117,19 +113,19 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                 <p className="eyebrow mb-2">Department</p>
                 <Link
                   to={`/shop/${current.slug}`}
-                  className="block w-fit font-display text-display-md text-burgundy-800 hover:text-burgundy-700"
+                  className="block w-fit text-display-md font-semibold tracking-tight text-ink hover:text-ink-soft"
                 >
                   {current.name}
                 </Link>
                 <Link
                   to={`/shop/${current.slug}`}
-                  className="link-underline mt-6 inline-block text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800"
+                  className="mt-5 inline-block text-sm font-medium text-ink underline-offset-4 hover:underline"
                 >
                   Shop all {current.name.toLowerCase()}
                 </Link>
                 <Link
                   to={`/shop/${current.slug}?sort=newest`}
-                  className="link-underline mt-3 block w-fit text-xs font-semibold uppercase tracking-[0.14em] text-ink-soft"
+                  className="mt-2 block w-fit text-sm text-ink-soft underline-offset-4 hover:underline"
                 >
                   New arrivals
                 </Link>
@@ -137,7 +133,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
               <ul className="col-span-5 grid grid-cols-2 content-start gap-x-8 gap-y-3">
                 {current.children.map((child) => (
                   <li key={child.id}>
-                    <Link to={`/shop/${child.slug}`} className="link-underline text-[0.9375rem] text-ink hover:text-burgundy-800">
+                    <Link to={`/shop/${child.slug}`} className="text-[0.9375rem] text-ink-soft transition-colors hover:text-ink">
                       {child.name}
                     </Link>
                   </li>
@@ -155,7 +151,7 @@ export function MegaMenu({ categories }: { categories: NavNode[] }) {
                       className="h-full w-full object-cover transition-transform duration-1200 ease-luxe group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-shade/50 to-transparent" />
-                    <span className="absolute bottom-4 left-5 font-display text-2xl italic text-cream-50">
+                    <span className="absolute bottom-4 left-5 text-lg font-semibold text-white">
                       Discover {current.name}
                     </span>
                   </div>

@@ -14,15 +14,15 @@ export function DealSpotlight({ deal }: { deal: { title: string; subtitle: strin
   return (
     <section className="container-page py-12 lg:py-16" aria-label="Deal of the day">
       <div className="grid overflow-hidden rounded-sm border border-line bg-surface-raised md:grid-cols-2">
-        <Link to={`/products/${product.slug}`} className="block aspect-[4/3] bg-cream-200 md:aspect-auto">
+        <Link to={`/products/${product.slug}`} className="block aspect-[4/3] bg-paper-200 md:aspect-auto">
           {image ? <ResponsiveImage src={image.url} renditions={image.renditions} alt={image.alt} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover" /> : null}
         </Link>
         <Reveal className="flex flex-col justify-center p-8 md:p-14">
-          <p className="eyebrow text-burgundy-700">Deal of the day</p>
+          <p className="eyebrow text-charcoal-700">Deal of the day</p>
           <h2 className="mt-3 text-display-lg">{product.name}</h2>
           <p className="mt-3 text-ink-soft">{deal.subtitle}</p>
           <Price className="mt-6" size="lg" price={product.price_paise} mrp={product.mrp_paise} />
-          <p className="mb-3 mt-8 text-xs font-semibold uppercase tracking-[0.18em] text-ink-muted">Ends in</p>
+          <p className="mb-3 mt-8 text-xs font-semibold text-ink-muted">Ends in</p>
           <Countdown to={deal.ends_at} />
           <ButtonLink to={`/products/${product.slug}`} size="lg" className="mt-10 self-start">
             Take a closer look

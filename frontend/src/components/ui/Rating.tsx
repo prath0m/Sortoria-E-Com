@@ -4,12 +4,12 @@ import { cn } from '@/lib/cn';
 export function Stars({ value, size = 14, className }: { value: number; size?: number; className?: string }) {
   return (
     <span className={cn('relative inline-flex', className)} aria-hidden="true">
-      <span className="flex gap-0.5 text-sage-300">
+      <span className="flex gap-0.5 text-line-strong">
         {Array.from({ length: 5 }, (_, i) => (
           <Star key={i} width={size} height={size} fill="currentColor" strokeWidth={0} />
         ))}
       </span>
-      <span className="absolute inset-0 flex gap-0.5 overflow-hidden text-gold-400" style={{ width: `${(value / 5) * 100}%` }}>
+      <span className="absolute inset-0 flex gap-0.5 overflow-hidden text-ink" style={{ width: `${(value / 5) * 100}%` }}>
         {Array.from({ length: 5 }, (_, i) => (
           <Star key={i} width={size} height={size} className="shrink-0" fill="currentColor" strokeWidth={0} />
         ))}

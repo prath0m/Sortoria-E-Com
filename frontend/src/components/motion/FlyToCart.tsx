@@ -49,7 +49,7 @@ export function FlyToCartLayer() {
           <motion.div
             key={f.id}
             aria-hidden="true"
-            className="pointer-events-none fixed left-0 top-0 z-toast h-14 w-14 overflow-hidden rounded-full border-2 border-gold-300 bg-cream-200 shadow-lift"
+            className="pointer-events-none fixed left-0 top-0 z-toast h-14 w-14 overflow-hidden rounded-full border-2 border-iris-300 bg-paper-200 shadow-lift"
             initial={{ x: startX, y: startY, scale: 1, opacity: 1 }}
             animate={{
               x: [startX, (startX + endX) / 2, endX],

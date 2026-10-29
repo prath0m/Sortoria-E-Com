@@ -30,7 +30,7 @@ export function ShareMenu({ title, image }: { title: string; image?: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-      <span className="inline-flex items-center gap-2 font-semibold uppercase tracking-[0.12em] text-ink-muted text-[0.6875rem]">
+      <span className="inline-flex items-center gap-2 font-semibold text-ink-muted text-[0.8125rem]">
         <Share2 className="h-3.5 w-3.5" aria-hidden="true" /> Share
       </span>
       {typeof navigator !== 'undefined' && 'share' in navigator ? (

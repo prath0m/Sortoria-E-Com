@@ -21,10 +21,10 @@ function BannerCard({ banner, large }: { banner: Banner; large?: boolean }) {
         </Badge>
       ) : null}
       <span className={cn('absolute inset-x-6 bottom-6 md:inset-x-10 md:bottom-10', large && 'max-w-xl')}>
-        {banner.eyebrow ? <span className="eyebrow block text-gold-200">{banner.eyebrow}</span> : null}
-        <span className={cn('mt-2 block font-display text-cream-50', large ? 'text-display-xl' : 'text-display-md')}>{banner.title}</span>
-        {banner.subtitle ? <span className="mt-3 block max-w-md text-cream-100">{banner.subtitle}</span> : null}
-        {banner.cta_label ? <span className={cn(buttonClasses({ variant: 'gold', size: 'md' }), 'mt-6')}>{banner.cta_label}</span> : null}
+        {banner.eyebrow ? <span className="eyebrow block text-iris-200">{banner.eyebrow}</span> : null}
+        <span className={cn('mt-2 block font-display text-paper-50', large ? 'text-display-xl' : 'text-display-md')}>{banner.title}</span>
+        {banner.subtitle ? <span className="mt-3 block max-w-md text-paper-100">{banner.subtitle}</span> : null}
+        {banner.cta_label ? <span className={cn(buttonClasses({ variant: 'inverse', size: 'md' }), 'mt-6')}>{banner.cta_label}</span> : null}
       </span>
     </Link>
   );

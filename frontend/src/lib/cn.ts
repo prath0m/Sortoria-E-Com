@@ -3,7 +3,7 @@ import { extendTailwindMerge } from 'tailwind-merge';
 
 /**
  * tailwind-merge must know our custom font sizes; otherwise `text-display-lg` and a colour like
- * `text-cream-50` look like two colour classes and the size gets dropped.
+ * `text-paper-50` look like two colour classes and the size gets dropped.
  */
 const twMerge = extendTailwindMerge({
   extend: {

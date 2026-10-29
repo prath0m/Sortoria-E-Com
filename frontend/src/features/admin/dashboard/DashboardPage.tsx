@@ -49,7 +49,7 @@ function Sparkline({ data, dataKey }: { data: Dashboard['revenue_series']; dataK
 function KpiCard({ label, value, kpi, compare, spark, href, invert, warn }: { label: string; value: string; kpi: Kpi; compare?: string; spark?: React.ReactNode; href?: string; invert?: boolean; warn?: boolean }) {
   const body = (
     <>
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">{label}</p>
+      <p className="text-xs font-semibold text-ink-muted">{label}</p>
       <p className={cn('mt-2 font-sans text-2xl font-semibold tabular-nums', warn ? 'text-danger' : 'text-ink')}>{value}</p>
       <div className="mt-1 flex items-center gap-2">
         {kpi.previous === null ? (
@@ -263,7 +263,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">Overview</p>
+          <p className="text-xs font-semibold text-ink-muted">Overview</p>
           <h1 className="mt-1 text-display-md">Good to see you{user?.first_name ? `, ${user.first_name}` : ''}</h1>
         </div>
         <RangePicker
@@ -315,7 +315,7 @@ export default function DashboardPage() {
               <div className="-mx-5 overflow-x-auto">
                 <table className="w-full min-w-[34rem] text-sm">
                   <thead>
-                    <tr className="border-b border-line text-left text-xs uppercase tracking-[0.1em] text-ink-muted">
+                    <tr className="border-b border-line text-left text-xs text-ink-muted">
                       <th scope="col" className="px-5 py-2 font-semibold">Order</th>
                       <th scope="col" className="px-2 py-2 font-semibold">Customer</th>
                       <th scope="col" className="px-2 py-2 font-semibold">Status</th>

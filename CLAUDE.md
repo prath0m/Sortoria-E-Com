@@ -60,22 +60,29 @@ frontend/src/content/     brand-voice copy that isn't admin-managed (microcopy, 
 - First-load queries read server-inlined data via `initialData: () => peekInlined(key)` so the first render has it (no skeleton flash, no layout shift).
 
 ## Design tokens
+Clean minimal: white and soft-grey surfaces, near-black type, one indigo accent. Colours are CSS variables (`src/styles/index.css`).
+
 | Token | Value | Use |
 |---|---|---|
-| `burgundy-800` | `#590907` | Primary: headings, primary buttons, nav, footer |
-| `sage-400` | `#A5A79B` | Borders, secondary surfaces. **Never text** (2.1:1 on cream) |
-| `gold-300` | `#E8D258` | Accent fills only: badges, stars, underlines, countdown. **Never text on cream** (1.3:1). Fine as text on burgundy (9.4:1) |
-| `cream-100` | `#F3EDE2` | Page background (`bg-surface`) |
-| `ink` | `#2A1413` | Body text (14.9:1) |
-| `ink-soft` | `#4A3331` | Secondary text (10:1) |
-| `ink-muted` = `sage-800` | `#61635B` | Lightest allowed text on cream (5.2:1). sage-700 fails AA |
-- Semantic tokens (`surface`, `line`, `primary`, `accent`, `ink-*`) are remapped under `.dark` for the admin dark mode. Admin UI uses the semantic tokens; the storefront may use the brand scales directly.
-- Fonts: Cormorant Garamond (`font-display`, 500/600, italic accents) and Manrope (`font-sans`). Display sizes are `text-display-{sm..2xl}`. Labels use the `.eyebrow` class.
-- Radii are restrained (2–8px). Borders are 1px `border-line`. Shadows: `shadow-soft`, `shadow-lift`. Hero texture: `.grain`.
-- Logo: `components/brand/Logo.tsx` (wordmark) and `Monogram`, generated from font outlines by `scripts/build_brand_assets.py`. An uploaded logo in Store Settings overrides them.
+| `ink` | `#0A0A0A` | Body text and headings |
+| `ink-soft` | `#404040` | Secondary text |
+| `ink-muted` | `#666666` | Lightest allowed text (5.7:1 on white, 5.3:1 on `surface-muted`) |
+| `surface` / `surface-raised` | `#FFFFFF` | Page and cards |
+| `surface-muted` | `#F4F4F5` | Panels, image placeholders, search field |
+| `line` / `line-strong` | `#E5E5E7` / `#D4D4D8` | 1px borders |
+| `primary` | `#0A0A0A` (white in dark) | Primary buttons |
+| `accent` | `#4F46E5` (indigo-300 in dark) | Links, focus rings, highlights, unread badges. Text-safe (6.3:1) |
+| `success` / `danger` / `warning` | `#166534` / `#B91C1C` / `#854D0E` | Status. Dark enough for AA on their own 15% tints |
+| `shade` | `#0A0A0A`, never remapped | Scrims and photo backdrops (`ink` flips in dark mode) |
+- Scales: `charcoal` (neutral darks: bands, strong text), `paper` (whites), `stone` (greys), `iris` (indigo accent scale). Sale badges are red, rating stars use `ink`.
+- Semantic tokens are remapped under `.dark`. The storefront dark mode also maps the scale classes it uses (paper panels → dark surfaces, charcoal text → light ink); `[data-light-surface]` keeps an area light. Admin UI uses semantic tokens only.
+- Font: Inter Variable for everything (`font-display` = `font-sans`). Headings semibold with tight tracking (`text-display-{sm..2xl}`). Sentence case everywhere; `.eyebrow` is the only small uppercase label.
+- Shapes: pill buttons (`rounded-full`), radii `xs` 8px · `sm` 12px · `md` 16px, 1px `border-line`, quiet shadows (`shadow-soft`, `shadow-lift`). No textures or decorative illustrations beyond empty states.
+- Charts: `--chart-1..5` are the dataviz skill's validated order (blue, orange, aqua, yellow, magenta) with separate dark steps; keep labelled legends (three light slots are under 3:1 on white).
+- Logo: `components/brand/Logo.tsx` (wordmark) and `Monogram`, generated from Inter outlines by `scripts/build_brand_assets.py` (`make brand`), which also writes the favicon and the email/invoice PNGs. An uploaded logo in Store Settings overrides them.
 
 ## Brand voice
-Refined, warm and confident. Short sentences, concrete and sensory, never salesy or shouty. Say "patrons" sparingly, and don't use exclamation marks in UI copy. Examples: empty cart → "Your bag is waiting to be filled." 404 → "This page has wandered off the pattern."
+Clear, warm and confident. Short sentences, concrete and sensory, never salesy or shouty. Say "patrons" sparingly, and don't use exclamation marks in UI copy. Examples: empty cart → "Your bag is waiting to be filled." 404 → "This page has wandered off the pattern."
 
 ## Workflow
 Build in the phases in `PLAN.md` §12. After each phase, run `make test` and `make lint`, run the app, then commit. No TODOs or stub functions in completed phases.

@@ -66,7 +66,7 @@ export default function ProductsPage() {
       cell: (p) => (
         <div className="flex gap-1">
           <StatusBadge status={p.is_active ? 'active' : 'inactive'} />
-          {p.is_featured ? <StatusBadge status="featured" label="Featured" className="bg-gold-300/30 text-ink" /> : null}
+          {p.is_featured ? <StatusBadge status="featured" label="Featured" className="bg-iris-300/30 text-ink" /> : null}
         </div>
       ),
     },

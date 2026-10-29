@@ -19,7 +19,7 @@ function Digit({ value, label, tone }: { value: number; label: string; tone: 'li
       <div
         className={cn(
           'relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-xs font-sans text-xl font-semibold tabular-nums [font-variant-numeric:lining-nums_tabular-nums] sm:h-14 sm:w-14 sm:text-2xl',
-          tone === 'dark' ? 'bg-cream-50/10 text-gold-200 ring-1 ring-cream-50/15' : 'bg-gold-100 text-burgundy-900',
+          tone === 'dark' ? 'bg-paper-50/10 text-iris-200 ring-1 ring-paper-50/15' : 'bg-iris-100 text-charcoal-900',
         )}
       >
         <AnimatePresence mode="popLayout" initial={false}>
@@ -34,7 +34,7 @@ function Digit({ value, label, tone }: { value: number; label: string; tone: 'li
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className={cn('mt-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.18em]', tone === 'dark' ? 'text-cream-200' : 'text-ink-muted')}>
+      <span className={cn('mt-1.5 text-xs font-semibold', tone === 'dark' ? 'text-paper-200' : 'text-ink-muted')}>
         {label}
       </span>
     </div>

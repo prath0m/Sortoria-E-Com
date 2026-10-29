@@ -16,8 +16,8 @@ export function Sidebar({ collapsed, onToggle, onNavigate }: { collapsed: boolea
           <Monogram className="h-8 w-8" />
         ) : (
           <span className="flex items-baseline gap-2">
-            <Logo src={store?.logo} className="h-5 text-accent" />
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-ink-muted">Admin</span>
+            <Logo src={store?.logo} className="h-4" />
+            <span className="text-xs font-semibold text-ink-muted">Admin</span>
           </span>
         )}
         {onToggle && !collapsed ? (
@@ -32,7 +32,7 @@ export function Sidebar({ collapsed, onToggle, onNavigate }: { collapsed: boolea
           if (!items.length) return null;
           return (
             <div key={group.label} className="mb-6">
-              {!collapsed ? <p className="mb-2 px-3 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-ink-muted">{group.label}</p> : null}
+              {!collapsed ? <p className="mb-2 px-3 text-xs font-semibold text-ink-muted">{group.label}</p> : null}
               <ul className="space-y-0.5">
                 {items.map(({ to, label, icon: Icon, end }) => (
                   <li key={to}>

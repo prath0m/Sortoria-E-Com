@@ -27,7 +27,7 @@ export function ReturnTimeline({ ret }: { ret: ReturnRequest }) {
             {i > 0 ? (
               <span className="absolute -top-5 left-[0.6875rem] h-5 w-px bg-line sm:left-[-50%] sm:top-3 sm:h-px sm:w-full" aria-hidden="true">
                 <motion.span
-                  className="block h-full w-full origin-left bg-burgundy-800"
+                  className="block h-full w-full origin-left bg-charcoal-800"
                   initial={{ scale: 0 }}
                   animate={{ scale: done ? 1 : 0 }}
                   transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : i * 0.2 }}
@@ -40,7 +40,7 @@ export function ReturnTimeline({ ret }: { ret: ReturnRequest }) {
               transition={{ delay: reduce ? 0 : i * 0.2 }}
               className={cn(
                 'relative z-[1] h-6 w-6 shrink-0 rounded-full border-2',
-                done ? (step.status === 'rejected' ? 'border-danger bg-danger' : 'border-burgundy-800 bg-burgundy-800') : 'border-line-strong bg-surface',
+                done ? (step.status === 'rejected' ? 'border-danger bg-danger' : 'border-charcoal-800 bg-charcoal-800') : 'border-line-strong bg-surface',
               )}
             />
             <div className="sm:mt-2">

@@ -25,7 +25,7 @@ export function AccordionItem({
           aria-expanded={open}
           aria-controls={id}
           onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-semibold uppercase tracking-[0.12em] text-ink"
+          className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-semibold text-ink"
         >
           {title}
           <Plus className={cn('h-4 w-4 shrink-0 transition-transform duration-400 ease-luxe', open && 'rotate-45')} />

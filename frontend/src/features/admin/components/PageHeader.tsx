@@ -12,7 +12,7 @@ export function PageHeader({ title, eyebrow, back, actions, children }: { title:
       ) : null}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
-          {eyebrow ? <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">{eyebrow}</p> : null}
+          {eyebrow ? <p className="text-xs font-semibold text-ink-muted">{eyebrow}</p> : null}
           <h1 className="mt-1 text-display-md">{title}</h1>
           {children}
         </div>

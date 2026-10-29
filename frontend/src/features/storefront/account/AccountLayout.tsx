@@ -37,7 +37,7 @@ export default function AccountLayout() {
                     className={({ isActive }) =>
                       cn(
                         'block rounded-xs px-3 py-2 text-sm transition-colors',
-                        isActive ? 'bg-burgundy-800 text-cream-50' : 'text-ink-soft hover:bg-cream-200 hover:text-ink',
+                        isActive ? 'bg-charcoal-800 text-paper-50' : 'text-ink-soft hover:bg-paper-200 hover:text-ink',
                       )
                     }
                   >
@@ -52,7 +52,7 @@ export default function AccountLayout() {
                     await logout();
                     navigate('/');
                   }}
-                  className="flex items-center gap-2 rounded-xs px-3 py-2 text-sm text-ink-soft hover:text-burgundy-800"
+                  className="flex items-center gap-2 rounded-xs px-3 py-2 text-sm text-ink-soft hover:text-charcoal-800"
                 >
                   <LogOut className="h-4 w-4" /> Sign out
                 </button>

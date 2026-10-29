@@ -10,7 +10,7 @@ import { useGuestCart } from '@/stores/cart';
 function CountBadge({ count }: { count: number }) {
   if (!count) return null;
   return (
-    <span className="absolute right-0.5 top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-burgundy-800 px-1 text-[0.625rem] font-bold leading-none text-cream-50">
+    <span className="absolute right-0.5 top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-charcoal-800 px-1 text-[0.625rem] font-bold leading-none text-paper-50">
       {count > 99 ? '99+' : count}
     </span>
   );

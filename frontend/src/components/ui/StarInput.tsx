@@ -26,8 +26,8 @@ export function StarInput({ value, onChange, error }: { value: number; onChange:
               />
               <Star
                 className={cn(
-                  'h-7 w-7 rounded-xs transition-colors peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-burgundy-800',
-                  n <= shown ? 'text-gold-400' : 'text-sage-300',
+                  'h-7 w-7 rounded-xs transition-colors peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-charcoal-800',
+                  n <= shown ? 'text-iris-400' : 'text-stone-300',
                 )}
                 fill="currentColor"
                 strokeWidth={0}

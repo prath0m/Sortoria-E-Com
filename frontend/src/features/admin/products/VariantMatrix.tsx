@@ -112,7 +112,7 @@ export function VariantMatrix({
           if (!attr) return null;
           return (
             <fieldset key={attrId} className="mt-4">
-              <legend className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-ink-muted">{attr.name}</legend>
+              <legend className="mb-2 text-xs font-semibold text-ink-muted">{attr.name}</legend>
               <div className="flex flex-wrap gap-1.5">
                 {attr.values.map((v) => {
                   const on = picked[attrId]?.has(v.id);
@@ -153,7 +153,7 @@ export function VariantMatrix({
         <div className="overflow-x-auto rounded-sm border border-line">
           <table className="w-full min-w-[48rem] text-sm">
             <thead>
-              <tr className="border-b border-line text-left text-xs uppercase tracking-[0.08em] text-ink-muted">
+              <tr className="border-b border-line text-left text-xs text-ink-muted">
                 <th className="px-3 py-2">Option</th>
                 <th className="px-3 py-2">SKU</th>
                 <th className="px-3 py-2">Price ₹</th>

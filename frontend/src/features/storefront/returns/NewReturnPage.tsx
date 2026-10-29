@@ -83,7 +83,7 @@ export default function NewReturnPage() {
           }}
         >
           <fieldset>
-            <legend className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-ink">Which pieces?</legend>
+            <legend className="mb-3 text-sm font-semibold text-ink">Which pieces?</legend>
             <ul className="divide-y divide-line border-y border-line">
               {items.map((item) => (
                 <li key={item.order_item_id} className={cn('flex items-center gap-4 py-4', !item.eligible && 'opacity-60')}>
@@ -93,7 +93,7 @@ export default function NewReturnPage() {
                     <p className="text-sm text-ink-muted">{item.variant_label}</p>
                     {item.note ? <p className="text-xs text-ink-muted">{item.note}</p> : null}
                     {item.policy === 'replacement_only' && item.eligible ? (
-                      <p className="text-xs text-burgundy-700">Eligible for a replacement within {item.window_days} days.</p>
+                      <p className="text-xs text-charcoal-700">Eligible for a replacement within {item.window_days} days.</p>
                     ) : null}
                   </div>
                   {item.eligible ? (
@@ -111,14 +111,14 @@ export default function NewReturnPage() {
             </ul>
           </fieldset>
           <fieldset>
-            <legend className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-ink">What happened?</legend>
+            <legend className="mb-3 text-sm font-semibold text-ink">What happened?</legend>
             <div className="grid gap-2 sm:grid-cols-2">
               {REASONS.map((r) => (
                 <label
                   key={r.value}
-                  className={cn('flex cursor-pointer items-center gap-3 rounded-xs border p-3 text-sm', reason === r.value ? 'border-burgundy-800 bg-burgundy-50/40' : 'border-line')}
+                  className={cn('flex cursor-pointer items-center gap-3 rounded-xs border p-3 text-sm', reason === r.value ? 'border-charcoal-800 bg-charcoal-50/40' : 'border-line')}
                 >
-                  <input type="radio" name="reason" value={r.value} checked={reason === r.value} onChange={() => setReason(r.value)} className="accent-[rgb(var(--burgundy-800))]" />
+                  <input type="radio" name="reason" value={r.value} checked={reason === r.value} onChange={() => setReason(r.value)} className="accent-[rgb(var(--charcoal-800))]" />
                   {r.label}
                 </label>
               ))}

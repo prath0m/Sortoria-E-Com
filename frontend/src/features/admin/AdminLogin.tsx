@@ -41,7 +41,7 @@ export default function AdminLogin() {
   });
 
   return (
-    <div className="grain flex min-h-screen items-center justify-center bg-burgundy-900 px-4">
+    <div className="grain flex min-h-screen items-center justify-center bg-charcoal-900 px-4">
       <Seo title="Admin sign in" noindex />
       <div className="relative z-[2] w-full max-w-sm rounded-sm bg-surface-raised p-8 shadow-lift">
         <Monogram className="mx-auto h-12 w-12" />

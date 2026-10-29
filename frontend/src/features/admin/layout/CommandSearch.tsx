@@ -88,7 +88,7 @@ export function CommandSearch({ open, onClose }: { open: boolean; onClose: () =>
                 <span className="block truncate text-sm font-medium text-ink">{hit.label}</span>
                 <span className="block truncate text-xs text-ink-muted">{hit.detail}</span>
               </span>
-              <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-ink-muted">{hit.group}</span>
+              <span className="text-xs font-semibold text-ink-muted">{hit.group}</span>
             </li>
           ))}
         </ul>

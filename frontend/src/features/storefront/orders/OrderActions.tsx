@@ -38,7 +38,7 @@ export function OrderActions({ order, token }: { order: OrderDetail; token?: str
           <ul className="space-y-2 text-sm">
             {returns.data.map((r) => (
               <li key={r.number} className="flex items-center justify-between gap-3">
-                <Link to={`/returns/${r.number}?token=${encodeURIComponent(order.access_token)}`} className="text-burgundy-800 link-underline">
+                <Link to={`/returns/${r.number}?token=${encodeURIComponent(order.access_token)}`} className="text-charcoal-800 link-underline">
                   {r.number}
                 </Link>
                 <Badge tone={r.status === 'rejected' ? 'muted' : r.status === 'refunded' || r.status === 'replaced' ? 'success' : 'outline'}>

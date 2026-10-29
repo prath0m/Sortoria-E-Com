@@ -24,13 +24,13 @@ export function PhotoPicker({
       {hint ? <p className="text-[0.8125rem] text-ink-muted">{hint}</p> : null}
       <ul className="mt-2 flex flex-wrap gap-3">
         {previews.map((url, i) => (
-          <li key={url} className="relative h-20 w-20 overflow-hidden rounded-xs bg-cream-200">
+          <li key={url} className="relative h-20 w-20 overflow-hidden rounded-xs bg-paper-200">
             <img src={url} alt={`Upload ${i + 1} preview`} className="h-full w-full object-cover" />
             <button
               type="button"
               onClick={() => onChange(files.filter((_, j) => j !== i))}
               aria-label={`Remove photo ${i + 1}`}
-              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-shade/70 text-cream-50"
+              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-shade/70 text-paper-50"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -40,7 +40,7 @@ export function PhotoPicker({
           <li>
             <label
               htmlFor={id}
-              className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xs border border-dashed border-line-strong text-[0.6875rem] text-ink-muted hover:border-burgundy-800 hover:text-burgundy-800"
+              className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xs border border-dashed border-line-strong text-[0.6875rem] text-ink-muted hover:border-charcoal-800 hover:text-charcoal-800"
             >
               <ImagePlus className="h-5 w-5" aria-hidden="true" />
               Add

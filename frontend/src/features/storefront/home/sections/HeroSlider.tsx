@@ -116,7 +116,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
               // Mobile text spans the width, so the scrim runs bottom-up there and left-right on larger screens.
               light
                 ? 'bg-gradient-to-t from-shade/85 via-shade/50 to-shade/20 md:bg-gradient-to-r md:from-shade/75 md:via-shade/35 md:to-transparent'
-                : 'bg-gradient-to-t from-cream-50/95 via-cream-50/75 to-cream-50/30 md:bg-gradient-to-r md:from-cream-50/90 md:via-cream-50/50 md:to-transparent',
+                : 'bg-gradient-to-t from-paper-50/95 via-paper-50/75 to-paper-50/30 md:bg-gradient-to-r md:from-paper-50/90 md:via-paper-50/50 md:to-transparent',
             )}
           />
         </motion.div>
@@ -134,21 +134,21 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
           aria-live={running ? 'off' : 'polite'}
         >
           {slide.eyebrow ? (
-            <p data-eyebrow className={cn('eyebrow', light ? 'text-gold-200' : 'text-burgundy-700')}>
+            <p data-eyebrow className={cn('eyebrow', light ? 'text-iris-200' : 'text-charcoal-700')}>
               {slide.eyebrow}
             </p>
           ) : null}
-          <h1 className={cn('mt-4 text-display-2xl', light ? 'text-cream-50' : 'text-burgundy-900')}>
+          <h1 className={cn('mt-4 text-display-2xl', light ? 'text-paper-50' : 'text-charcoal-900')}>
             <Words text={slide.headline} />
           </h1>
           {slide.subtext ? (
-            <p data-sub className={cn('mt-6 max-w-xl text-lg', light ? 'text-cream-100' : 'text-ink-soft')}>
+            <p data-sub className={cn('mt-6 max-w-xl text-lg', light ? 'text-paper-100' : 'text-ink-soft')}>
               {slide.subtext}
             </p>
           ) : null}
           <div className={cn('mt-10 flex flex-wrap gap-3', slide.text_align === 'center' && 'justify-center')}>
             {slide.cta_label ? (
-              <Link data-cta to={slide.cta_url} className={buttonClasses({ size: 'lg', variant: light ? 'gold' : 'primary' })}>
+              <Link data-cta to={slide.cta_url} className={buttonClasses({ size: 'lg', variant: light ? 'inverse' : 'primary' })}>
                 {slide.cta_label}
               </Link>
             ) : null}
@@ -158,7 +158,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                 to={slide.secondary_cta_url}
                 className={cn(
                   buttonClasses({ size: 'lg', variant: 'secondary' }),
-                  light && 'border-cream-100 text-cream-50 hover:bg-cream-50 hover:text-burgundy-900',
+                  light && 'border-paper-100 text-paper-50 hover:bg-paper-50 hover:text-charcoal-900',
                 )}
               >
                 {slide.secondary_cta_label}
@@ -180,30 +180,30 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                 aria-current={i === index}
                 className="group relative h-8 flex-1 max-w-24"
               >
-                <span className={cn('absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 overflow-hidden rounded-full', light ? 'bg-cream-50/30' : 'bg-ink/20')}>
+                <span className={cn('absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 overflow-hidden rounded-full', light ? 'bg-paper-50/30' : 'bg-ink/20')}>
                   {i === index ? (
                     <motion.span
                       key={`${index}-${running}`}
-                      className="block h-full origin-left bg-gold-300"
+                      className="block h-full origin-left bg-iris-300"
                       initial={{ scaleX: running ? 0 : 1 }}
                       animate={{ scaleX: 1 }}
                       transition={{ duration: running ? INTERVAL / 1000 : 0, ease: 'linear' }}
                     />
                   ) : (
-                    <span className={cn('block h-full transition-transform', light ? 'bg-cream-50/70' : 'bg-ink/50', i < index ? 'scale-x-100' : 'scale-x-0')} />
+                    <span className={cn('block h-full transition-transform', light ? 'bg-paper-50/70' : 'bg-ink/50', i < index ? 'scale-x-100' : 'scale-x-0')} />
                   )}
                 </span>
               </button>
             ))}
           </div>
-          <div className={cn('flex gap-1', light ? 'text-cream-50' : 'text-ink')}>
-            <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? 'Play slideshow' : 'Pause slideshow'} className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full', light ? 'hover:bg-cream-50/10' : 'hover:bg-ink/5')}>
+          <div className={cn('flex gap-1', light ? 'text-paper-50' : 'text-ink')}>
+            <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? 'Play slideshow' : 'Pause slideshow'} className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full', light ? 'hover:bg-paper-50/10' : 'hover:bg-ink/5')}>
               {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
             </button>
-            <button type="button" onClick={() => go(index - 1)} aria-label="Previous slide" className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full border', light ? 'border-cream-50/30 hover:bg-cream-50/10' : 'border-ink/25 hover:bg-ink/5')}>
+            <button type="button" onClick={() => go(index - 1)} aria-label="Previous slide" className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full border', light ? 'border-paper-50/30 hover:bg-paper-50/10' : 'border-ink/25 hover:bg-ink/5')}>
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <button type="button" onClick={() => go(index + 1)} aria-label="Next slide" className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full border', light ? 'border-cream-50/30 hover:bg-cream-50/10' : 'border-ink/25 hover:bg-ink/5')}>
+            <button type="button" onClick={() => go(index + 1)} aria-label="Next slide" className={cn('inline-flex h-10 w-10 items-center justify-center rounded-full border', light ? 'border-paper-50/30 hover:bg-paper-50/10' : 'border-ink/25 hover:bg-ink/5')}>
               <ChevronRight className="h-5 w-5" />
             </button>
           </div>

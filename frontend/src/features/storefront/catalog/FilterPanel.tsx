@@ -37,7 +37,7 @@ function CheckRow({
         <span
           className={cn(
             'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-xs border transition-colors',
-            checked ? 'border-burgundy-800 bg-burgundy-800 text-cream-50' : 'border-line-strong',
+            checked ? 'border-charcoal-800 bg-charcoal-800 text-paper-50' : 'border-line-strong',
           )}
           aria-hidden="true"
         >
@@ -73,7 +73,7 @@ function PriceFilter({ facets, params, onChange }: Required<Pick<FilterPanelProp
               value={min}
               onChange={(e) => setMin(e.target.value)}
               placeholder={String(facets.price.min)}
-              className="h-10 w-full rounded-xs border border-line-strong bg-surface-raised pl-7 pr-2 text-sm focus:border-burgundy-800 focus:outline-none"
+              className="h-10 w-full rounded-xs border border-line-strong bg-surface-raised pl-7 pr-2 text-sm focus:border-charcoal-800 focus:outline-none"
             />
           </span>
         </label>
@@ -87,12 +87,12 @@ function PriceFilter({ facets, params, onChange }: Required<Pick<FilterPanelProp
               value={max}
               onChange={(e) => setMax(e.target.value)}
               placeholder={String(facets.price.max)}
-              className="h-10 w-full rounded-xs border border-line-strong bg-surface-raised pl-7 pr-2 text-sm focus:border-burgundy-800 focus:outline-none"
+              className="h-10 w-full rounded-xs border border-line-strong bg-surface-raised pl-7 pr-2 text-sm focus:border-charcoal-800 focus:outline-none"
             />
           </span>
         </label>
       </div>
-      <button type="submit" className="text-xs font-semibold uppercase tracking-[0.14em] text-burgundy-800 link-underline">
+      <button type="submit" className="text-xs font-semibold text-charcoal-800 link-underline">
         Apply price
       </button>
     </form>
@@ -147,7 +147,7 @@ export function FilterPanel({ facets, params, onChange, hideBrands }: FilterPane
                         <span
                           className={cn(
                             'h-8 w-8 rounded-full ring-1 ring-ink/15 ring-offset-2 ring-offset-surface transition-shadow',
-                            checked && 'ring-2 ring-burgundy-800',
+                            checked && 'ring-2 ring-charcoal-800',
                           )}
                           style={{ backgroundColor: v.hex }}
                         />
@@ -182,7 +182,7 @@ export function FilterPanel({ facets, params, onChange, hideBrands }: FilterPane
               label={
                 <span className="inline-flex items-center gap-1">
                   {r.min}
-                  <Star className="h-3.5 w-3.5 text-gold-500" fill="currentColor" strokeWidth={0} aria-hidden="true" /> &amp; above
+                  <Star className="h-3.5 w-3.5 text-iris-500" fill="currentColor" strokeWidth={0} aria-hidden="true" /> &amp; above
                 </span>
               }
               count={r.count}

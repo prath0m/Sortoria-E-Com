@@ -3,26 +3,26 @@ import { Link, type LinkProps } from 'react-router-dom';
 import { cn } from '@/lib/cn';
 import { Spinner } from './Spinner';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'link' | 'gold' | 'danger';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'link' | 'inverse' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
 const base =
-  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans font-semibold uppercase tracking-[0.14em] transition-[background-color,color,border-color,box-shadow,transform] duration-250 ease-luxe disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]';
+  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans font-medium tracking-[-0.005em] transition-[background-color,color,border-color,box-shadow,transform] duration-250 ease-luxe disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary text-primary-on hover:bg-primary-hover shadow-soft',
-  secondary: 'border border-accent text-accent hover:bg-primary hover:border-primary hover:text-primary-on',
+  primary: 'bg-primary text-primary-on hover:bg-primary-hover',
+  secondary: 'border border-line-strong bg-surface-raised text-ink hover:border-ink',
   ghost: 'text-ink hover:bg-ink/5',
-  link: 'link-underline px-0 tracking-[0.12em] text-accent',
-  // Fixed dark text: gold stays light in dark mode, so the semantic ink (light there) would vanish.
-  gold: 'bg-gold-300 text-burgundy-950 hover:bg-gold-200 shadow-soft',
+  link: '!h-auto !rounded-none px-0 !px-0 text-accent underline-offset-4 hover:underline',
+  // White on photos and dark bands, in both themes (fixed colours on purpose).
+  inverse: 'bg-white text-[#0a0a0a] hover:bg-white/90',
   danger: 'bg-danger text-white hover:opacity-90',
 };
 
 const sizes: Record<Size, string> = {
-  sm: 'h-9 px-4 text-[0.6875rem] rounded-xs',
-  md: 'h-11 px-6 text-xs rounded-xs',
-  lg: 'h-14 px-8 text-[0.8125rem] rounded-xs',
+  sm: 'h-9 px-4 text-[0.8125rem]',
+  md: 'h-11 px-6 text-sm',
+  lg: 'h-12 px-7 text-[0.9375rem]',
 };
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -96,7 +96,7 @@ export const IconButton = forwardRef<
     >
       {children}
       {badge ? (
-        <span className="absolute right-0.5 top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-burgundy-800 px-1 text-[0.625rem] font-bold leading-none text-cream-50">
+        <span className="absolute right-0.5 top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-accent px-1 text-[0.625rem] font-semibold leading-none text-white dark:text-[#0a0a0a]">
           {badge > 99 ? '99+' : badge}
         </span>
       ) : null}

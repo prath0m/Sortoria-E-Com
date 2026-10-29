@@ -49,7 +49,7 @@ export function Pagination({
             onClick={() => onChange(p)}
             aria-current={p === page ? 'page' : undefined}
             aria-label={`Page ${p}`}
-            className={cn(cell, p === page ? 'bg-burgundy-800 font-semibold text-cream-50' : 'hover:bg-ink/5')}
+            className={cn(cell, p === page ? 'bg-charcoal-800 font-semibold text-paper-50' : 'hover:bg-ink/5')}
           >
             {p}
           </button>

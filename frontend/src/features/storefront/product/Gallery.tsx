@@ -26,7 +26,7 @@ export function Gallery({ images, name }: { images: ProductImage[]; name: string
   const desktop = useIsDesktop();
   const current = images[Math.min(index, images.length - 1)];
 
-  if (!images.length) return <div className="aspect-[4/5] rounded-sm bg-cream-200" />;
+  if (!images.length) return <div className="aspect-[4/5] rounded-sm bg-paper-200" />;
 
   return (
     <div className="min-w-0">
@@ -42,7 +42,7 @@ export function Gallery({ images, name }: { images: ProductImage[]; name: string
                   aria-current={i === index}
                   className={cn(
                     'block aspect-[4/5] w-full overflow-hidden rounded-xs ring-1 ring-line transition-shadow',
-                    i === index && 'ring-2 ring-burgundy-800',
+                    i === index && 'ring-2 ring-charcoal-800',
                   )}
                 >
                   <ResponsiveImage src={img.url} renditions={img.renditions} alt="" sizes="72px" className="h-full w-full object-cover" />
@@ -65,7 +65,7 @@ export function Gallery({ images, name }: { images: ProductImage[]; name: string
                 <button
                   type="button"
                   onClick={() => setFullscreen(true)}
-                  className="block aspect-[4/5] w-full bg-cream-200"
+                  className="block aspect-[4/5] w-full bg-paper-200"
                   aria-label={`Open image ${i + 1} full screen`}
                 >
                   <ResponsiveImage
@@ -106,7 +106,7 @@ function HoverZoom({ image, priority, onOpen }: { image: ProductImage; priority?
       onMouseMove={move}
       onMouseLeave={() => setZoom(null)}
       aria-label={`Hover to zoom, or open ${image.alt || 'this image'} full screen`}
-      className="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-sm bg-cream-200"
+      className="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-sm bg-paper-200"
     >
       <ResponsiveImage
         key={image.id}
@@ -126,7 +126,7 @@ function HoverZoom({ image, priority, onOpen }: { image: ProductImage; priority?
           backgroundPosition: zoom ? `${zoom.x}% ${zoom.y}%` : 'center',
         }}
       />
-      <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-surface-raised/90 px-3 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-ink shadow-soft backdrop-blur transition-opacity group-hover:opacity-0">
+      <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-surface-raised/90 px-3 py-2 text-[0.8125rem] font-semibold text-ink shadow-soft backdrop-blur transition-opacity group-hover:opacity-0">
         <ZoomIn className="h-3.5 w-3.5" aria-hidden="true" /> Hover to zoom
       </span>
       <Expand className="absolute right-4 top-4 h-5 w-5 text-ink/60" aria-hidden="true" />

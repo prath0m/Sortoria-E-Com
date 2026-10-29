@@ -96,7 +96,7 @@ function Editor({ attribute, onClose }: { attribute: Attribute; onClose: () => v
         <Checkbox label="Use as a filter" description="Categories still choose which filters they show." checked={draft.is_filterable} onChange={(e) => setDraft({ ...draft, is_filterable: e.target.checked })} />
 
         <fieldset className="border-t border-line pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted">Values</legend>
+          <legend className="text-xs font-semibold text-ink-muted">Values</legend>
           <ul className="mt-3 space-y-2">
             {draft.values.map((v, i) => (
               <li

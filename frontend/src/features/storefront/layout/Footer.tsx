@@ -17,8 +17,8 @@ function Pinterest(props: { className?: string }) {
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <h2 className="mb-5 font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold-300">{title}</h2>
-      <ul className="space-y-3 text-sm text-cream-200">{children}</ul>
+      <h2 className="mb-5 font-sans text-sm font-semibold text-white">{title}</h2>
+      <ul className="space-y-3 text-sm text-white/65">{children}</ul>
     </div>
   );
 }
@@ -36,14 +36,14 @@ export function Footer() {
   ].filter((s) => s.href);
 
   return (
-    <footer className="grain mt-24 bg-burgundy-900 text-cream-100">
+    <footer className="mt-24 bg-[#0a0a0a] text-white">
       <div className="container-page relative z-[2] py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-sm">
-            <Logo src={store?.logo} label={name} tone="cream" className="h-8" />
-            {store?.footer_blurb ? <p className="mt-6 text-sm leading-relaxed text-cream-200">{store.footer_blurb}</p> : null}
+            <Logo src={store?.logo} label={name} tone="light" className="h-6" />
+            {store?.footer_blurb ? <p className="mt-6 text-sm leading-relaxed text-white/65">{store.footer_blurb}</p> : null}
             <div className="mt-8">
-              <p className="mb-3 text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold-300">The {name} letter</p>
+              <p className="mb-3 text-sm font-semibold text-white">The {name} letter</p>
               <NewsletterForm source="footer" tone="dark" compact />
             </div>
             {socials.length ? (
@@ -55,7 +55,7 @@ export function Footer() {
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label={`${name} on ${label}`}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/25 text-cream-100 transition-colors hover:border-gold-300 hover:text-gold-300"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper-100/25 text-paper-100 transition-colors hover:border-white hover:text-white"
                     >
                       <Icon className="h-4 w-4" />
                     </a>
@@ -68,28 +68,28 @@ export function Footer() {
             <FooterColumn title="Shop">
               {categories.slice(0, 6).map((c) => (
                 <li key={c.id}>
-                  <Link to={`/shop/${c.slug}`} className="link-underline hover:text-cream-50">
+                  <Link to={`/shop/${c.slug}`} className="link-underline hover:text-white">
                     {c.name}
                   </Link>
                 </li>
               ))}
             </FooterColumn>
             <FooterColumn title="Help">
-              <li><Link to="/track-order" className="link-underline hover:text-cream-50">Track your order</Link></li>
-              <li><Link to="/offers" className="link-underline hover:text-cream-50">Offers</Link></li>
+              <li><Link to="/track-order" className="link-underline hover:text-white">Track your order</Link></li>
+              <li><Link to="/offers" className="link-underline hover:text-white">Offers</Link></li>
               {store?.contact_email ? (
                 <li>
-                  <a href={`mailto:${store.contact_email}`} className="link-underline hover:text-cream-50">
+                  <a href={`mailto:${store.contact_email}`} className="link-underline hover:text-white">
                     {store.contact_email}
                   </a>
                 </li>
               ) : null}
-              {store?.support_phone ? <li className="text-cream-200">{store.support_phone}</li> : null}
+              {store?.support_phone ? <li className="text-white/65">{store.support_phone}</li> : null}
             </FooterColumn>
             <FooterColumn title={name}>
               {pages.map((page) => (
                 <li key={page.slug}>
-                  <Link to={`/pages/${page.slug}`} className="link-underline hover:text-cream-50">
+                  <Link to={`/pages/${page.slug}`} className="link-underline hover:text-white">
                     {page.title}
                   </Link>
                 </li>
@@ -97,7 +97,7 @@ export function Footer() {
             </FooterColumn>
           </div>
         </div>
-        <div className="mt-14 flex flex-col gap-3 border-t border-cream-100/15 pt-6 text-xs text-cream-200 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-paper-100/15 pt-6 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {name}. All prices include GST.
           </p>

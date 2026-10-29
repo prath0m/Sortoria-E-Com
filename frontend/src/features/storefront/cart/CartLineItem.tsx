@@ -12,7 +12,7 @@ export function CartLineItem({ line, compact, saved, onNavigate }: { line: Quote
   const ref = { id: line.id, variantId: line.variant_id };
   return (
     <li className={cn('flex gap-4', compact ? 'py-4' : 'py-6')}>
-      <Link to={`/products/${line.slug}`} onClick={onNavigate} className={cn('shrink-0 overflow-hidden rounded-xs bg-cream-200', compact ? 'h-24 w-20' : 'h-32 w-24 sm:h-40 sm:w-32')}>
+      <Link to={`/products/${line.slug}`} onClick={onNavigate} className={cn('shrink-0 overflow-hidden rounded-xs bg-paper-200', compact ? 'h-24 w-20' : 'h-32 w-24 sm:h-40 sm:w-32')}>
         {line.image ? (
           <ResponsiveImage src={line.image.url} renditions={line.image.renditions} alt={line.image.alt} sizes="128px" className="h-full w-full object-cover" />
         ) : null}
@@ -20,12 +20,12 @@ export function CartLineItem({ line, compact, saved, onNavigate }: { line: Quote
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            {line.brand ? <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink-muted">{line.brand}</p> : null}
-            <Link to={`/products/${line.slug}`} onClick={onNavigate} className="line-clamp-2 font-medium text-ink hover:text-burgundy-800">
+            {line.brand ? <p className="text-[0.8125rem] font-semibold text-ink-muted">{line.brand}</p> : null}
+            <Link to={`/products/${line.slug}`} onClick={onNavigate} className="line-clamp-2 font-medium text-ink hover:text-charcoal-800">
               {line.name}
             </Link>
             {line.variant_label ? <p className="mt-0.5 text-sm text-ink-muted">{line.variant_label}</p> : null}
-            {line.flash_sale ? <p className="mt-1 text-xs font-semibold text-burgundy-700">{line.flash_sale.title} price</p> : null}
+            {line.flash_sale ? <p className="mt-1 text-xs font-semibold text-charcoal-700">{line.flash_sale.title} price</p> : null}
           </div>
           <div className="text-right">
             <p className="font-semibold text-ink">{formatMoney(line.line_total_paise)}</p>

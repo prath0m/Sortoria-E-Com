@@ -90,7 +90,7 @@ function ReviewCard({ review, selected, onToggle }: { review: AdminReview; selec
           </p>
           {review.admin_reply && !replying ? (
             <div className="mt-3 rounded-xs bg-accent-soft p-3 text-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-muted">Your reply</p>
+              <p className="text-xs font-semibold text-ink-muted">Your reply</p>
               <p className="mt-1 text-ink">{review.admin_reply}</p>
             </div>
           ) : null}

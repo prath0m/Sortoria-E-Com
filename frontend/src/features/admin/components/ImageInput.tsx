@@ -45,7 +45,7 @@ export function ImageInput({
       </div>
       <label htmlFor={id} className={cn('group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-xs border border-dashed border-line bg-surface hover:border-line-strong', aspect)}>
         {src ? <img src={src} alt="" className={cn('h-full w-full', fit === 'contain' ? 'object-contain p-2' : 'object-cover')} /> : <ImagePlus className="h-6 w-6 text-ink-muted" aria-hidden="true" />}
-        <span className="absolute inset-x-0 bottom-0 bg-ink/60 py-1 text-center text-xs text-cream-50 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+        <span className="absolute inset-x-0 bottom-0 bg-ink/60 py-1 text-center text-xs text-paper-50 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
           {src ? 'Replace' : 'Choose image'}
         </span>
         <input id={id} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(e) => onChange(e.target.files?.[0] ?? null)} />
